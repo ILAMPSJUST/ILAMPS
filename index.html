@@ -10,7 +10,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 <style>
-/* ── FONT: Helvetica system stack ── */
+/* ── FONT & VARS ── */
 :root{
   --f: 'Helvetica Neue',Helvetica,Arial,sans-serif;
   --navy:#0d1f42;--navy-mid:#1a3566;--navy-light:#2a4a8a;
@@ -63,51 +63,44 @@ button{font-family:var(--f);cursor:pointer}
 #scroll-top.show{opacity:1;transform:none}
 #scroll-top:hover{background:#5a8bd4;transform:translateY(-2px)}
 
-/* BACK BUTTON */
-.back-btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;font-weight:600;color:var(--muted);cursor:pointer;margin-bottom:1.75rem;transition:var(--tr);padding:.4rem .75rem;border-radius:8px;border:none;background:transparent}
-.back-btn:hover{color:var(--navy);background:var(--off)}
-
 /* TOAST */
 .toast{position:fixed;bottom:5rem;right:1.5rem;background:var(--navy);color:#fff;padding:.65rem 1.1rem;border-radius:10px;font-size:.82rem;z-index:9999;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;max-width:300px}
 .toast.show{opacity:1;transform:none}
 
 /* ═══ NAV ═══ */
 #navbar{position:fixed;top:0;left:0;right:0;z-index:900;background:rgba(10,20,55,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06)}
-.nav-in{display:flex;align-items:center;justify-content:space-between;height:64px;gap:1rem}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:70px;gap:1rem}
 .nav-logo{display:flex;align-items:center;gap:.7rem;cursor:pointer;flex-shrink:0}
-.nav-logo-box{width:34px;height:34px;border-radius:7px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.nav-logo-box{width:50px;height:50px;border-radius:7px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
 .nav-logo-box img{width:100%;height:100%;object-fit:contain}
-.nav-logo-box-text{background:linear-gradient(135deg,var(--accent),var(--navy-mid));font-size:.6rem;font-weight:800;color:#fff;line-height:1.1;text-align:center;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-.nav-logo-nm{font-size:1.1rem;font-weight:800;color:#fff;letter-spacing:-.02em}
-.nav-logo-sb{font-size:.56rem;color:var(--gray-light);letter-spacing:.07em;text-transform:uppercase}
+.nav-logo-box-text{background:linear-gradient(135deg,var(--accent),var(--navy-mid));font-size:.75rem;font-weight:800;color:#fff;line-height:1.1;text-align:center;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.nav-logo-nm{font-size:1.4rem;font-weight:900;color:#fff;letter-spacing:-.02em; line-height:1;}
 .nav-links{display:flex;align-items:center;gap:0;list-style:none}
-.nav-links a{display:block;padding:.38rem .72rem;font-size:.8rem;font-weight:500;color:rgba(255,255,255,.65);text-decoration:none;border-radius:6px;transition:var(--tr);cursor:pointer;white-space:nowrap}
+.nav-links a{display:block;padding:.38rem .72rem;font-size:.82rem;font-weight:600;color:rgba(255,255,255,.65);text-decoration:none;border-radius:6px;transition:var(--tr);cursor:pointer;white-space:nowrap}
 .nav-links a:hover,.nav-links a.active{color:#fff;background:rgba(255,255,255,.09)}
 .nav-auth{display:flex;align-items:center;gap:.55rem;flex-shrink:0}
 .nav-ham{display:none;flex-direction:column;gap:4.5px;cursor:pointer;padding:8px;flex-shrink:0}
 .nav-ham span{display:block;width:21px;height:2px;background:#fff;border-radius:2px;transition:var(--tr)}
 @media(max-width:900px){
   .nav-ham{display:flex}
-  .nav-links{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:rgba(10,20,55,.99);padding:.75rem;border-top:1px solid rgba(255,255,255,.06);gap:.15rem;backdrop-filter:blur(20px)}
+  .nav-links{display:none;position:absolute;top:70px;left:0;right:0;flex-direction:column;background:rgba(10,20,55,.99);padding:.75rem;border-top:1px solid rgba(255,255,255,.06);gap:.15rem;backdrop-filter:blur(20px)}
   .nav-links.open{display:flex}
   .nav-links a{width:100%;padding:.6rem .9rem}
   .nav-auth .btn-sm:first-child{display:none}
 }
 
-/* ═══ HERO REDESIGN ═══ */
+/* ═══ HERO ═══ */
 #hero { position: relative; height: 100vh; min-height: 600px; background: var(--navy); display: flex; align-items: center; overflow: hidden;}
 .hero-bg-grid { position: absolute; inset: 0; z-index: 1; background-image: linear-gradient(rgba(74,123,200,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(74,123,200,.045) 1px, transparent 1px); background-size: 52px 52px; pointer-events: none; }
-.hero-split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center; width: 100%; position: relative; z-index: 3; padding-top: 64px; }
-.hero-content { padding: 2rem 0; }
+.hero-split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center; width: 100%; position: relative; z-index: 3; padding-top: 70px; }
+.hero-content { padding: 2rem 0; display:flex; flex-direction:column; align-items:flex-start;}
 .hero-slides-container { position: relative; height: 420px; border-radius: var(--rl); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid rgba(255,255,255,0.1); }
 .slides-wrap { position: absolute; inset: 0; z-index: 1; }
 .slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}
 .slide.active{opacity:1}
 .slide img{width:100%;height:100%;object-fit:cover}
-.slide-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(8,18,48,.6) 0%,transparent 100%)}
+.slide-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(8,18,48,.3) 0%,transparent 100%)}
 .hero-no-slide{position:absolute;inset:0;z-index:2;background:linear-gradient(135deg,#0a1428,#1a3566 55%,#0d2a4a);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem}
-.hero-no-slide-icon{font-size:2.5rem;opacity:.28}
-.hero-no-slide-txt{font-size:.76rem;color:rgba(255,255,255,.25);text-align:center}
 .slide-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:4;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:.95rem;display:none;align-items:center;justify-content:center;transition:var(--tr);backdrop-filter:blur(6px);font-family:var(--f)}
 .slide-arrow:hover{background:rgba(255,255,255,.22)}
 .slide-arrow.prev{left:1.25rem}.slide-arrow.next{right:1.25rem}
@@ -121,33 +114,38 @@ button{font-family:var(--f);cursor:pointer}
 .hero-title{font-size:clamp(2.2rem,6vw,4rem);font-weight:900;color:#fff;line-height:1.05;margin-bottom:.8rem;letter-spacing:-.04em}
 .hero-uni{font-size:.73rem;color:var(--gray-light);letter-spacing:.07em;text-transform:uppercase;margin-bottom:1.25rem;font-weight:500;line-height:1.55}
 .hero-desc{font-size:.95rem;color:rgba(255,255,255,.62);line-height:1.8;margin-bottom:2rem;max-width:520px}
-.hero-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2.75rem}
-.hero-stats{display:flex;gap:2rem;padding-top:1.75rem;border-top:1px solid rgba(255,255,255,.1);flex-wrap:wrap;gap:1.5rem 2rem}
+.hero-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2.75rem; width:100%}
+.hero-stats{display:flex;gap:2rem;padding-top:1.75rem;border-top:1px solid rgba(255,255,255,.1);flex-wrap:wrap;gap:1.5rem 2rem; width:100%}
 .hs-num{font-size:1.85rem;font-weight:800;color:#fff;line-height:1;cursor:pointer;transition:var(--tr)}
 .hs-num:hover{color:var(--accent-light)}
 .hs-lbl{font-size:.63rem;color:var(--gray-light);letter-spacing:.08em;text-transform:uppercase;margin-top:.25rem;font-weight:600}
+
+/* Mobile Hero Reordering */
 @media(max-width:900px){
-  .hero-split { grid-template-columns: 1fr; gap: 2rem; padding-top: 80px;}
-  .hero-slides-container { height: 300px; }
+  .hero-split { display:flex; flex-direction:column; padding-top:20px; gap:1.5rem; text-align:center;}
+  .hero-content { align-items:center; padding: 1rem 0 2rem;}
+  .hero-badge { order: 1; margin-bottom:.8rem;}
+  .hero-title { order: 2; margin-bottom:0;}
+  .hero-slides-container { order: 3; width: 100%; height: 260px; margin: 1.5rem 0; }
+  .hero-uni { display:none; }
+  .hero-desc { order: 4; }
+  .hero-actions { order: 5; justify-content:center; }
+  .hero-stats { order: 6; justify-content:center; border-top:none; padding-top:0;}
 }
 
 /* PAGE HEADER */
 .page-hdr{padding:3rem 0 2rem;border-bottom:1px solid var(--border);margin-bottom:3rem}
-.page-hdr .stitle{margin-bottom:.4rem}
 
 /* ═══ HOME SECTIONS ═══ */
 .home-sec{padding:4.5rem 0}
 .home-sec.gray{background:var(--off)}
-.home-sec.dark{background:var(--navy)}
-.view-all{display:inline-flex;align-items:center;gap:.38rem;font-size:.82rem;font-weight:700;color:var(--accent);cursor:pointer;margin-top:1.75rem;transition:var(--tr);letter-spacing:.01em}
-.view-all:hover{gap:.65rem}
 
 /* ABOUT */
 .about-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:4rem;align-items:center}
-.about-big{background:var(--navy);border-radius:var(--rl);padding:1.75rem;position:relative;overflow:hidden;margin-bottom:.875rem}
+.about-big{background:var(--navy);border-radius:var(--rl);padding:1.75rem;position:relative;overflow:hidden;margin-bottom:.875rem; cursor:pointer;}
 .about-big::after{content:'';position:absolute;top:-25px;right:-25px;width:90px;height:90px;background:rgba(74,123,200,.12);border-radius:50%}
-.about-big-num{font-size:2.75rem;font-weight:900;color:var(--accent-light);line-height:1;cursor:pointer}
-.about-big-num:hover{color:#fff}
+.about-big-num{font-size:2.75rem;font-weight:900;color:var(--accent-light);line-height:1;}
+.about-big:hover .about-big-num{color:#fff}
 .about-big-lbl{font-size:.78rem;color:rgba(255,255,255,.58);margin-top:.28rem}
 .about-sm-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
 .about-sm{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center;box-shadow:var(--shadow);cursor:pointer;transition:var(--tr)}
@@ -175,10 +173,17 @@ button{font-family:var(--f);cursor:pointer}
 .pi-ints{display:flex;flex-wrap:wrap;gap:.35rem}
 .pi-int{background:rgba(74,123,200,.18);border:1px solid rgba(74,123,200,.25);color:var(--accent-light);padding:.22rem .68rem;border-radius:50px;font-size:.72rem;font-weight:500}
 @media(max-width:768px){.pi-card{grid-template-columns:1fr;gap:1.5rem;padding:1.5rem}}
+.pi-card-light { background: #fff; border: 1px solid var(--border); box-shadow: var(--shadow); }
+.pi-card-light .pi-name { color: var(--navy); }
+.pi-card-light .pi-desig { color: var(--accent); }
+.pi-card-light .pi-dept { color: var(--muted); }
+.pi-card-light .pi-bio { color: var(--muted); }
+.pi-card-light .pi-sl { color: var(--accent); }
+.pi-card-light .pi-link { background: var(--off); color: var(--navy); }
+.pi-card-light .pi-link:hover { background: var(--accent); color: #fff; }
+.pi-card-light .pi-int { background: rgba(74,123,200,.1); border-color: rgba(74,123,200,.2); color: var(--accent); }
 
 /* TEAM CARDS */
-.tg-label{font-size:1.05rem;font-weight:800;color:var(--navy);margin-bottom:1rem;padding-bottom:.6rem;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:.45rem;letter-spacing:-.01em}
-.tg-cnt{background:var(--accent);color:#fff;width:20px;height:20px;border-radius:50%;font-size:.65rem;display:inline-flex;align-items:center;justify-content:center;font-weight:800}
 .team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem}
 .tc{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:1.4rem 1rem;text-align:center;transition:var(--tr);cursor:pointer;position:relative;overflow:hidden}
 .tc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--navy-light));opacity:0;transition:var(--tr)}
@@ -188,10 +193,9 @@ button{font-family:var(--f);cursor:pointer}
 .tc-name{font-size:.92rem;font-weight:800;color:var(--navy);margin-bottom:.15rem;letter-spacing:-.01em}
 .tc-role{font-size:.68rem;color:var(--accent);font-weight:600;margin-bottom:.5rem}
 .tc-res{font-size:.71rem;color:var(--muted);line-height:1.5}
-.team-grp{margin-bottom:2.25rem}
 @media(max-width:480px){.team-grid{grid-template-columns:1fr 1fr}}
 
-/* PUBLICATION LIST CARD (All Pubs page) */
+/* PUBLICATION CARDS */
 .pub-list{display:flex;flex-direction:column;gap:.9rem}
 .pubi{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:var(--tr);cursor:pointer; padding: 1.25rem;}
 .pubi:hover{box-shadow:var(--shadow-lg);border-color:rgba(74,123,200,.3);transform:translateY(-2px)}
@@ -203,7 +207,6 @@ button{font-family:var(--f);cursor:pointer}
 .pub-venue{font-size:.78rem;color:var(--gray);font-style:italic}
 .pub-abs{font-size:.8rem;color:var(--muted);margin-top:.6rem;line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pub-doi{display:inline-flex;align-items:center;gap:.28rem;margin-top:.6rem;font-size:.75rem;color:var(--accent);font-weight:600}
-.pub-doi:hover{text-decoration:underline}
 
 /* HOME PUB CARD (SQUARE THUMBNAIL) */
 .pubi-home { display: flex; gap: 1.25rem; background: #fff; border: 1px solid var(--border); border-radius: var(--r); padding: 1.25rem; transition: var(--tr); cursor: pointer; align-items: flex-start; }
@@ -211,12 +214,7 @@ button{font-family:var(--f);cursor:pointer}
 .pubi-home-img { width: 110px; height: 110px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid var(--border); }
 .pubi-home-body { flex: 1; }
 .pubi-home-more { color: var(--accent); font-weight: 700; font-size: 0.75rem; cursor: pointer; display: inline-block; margin-left: 5px; text-decoration: underline; }
-
-@media(max-width:600px){
-  .pubi-home { flex-direction: column; gap: 1rem; }
-  .pubi-home-img { width: 100%; height: 180px; }
-}
-
+@media(max-width:600px){.pubi-home { flex-direction: column; gap: 1rem; } .pubi-home-img { width: 100%; height: 180px; }}
 
 /* NEWS CARD */
 .news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1.1rem}
@@ -229,9 +227,8 @@ button{font-family:var(--f);cursor:pointer}
 .nc-body{padding:1.1rem}
 .nc-body h3{font-size:.9rem;font-weight:800;color:var(--navy);margin-bottom:.48rem;line-height:1.38}
 .nc-body p{font-size:.79rem;color:var(--muted);line-height:1.68}
-@media(max-width:480px){.news-grid{grid-template-columns:1fr}}
 
-/* RESEARCH */
+/* RESEARCH & PROJ */
 .res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.1rem}
 .rc{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:1.6rem;transition:var(--tr)}
 .rc:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:rgba(74,123,200,.25)}
@@ -239,7 +236,6 @@ button{font-family:var(--f);cursor:pointer}
 .rc h3{font-size:.95rem;color:var(--navy);margin-bottom:.5rem;font-weight:800}
 .rc p{font-size:.8rem;color:var(--muted);line-height:1.68}
 
-/* ONGOING */
 .proj-list{display:flex;flex-direction:column;gap:1rem}
 .pc{background:#fff;border:1px solid var(--border);border-left:3.5px solid var(--accent);border-radius:0 var(--r) var(--r) 0;padding:1.35rem 1.6rem;display:grid;grid-template-columns:1fr auto;gap:.875rem;align-items:start;transition:var(--tr)}
 .pc:hover{box-shadow:var(--shadow)}
@@ -249,158 +245,73 @@ button{font-family:var(--f);cursor:pointer}
 .pc-mem{font-size:.67rem;background:var(--silver);color:var(--navy-mid);padding:.15rem .52rem;border-radius:50px;font-weight:500}
 
 /* GALLERY */
-.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
 .gi{border-radius:var(--r);overflow:hidden;aspect-ratio:4/3;position:relative;background:var(--silver);border:1px solid var(--border)}
 .gi img{width:100%;height:100%;object-fit:cover;transition:transform .5s;display:block}
 .gi:hover img{transform:scale(1.06)}
-.gi-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.38rem;color:var(--gray-light);background:linear-gradient(135deg,var(--silver),#cdd4de)}
-.gi-ph-i{font-size:1.5rem;opacity:.4}
-.gi-ph span{font-size:.65rem;opacity:.55}
-.gi-cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.52));padding:.5rem;font-size:.68rem;color:#fff;font-weight:500}
-@media(max-width:600px){.gal-grid{grid-template-columns:1fr 1fr}}
-
-/* CONTACT */
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start}
-.ci{display:flex;gap:.8rem;align-items:flex-start;margin-bottom:1.4rem}
-.ci-icon{width:38px;height:38px;border-radius:9px;background:rgba(74,123,200,.2);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
-.ci h4{font-size:.63rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-light);margin-bottom:.22rem}
-.ci p,.ci a{color:rgba(255,255,255,.64);font-size:.86rem;line-height:1.52}
-.join-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);padding:2rem}
-.join-box h3{font-size:1.35rem;font-weight:800;color:#fff;margin-bottom:.75rem;letter-spacing:-.02em}
-.join-box>p{color:rgba(255,255,255,.58);font-size:.86rem;line-height:1.78;margin-bottom:1.1rem}
-.join-list{list-style:none;margin-bottom:1.6rem}
-.join-list li{color:rgba(255,255,255,.62);font-size:.83rem;padding:.42rem 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:.6rem}
-.join-list li::before{content:'→';color:var(--accent-light);flex-shrink:0}
-@media(max-width:600px){.contact-grid{grid-template-columns:1fr;gap:2rem}}
+.gi-cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.6));padding:.6rem;font-size:.7rem;color:#fff;font-weight:500; display:flex; justify-content:space-between; align-items:flex-end;}
+.gi-date{font-size:.6rem; color:var(--accent-light); font-weight:700;}
+@media(max-width:600px){.gal-grid{grid-template-columns:1fr}}
 
 /* FOOTER */
-footer{background:#060f22;color:rgba(255,255,255,.34);padding:1.75rem 0}
-.fi{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-footer p{font-size:.75rem}
-.fl{display:flex;gap:1.2rem}
-.fl a{font-size:.75rem;color:rgba(255,255,255,.3);cursor:pointer;transition:var(--tr)}
-.fl a:hover{color:rgba(255,255,255,.72)}
+footer{background:#060f22;color:rgba(255,255,255,.5);padding:3rem 0 2rem; font-size:.8rem;}
+.footer-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3rem; margin-bottom:2rem; align-items:start;}
+.f-logos{display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap;}
+.f-logo-box{background:#fff; padding:.5rem; border-radius:8px; height:60px; display:flex; align-items:center; justify-content:center;}
+.f-logo-box img{max-height:100%; max-width:120px; object-fit:contain;}
+.f-title{color:#fff; font-size:1.1rem; font-weight:800; margin-bottom:.8rem;}
+.f-link{display:block; color:rgba(255,255,255,.5); margin-bottom:.5rem; transition:var(--tr); cursor:pointer;}
+.f-link:hover{color:var(--accent-light);}
+.f-bottom{border-top:1px solid rgba(255,255,255,.1); padding-top:1.5rem; display:flex; justify-content:space-between; flex-wrap:wrap; font-size:.75rem;}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr; gap:2rem;}}
 
-/* ═══ MODALS ═══ */
+/* MODALS */
 .mo{display:none;position:fixed;inset:0;z-index:1000;background:rgba(5,12,30,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1rem}
 .mo.open{display:flex}
 .mb{background:#fff;border-radius:var(--rl);width:100%;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.28);max-height:90vh;display:flex;flex-direction:column}
 .mh{padding:1.3rem 1.55rem 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.mh h2{font-size:1.35rem;font-weight:800;color:var(--navy);letter-spacing:-.02em}
 .mc{background:var(--silver);border:none;width:28px;height:28px;border-radius:7px;cursor:pointer;font-size:1rem;color:var(--gray);display:flex;align-items:center;justify-content:center;transition:var(--tr);flex-shrink:0}
 .mc:hover{background:var(--border)}
 .mbody{padding:1.25rem 1.55rem 1.55rem;overflow-y:auto}
-.ms{font-size:.82rem;color:var(--muted);margin-bottom:1.3rem}
 .ff{margin-bottom:.875rem}
 .ff label{display:block;font-size:.69rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--navy-mid);margin-bottom:.35rem}
 .ff input,.ff textarea,.ff select{width:100%;padding:.62rem .85rem;background:var(--off);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--f);font-size:.85rem;transition:var(--tr)}
 .ff input:focus,.ff textarea:focus{outline:none;border-color:var(--accent);background:#fff}
-.ff textarea{min-height:75px;resize:vertical}
-.ferr{color:#dc2626;font-size:.74rem;margin-top:.4rem;display:none}
-.mft{padding:.85rem 1.55rem;background:var(--off);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:.77rem;color:var(--muted);flex-shrink:0}
-.mft a{color:var(--accent);cursor:pointer}.mft a:hover{text-decoration:underline}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem}
-@media(max-width:520px){.g2,.g3{grid-template-columns:1fr}}
 
-/* MEMBER PROFILE MODAL */
-.member-modal-body{padding:0;display:flex;flex-direction:column}
-.mm-hero{background:var(--navy);padding:2rem;display:flex;gap:1.5rem;align-items:center}
-.mm-photo,.mm-photo-ph{width:90px;height:90px;border-radius:50%;flex-shrink:0}
-.mm-photo{object-fit:cover;border:3px solid var(--accent);display:block}
-.mm-photo-ph{background:rgba(74,123,200,.3);border:3px solid rgba(74,123,200,.3);display:flex;align-items:center;justify-content:center;font-size:2rem}
-.mm-info-name{font-size:1.35rem;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:.2rem}
-.mm-info-role{font-size:.78rem;color:var(--accent-light);font-weight:600;margin-bottom:.15rem}
-.mm-info-dept{font-size:.72rem;color:rgba(255,255,255,.45);line-height:1.4}
-.mm-content{padding:1.5rem;overflow-y:auto}
-.mm-section-label{font-size:.63rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:.55rem;margin-top:1.25rem}
-.mm-section-label:first-child{margin-top:0}
-.mm-bio{font-size:.88rem;color:var(--muted);line-height:1.78}
-.mm-pubs-list{display:flex;flex-direction:column;gap:.6rem;margin-top:.5rem}
-.mm-pub-item{background:var(--off);border:1px solid var(--border);border-radius:var(--r);padding:.75rem .9rem; cursor:pointer;}
-.mm-pub-item:hover{border-color:var(--accent);}
-.mm-pub-t{font-size:.84rem;font-weight:700;color:var(--navy);margin-bottom:.18rem;letter-spacing:-.01em}
-.mm-pub-m{font-size:.72rem;color:var(--muted)}
-@media(max-width:480px){.mm-hero{flex-direction:column;text-align:center}.mm-photo,.mm-photo-ph{width:75px;height:75px}}
-
-/* DETAIL MODALS (pub/news) */
-.detail-img{width:100%;max-height:280px;object-fit:cover;display:block}
-.detail-meta{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:1rem 0 .75rem}
-.detail-title{font-size:1.15rem;font-weight:800;color:var(--navy);margin-bottom:.6rem;line-height:1.3;letter-spacing:-.02em}
-.detail-authors{font-size:.82rem;color:var(--muted);margin-bottom:.25rem}
-.detail-venue{font-size:.82rem;color:var(--gray);font-style:italic;margin-bottom:.75rem}
-.detail-abstract-label{font-size:.63rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.45rem;display:block}
-.detail-abstract{font-size:.88rem;color:var(--muted);line-height:1.78}
-
-/* CROP MODAL */
-.crop-modal-body{padding:1.25rem;display:flex;flex-direction:column;gap:1rem;overflow:hidden}
-.crop-container{max-height:380px;min-height:200px;overflow:hidden;border-radius:var(--r);border:1px solid var(--border);background:#000}
-#crop-img{display:block;max-width:100%}
-.crop-actions{display:flex;gap:.65rem;justify-content:flex-end}
-.crop-ratio-btns{display:flex;gap:.45rem;flex-wrap:wrap}
-.crop-ratio-btn{background:var(--off);border:1.5px solid var(--border);border-radius:6px;padding:.3rem .65rem;font-size:.72rem;font-weight:600;cursor:pointer;color:var(--muted);transition:var(--tr);font-family:var(--f)}
-.crop-ratio-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(74,123,200,.08)}
-
-/* AUTHORS CHIP */
-.authors-chips{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:.55rem;min-height:28px}
-.auth-chip{background:rgba(74,123,200,.1);border:1px solid rgba(74,123,200,.2);color:var(--navy-mid);padding:.22rem .65rem;border-radius:50px;font-size:.73rem;display:inline-flex;align-items:center;gap:.35rem;font-weight:500}
-.auth-chip-rm{background:none;border:none;color:var(--gray);cursor:pointer;font-size:.8rem;line-height:1;padding:0;display:flex}
-.auth-chip-rm:hover{color:#dc2626}
-.authors-add-row{display:flex;gap:.5rem;flex-wrap:wrap}
-.authors-add-row select,.authors-add-row input{flex:1;min-width:120px;padding:.48rem .72rem;background:var(--off);border:1.5px solid var(--border);border-radius:7px;font-size:.82rem;color:var(--text);font-family:var(--f)}
-
-/* UPLOAD COMPONENT */
+/* DASHBOARD & ADMIN */
+#dash{display:none;position:fixed;inset:0;z-index:950;flex-direction:column;background:#eef1f7}
+#dash.open{display:flex}
+.dn{background:var(--navy);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;border-bottom:1px solid rgba(255,255,255,.07)}
+.dl{display:grid;grid-template-columns:205px 1fr;flex:1;overflow:hidden}
+.ds{background:#fff;border-right:1px solid var(--border);padding:.9rem .7rem;overflow-y:auto}
+.dc{padding:1.5rem;overflow-y:auto;flex:1}
+.dsec{display:none}.dsec.active{display:block}
+.dcard{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem;margin-bottom:.9rem;box-shadow:var(--shadow)}
+.aci-list{display:flex;flex-direction:column;gap:.65rem;margin-bottom:.8rem}
+.aci{background:var(--off);border:1px solid var(--border);border-radius:var(--r);padding:.9rem}
+.aci-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;gap:.5rem}
 .up-wrap{border:2px dashed var(--border);border-radius:var(--r);padding:1.1rem;text-align:center;transition:var(--tr);cursor:pointer;position:relative;overflow:hidden}
 .up-wrap:hover{border-color:var(--accent);background:rgba(74,123,200,.03)}
 .up-preview{width:100%;max-height:130px;object-fit:cover;border-radius:7px;margin-bottom:.5rem;display:none}
 .up-preview.show{display:block}
-.up-ph{font-size:1.4rem;display:block;margin-bottom:.3rem;opacity:.5}
-.up-label{font-size:.77rem;color:var(--muted)}
-.up-hint{font-size:.7rem;color:var(--accent);font-weight:600;margin-top:.28rem;display:block}
 .up-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.up-spinner{display:none;font-size:.74rem;color:var(--accent);margin-top:.28rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem}
+@media(max-width:768px){.dl{grid-template-columns:1fr}.ds{display:none}.g2,.g3{grid-template-columns:1fr}}
 
-/* DASHBOARD */
-#dash{display:none;position:fixed;inset:0;z-index:950;flex-direction:column;background:#eef1f7}
-#dash.open{display:flex}
-.dn{background:var(--navy);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.07)}
-.dn-brand{font-size:1.05rem;font-weight:800;color:#fff;display:flex;align-items:center;gap:.45rem;letter-spacing:-.02em}
-.dn-chip{font-size:.6rem;background:rgba(255,255,255,.1);padding:.15rem .45rem;border-radius:4px;color:var(--accent-light);font-weight:700;letter-spacing:.07em}
-.dn-r{display:flex;align-items:center;gap:.55rem}
-.dn-uc{background:rgba(255,255,255,.1);border-radius:18px;padding:.25rem .78rem;font-size:.73rem;color:rgba(255,255,255,.78);white-space:nowrap;max-width:160px;overflow:hidden;text-overflow:ellipsis}
-.dl{display:grid;grid-template-columns:205px 1fr;flex:1;overflow:hidden}
-.ds{background:#fff;border-right:1px solid var(--border);padding:.9rem .7rem;overflow-y:auto}
-.dni{width:100%;text-align:left;padding:.48rem .78rem;border-radius:7px;border:none;background:transparent;color:var(--muted);font-size:.8rem;cursor:pointer;transition:var(--tr);font-family:var(--f);margin-bottom:.14rem;display:flex;align-items:center;gap:.5rem;font-weight:500}
-.dni:hover{background:var(--off);color:var(--navy)}
-.dni.active{background:rgba(74,123,200,.1);color:var(--accent);font-weight:700}
-.dnsep{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-light);padding:.35rem .78rem .25rem;margin-top:.5rem}
-.dc{padding:1.5rem;overflow-y:auto;flex:1}
-.dsec{display:none}.dsec.active{display:block}
-.dpt{font-size:1.35rem;font-weight:800;color:var(--navy);margin-bottom:.3rem;letter-spacing:-.02em}
-.dps{font-size:.8rem;color:var(--muted);margin-bottom:1.65rem}
-.dcard{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem;margin-bottom:.9rem;box-shadow:var(--shadow)}
-.dcard h3{font-size:.93rem;font-weight:800;color:var(--navy);margin-bottom:.95rem;padding-bottom:.58rem;border-bottom:1px solid var(--border);letter-spacing:-.01em}
-.d2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
-.d3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.8rem}
-.pubi-dash{background:var(--off);border:1px solid var(--border);border-radius:var(--r);padding:.88rem 1rem;margin-bottom:.65rem;display:flex;align-items:flex-start;gap:.8rem}
-.pubi-dash-b{flex:1}
-.pubi-dash-t{font-size:.87rem;font-weight:700;color:var(--navy);margin-bottom:.15rem;letter-spacing:-.01em}
-.pubi-dash-m{font-size:.72rem;color:var(--muted)}
-.admin-table{width:100%;border-collapse:collapse}
-.admin-table th{background:var(--off);padding:.5rem .85rem;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);border-bottom:1px solid var(--border);text-align:left}
-.admin-table td{padding:.62rem .85rem;border-bottom:1px solid var(--border);font-size:.8rem;color:var(--text)}
-.admin-table tr:hover td{background:var(--off)}
-.aci-list{display:flex;flex-direction:column;gap:.65rem;margin-bottom:.8rem}
-.aci{background:var(--off);border:1px solid var(--border);border-radius:var(--r);padding:.9rem}
-.aci-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;gap:.5rem}
-.aci-t{font-size:.84rem;font-weight:700;color:var(--navy);letter-spacing:-.01em;flex:1}
-.pending-n{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.22);border-radius:var(--r);padding:.85rem .95rem;margin-bottom:1.25rem;font-size:.81rem;color:#92400e}
-@media(max-width:768px){
-  .dl{grid-template-columns:1fr}
-  .ds{display:none}
-  .d2,.d3{grid-template-columns:1fr}
-  .dn-uc{display:none}
-}
+/* DEDICATED PAGES (Details) */
+.dp-container{background:#fff; border:1px solid var(--border); border-radius:var(--rl); padding:2.5rem; margin-top:2rem; box-shadow:var(--shadow);}
+.dp-hero{display:flex; gap:2rem; align-items:center; border-bottom:1px solid var(--border); padding-bottom:2rem; margin-bottom:2rem;}
+.dp-photo{width:130px; height:130px; border-radius:50%; object-fit:cover; border:3px solid var(--accent); flex-shrink:0;}
+.dp-photo-ph{width:130px; height:130px; border-radius:50%; background:rgba(74,123,200,.1); border:3px solid rgba(74,123,200,.3); display:flex; align-items:center; justify-content:center; font-size:3rem; color:var(--accent); flex-shrink:0;}
+.dp-name{font-size:1.8rem; font-weight:800; color:var(--navy); margin-bottom:.3rem; letter-spacing:-.02em;}
+.dp-role{font-size:1rem; color:var(--accent); font-weight:600; margin-bottom:.3rem;}
+.dp-dept{font-size:.85rem; color:var(--muted); line-height:1.5;}
+.dp-section{margin-bottom:2rem;}
+.dp-slabel{font-size:.7rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--gray); margin-bottom:.8rem; display:block;}
+.dp-img{width:100%; max-height:400px; object-fit:cover; border-radius:var(--r); margin-bottom:2rem;}
+.dp-title{font-size:1.5rem; font-weight:800; color:var(--navy); margin-bottom:.8rem; line-height:1.3;}
+@media(max-width:600px){.dp-container{padding:1.5rem;} .dp-hero{flex-direction:column; text-align:center;} .dp-photo, .dp-photo-ph{width:100px; height:100px;}}
 </style>
 </head>
 <body>
@@ -418,10 +329,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     <div class="nav-in">
       <div class="nav-logo" onclick="goPage('home')">
         <div class="nav-logo-box" id="nav-logo-box"><div class="nav-logo-box-text">ILA<br>MPS</div></div>
-        <div>
-          <div class="nav-logo-nm" id="nav-lab-name">ILAMPS</div>
-          <span class="nav-logo-sb">JUST · Bangladesh</span>
-        </div>
+        <div class="nav-logo-nm" id="nav-lab-name">ILAMPS</div>
       </div>
       <ul class="nav-links" id="nav-links">
         <li><a onclick="goPage('home')">Home</a></li>
@@ -453,7 +361,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     <div class="con" style="width: 100%; z-index: 3;">
       <div class="hero-split">
         <div class="hero-content">
-          <div class="hero-badge">Active Research Group · JUST, Bangladesh</div>
+          <div class="hero-badge">Active Research Group</div>
           <h1 class="hero-title" id="h-name">ILAMPS</h1>
           <p class="hero-uni" id="h-uni"></p>
           <p class="hero-desc" id="h-desc"></p>
@@ -477,13 +385,21 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     </div>
   </section>
 
+  <div class="home-sec gray">
+    <div class="con">
+      <div class="shdr"><span class="slabel">Leadership</span><h2 class="stitle">Principal Investigator</h2></div>
+      <div class="pi-card pi-card-light" id="home-pi-container">
+        </div>
+    </div>
+  </div>
+
   <div class="home-sec">
     <div class="con">
       <div class="about-grid">
         <div>
           <div class="about-big" onclick="goPage('publications')">
             <div class="about-big-num" id="ab-pubs">—</div>
-            <div class="about-big-lbl">Publications &amp; accepted abstracts · Click to view all</div>
+            <div class="about-big-lbl">Publications &amp; abstracts · View all</div>
           </div>
           <div class="about-sm-row">
             <div class="about-sm" onclick="goPage('research')"><div class="num" id="ab-projs">—</div><div class="lbl">Projects</div></div>
@@ -516,12 +432,12 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
       <a class="view-all" onclick="goPage('publications')">View all publications →</a>
     </div>
   </div>
-  
+
   <div class="home-sec gray">
     <div class="con">
-      <div class="shdr"><span class="slabel">Research Group</span><h2 class="stitle">Meet the Team</h2></div>
-      <div class="team-grid" id="home-team"></div>
-      <a class="view-all" onclick="goPage('team')">Meet everyone →</a>
+      <div class="shdr"><span class="slabel">Visuals</span><h2 class="stitle">Recent Gallery</h2></div>
+      <div class="gal-grid" id="home-gallery"></div>
+      <a class="view-all" onclick="goPage('gallery')">Load More Gallery →</a>
     </div>
   </div>
 </div>
@@ -529,28 +445,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 <div class="page" id="page-team">
   <div style="padding:4.5rem 0">
     <div class="con">
-      <button class="back-btn" onclick="goPage('home')">← Back to Home</button>
-      <div class="shdr"><span class="slabel">Research Group</span><h2 class="stitle">Our Team</h2><p class="ssub">Researchers working at the frontier of computational materials science.</p></div>
-      <div style="margin-bottom:3rem;background:var(--navy);border-radius:var(--rl);padding:2rem 2.25rem">
-        <div class="tg-label" style="color:rgba(255,255,255,.5);border-color:rgba(255,255,255,.1)">Principal Investigator</div>
-        <div class="pi-card" style="background:transparent;border:none;padding:0;gap:2rem;margin-top:.5rem">
-          <div style="text-align:center">
-            <div id="pi-photo-w"><div class="pi-photo-ph">👨‍🔬</div></div>
-            <div class="pi-name" id="pi-name"></div>
-            <div class="pi-desig" id="pi-desig"></div>
-            <div class="pi-dept" id="pi-dept"></div>
-            <div class="pi-links" id="pi-links"></div>
-          </div>
-          <div>
-            <span class="pi-sl">Biography</span>
-            <p class="pi-bio" id="pi-bio"></p>
-            <span class="pi-sl">Research Interests</span>
-            <div class="pi-ints" id="pi-ints"></div>
-            <span class="pi-sl">Contact</span>
-            <p class="pi-bio"><a id="pi-email" href="" style="color:var(--accent-light)"></a></p>
-          </div>
-        </div>
-      </div>
+      <div class="shdr"><span class="slabel">Research Group</span><h2 class="stitle">Our Team</h2></div>
       <div id="team-grad"></div>
       <div id="team-ug"></div>
       <div id="team-alumni"></div>
@@ -562,8 +457,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 <div class="page" id="page-research">
   <div style="padding:4.5rem 0">
     <div class="con">
-      <button class="back-btn" onclick="goPage('home')">← Back to Home</button>
-      <div class="shdr"><span class="slabel">Our Focus</span><h2 class="stitle">Research Areas</h2><p class="ssub">Problems at the intersection of simulation, machine learning, and semiconductor materials.</p></div>
+      <div class="shdr"><span class="slabel">Our Focus</span><h2 class="stitle">Research Areas</h2></div>
       <div class="res-grid" id="research-grid"></div>
       <div style="margin-top:3.5rem"><div class="shdr"><span class="slabel">Active Work</span><h2 class="stitle">Ongoing Projects</h2></div><div class="proj-list" id="proj-list"></div></div>
     </div>
@@ -573,8 +467,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 <div class="page" id="page-publications">
   <div style="padding:4.5rem 0">
     <div class="con">
-      <button class="back-btn" onclick="goPage('home')">← Back to Home</button>
-      <div class="shdr"><span class="slabel">Scholarly Output</span><h2 class="stitle">All Publications <span id="pub-total-count" style="font-size:1rem;color:var(--accent);font-weight:700"></span></h2><p class="ssub">All peer-reviewed contributions from ILAMPS members.</p></div>
+      <div class="shdr"><span class="slabel">Scholarly Output</span><h2 class="stitle">All Publications <span id="pub-total-count" style="font-size:1rem;color:var(--accent);font-weight:700"></span></h2></div>
       <div class="pub-list" id="all-pubs"></div>
     </div>
   </div>
@@ -583,7 +476,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 <div class="page" id="page-news">
   <div style="padding:4.5rem 0">
     <div class="con">
-      <button class="back-btn" onclick="goPage('home')">← Back to Home</button>
       <div class="shdr"><span class="slabel">Latest Updates</span><h2 class="stitle">News &amp; Announcements</h2></div>
       <div class="news-grid" id="all-news"></div>
     </div>
@@ -593,7 +485,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 <div class="page" id="page-gallery">
   <div style="padding:4.5rem 0">
     <div class="con">
-      <button class="back-btn" onclick="goPage('home')">← Back to Home</button>
       <div class="shdr"><span class="slabel">Lab Life</span><h2 class="stitle">Group Gallery</h2></div>
       <div class="gal-grid" id="gal-grid"></div>
     </div>
@@ -603,7 +494,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 <div class="page" id="page-contact">
   <div style="padding:4.5rem 0;background:var(--navy);min-height:100vh">
     <div class="con">
-      <button class="back-btn" style="color:rgba(255,255,255,.5)" onclick="goPage('home')">← Back to Home</button>
       <div class="shdr"><span class="slabel" style="color:var(--accent-light)">Get In Touch</span><h2 class="stitle" style="color:#fff">Contact &amp; Join Us</h2></div>
       <div class="contact-grid">
         <div>
@@ -622,11 +512,52 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   </div>
 </div>
 
+<div class="page" id="page-profile">
+  <div style="padding:4.5rem 0">
+    <div class="con" id="dp-profile-body">
+      </div>
+  </div>
+</div>
+
+<div class="page" id="page-publication">
+  <div style="padding:4.5rem 0">
+    <div class="con" id="dp-pub-body">
+      </div>
+  </div>
+</div>
+
+<div class="page" id="page-newsdetail">
+  <div style="padding:4.5rem 0">
+    <div class="con" id="dp-news-body">
+      </div>
+  </div>
+</div>
+
+
 <footer>
   <div class="con">
-    <div class="fi">
-      <p id="footer-copy">© ILAMPS · JUST, Bangladesh</p>
-      <div class="fl"><a onclick="goPage('team')">Team</a><a onclick="goPage('publications')">Publications</a><a onclick="goPage('contact')">Contact</a></div>
+    <div class="footer-grid">
+      <div>
+        <div class="f-title">ILAMPS</div>
+        <div class="f-logos">
+          <div class="f-logo-box" id="f-logo-box-1" style="display:none"><img id="f-logo-ilamps" src=""></div>
+          <div class="f-logo-box" id="f-logo-box-2" style="display:none"><img id="f-logo-just" src=""></div>
+        </div>
+      </div>
+      <div>
+        <div class="f-title">Contact</div>
+        <p style="margin-bottom:.5rem" id="f-addr"></p>
+        <a id="f-email" class="f-link"></a>
+      </div>
+      <div>
+        <div class="f-title">Quick Links</div>
+        <a onclick="goPage('team')" class="f-link">Team</a>
+        <a onclick="goPage('publications')" class="f-link">Publications</a>
+        <a onclick="goPage('contact')" class="f-link">Contact Us</a>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <p id="footer-copy">© ILAMPS</p>
     </div>
   </div>
 </footer>
@@ -635,7 +566,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   <div class="mb" style="max-width:400px">
     <div class="mh"><h2>Sign In</h2><button class="mc" onclick="closeMo('login')">✕</button></div>
     <div class="mbody">
-      <p class="ms">Sign in with your lab account credentials.</p>
       <div class="ff"><label>Email</label><input type="email" id="l-email" placeholder="you@example.com"></div>
       <div class="ff"><label>Password</label><input type="password" id="l-pwd" placeholder="••••••••"></div>
       <div class="ferr" id="l-err"></div>
@@ -648,7 +578,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   <div class="mb" style="max-width:420px">
     <div class="mh"><h2>Request Access</h2><button class="mc" onclick="closeMo('signup')">✕</button></div>
     <div class="mbody">
-      <p class="ms">Create a lab account. Visible after admin approval.</p>
       <div class="g2">
         <div class="ff"><label>Full Name</label><input type="text" id="s-name"></div>
         <div class="ff"><label>Role</label><select id="s-role"><option value="graduate">Graduate Student</option><option value="undergrad">Undergraduate</option><option value="ra">Research Assistant</option></select></div>
@@ -662,38 +591,10 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   </div>
 </div>
 
-<div class="mo" id="mo-member">
-  <div class="mb" style="max-width:540px">
-    <div class="mh" style="padding-bottom:0"><h2 style="opacity:0">.</h2><button class="mc" onclick="closeMo('member')">✕</button></div>
-    <div class="member-modal-body" id="mm-body"></div>
-  </div>
-</div>
-
-<div class="mo" id="mo-pub">
-  <div class="mb" style="max-width:600px">
-    <div class="mh" style="padding:1.1rem 1.4rem 0"><h2>Publication</h2><button class="mc" onclick="closeMo('pub')">✕</button></div>
-    <div class="mbody" id="pub-detail-body"></div>
-  </div>
-</div>
-
-<div class="mo" id="mo-news">
-  <div class="mb" style="max-width:560px">
-    <div class="mh" style="padding:1.1rem 1.4rem 0"><h2>News</h2><button class="mc" onclick="closeMo('news')">✕</button></div>
-    <div class="mbody" id="news-detail-body"></div>
-  </div>
-</div>
-
 <div class="mo" id="mo-crop">
   <div class="mb" style="max-width:580px">
     <div class="mh"><h2>Crop Image</h2><button class="mc" onclick="cancelCrop()">✕</button></div>
     <div class="crop-modal-body">
-      <div class="crop-ratio-btns">
-        <button class="crop-ratio-btn active" onclick="setCropRatio(NaN)">Free</button>
-        <button class="crop-ratio-btn" onclick="setCropRatio(1)">1:1</button>
-        <button class="crop-ratio-btn" onclick="setCropRatio(16/9)">16:9</button>
-        <button class="crop-ratio-btn" onclick="setCropRatio(4/3)">4:3</button>
-        <button class="crop-ratio-btn" onclick="setCropRatio(3/4)">3:4 (Portrait)</button>
-      </div>
       <div class="crop-container"><img id="crop-img" src=""></div>
       <div class="crop-actions">
         <button class="btn btn-o" onclick="cancelCrop()">Cancel</button>
@@ -705,21 +606,19 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
 <div id="dash">
   <div class="dn">
-    <div class="dn-brand">ILAMPS <span class="dn-chip" id="dash-role">Member</span></div>
+    <div class="dn-brand">ILAMPS</div>
     <div class="dn-r">
-      <div class="dn-uc">👤 <span id="dash-name">—</span></div>
       <button class="btn btn-g btn-sm" onclick="closeDash()">← Back</button>
       <button class="btn btn-d btn-sm" onclick="signOut()">Logout</button>
     </div>
   </div>
   <div class="dl">
     <div class="ds">
-      <div class="dnsep">My Account</div>
       <button class="dni active" data-sec="d-profile">👤 My Profile</button>
       <button class="dni" data-sec="d-mypubs">📄 My Publications</button>
       <div id="admin-nav" style="display:none">
         <div class="dnsep">Admin</div>
-        <button class="dni" data-sec="d-lab">⚙️ Lab Settings</button>
+        <button class="dni" data-sec="d-lab">⚙️ Settings & Logos</button>
         <button class="dni" data-sec="d-pi">👨‍🔬 PI / Supervisor</button>
         <button class="dni" data-sec="d-hero">🖼️ Hero Slides</button>
         <button class="dni" data-sec="d-members">👥 Members</button>
@@ -733,262 +632,218 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
       <div class="dsec active" id="d-profile">
         <div class="dpt">My Profile</div>
-        <div class="dps">Your info shown on the public site after admin approval.</div>
-        <div id="d-pending" class="pending-n" style="display:none">⏳ <strong>Pending Approval</strong> — Admin will approve your profile to make it public.</div>
         <div class="dcard">
-          <h3>Profile Photo</h3>
           <div class="d2">
             <div class="ff">
               <label>Photo</label>
               <div class="up-wrap" onclick="trigUp('up-profile','profiles',url=>{profilePhotoUrl=url;showPrev('prev-profile','ph-profile',url)})">
                 <img class="up-preview" id="prev-profile" src="">
                 <span class="up-ph" id="ph-profile">📷</span>
-                <span class="up-label">Click to upload photo</span>
-                <span class="up-hint">JPG, PNG · Max 5MB · You can crop after selecting</span>
-                <span class="up-spinner" id="spin-up-profile">⏳ Uploading...</span>
                 <input class="up-input" type="file" accept="image/*" id="up-profile">
               </div>
             </div>
-            <div style="display:flex;flex-direction:column;gap:.8rem">
+            <div>
               <div class="ff"><label>Full Name</label><input type="text" id="p-name"></div>
               <div class="ff"><label>Role</label><select id="p-role"><option value="graduate">Graduate Student</option><option value="undergrad">Undergraduate</option><option value="ra">Research Assistant</option><option value="alumni">Alumni</option></select></div>
             </div>
           </div>
-        </div>
-        <div class="dcard">
-          <h3>Details</h3>
-          <div class="ff"><label>Designation (e.g. MSc Researcher)</label><input type="text" id="p-desig"></div>
+          <div class="ff"><label>Designation</label><input type="text" id="p-desig"></div>
           <div class="ff"><label>Research Topic</label><input type="text" id="p-research"></div>
-          <div class="ff"><label>Short Bio</label><textarea id="p-bio" placeholder="A short paragraph about yourself..."></textarea></div>
-          <div class="d2">
+          <div class="ff"><label>Short Bio</label><textarea id="p-bio"></textarea></div>
+          <div class="g2">
             <div class="ff"><label>Public Email</label><input type="email" id="p-email"></div>
-            <div class="ff"><label>Personal Website</label><input type="text" id="p-website" placeholder="https://..."></div>
-          </div>
-          <div class="d2">
-            <div class="ff"><label>LinkedIn</label><input type="text" id="p-linkedin" placeholder="https://linkedin.com/in/..."></div>
-            <div class="ff"><label>Google Scholar</label><input type="text" id="p-gs" placeholder="https://scholar.google.com/..."></div>
+            <div class="ff"><label>Website</label><input type="text" id="p-website"></div>
+            <div class="ff"><label>LinkedIn</label><input type="text" id="p-linkedin"></div>
+            <div class="ff"><label>Google Scholar</label><input type="text" id="p-gs"></div>
           </div>
           <button class="btn btn-p" onclick="saveProfile()">💾 Save Profile</button>
         </div>
       </div>
 
       <div class="dsec" id="d-mypubs">
-        <div class="dpt">My Publications</div>
-        <div class="dps">Add your papers — appear on the public Publications page.</div>
+        <div class="dpt">Publications</div>
         <div class="dcard">
-          <h3>Add Publication</h3>
-          
+          <h3 id="pub-form-title">Add Publication</h3>
           <div class="d2">
             <div class="ff">
-              <label>Thumbnail Image (Home Square)</label>
+              <label>Thumbnail (Square)</label>
               <div class="up-wrap" onclick="trigUp('up-pub-thumb','publications',url=>{pubThumbUrl=url;showPrev('prev-pub-thumb','ph-pub-thumb',url)})">
                 <img class="up-preview" id="prev-pub-thumb" src="">
                 <span class="up-ph" id="ph-pub-thumb">🔳</span>
-                <span class="up-label">Upload Thumbnail</span>
-                <span class="up-spinner" id="spin-up-pub-thumb">⏳ Uploading...</span>
                 <input class="up-input" type="file" accept="image/*" id="up-pub-thumb">
               </div>
             </div>
             <div class="ff">
-              <label>Detail Image (Inside Paper)</label>
+              <label>Detail Image (Banner)</label>
               <div class="up-wrap" onclick="trigUp('up-pub-detail','publications',url=>{pubDetailUrl=url;showPrev('prev-pub-detail','ph-pub-detail',url)})">
                 <img class="up-preview" id="prev-pub-detail" src="">
                 <span class="up-ph" id="ph-pub-detail">🖼️</span>
-                <span class="up-label">Upload Detail Image</span>
-                <span class="up-spinner" id="spin-up-pub-detail">⏳ Uploading...</span>
                 <input class="up-input" type="file" accept="image/*" id="up-pub-detail">
               </div>
             </div>
           </div>
-
-          <div class="ff"><label>Title</label><input type="text" id="np-t" placeholder="Full paper title"></div>
+          <div class="ff"><label>Title</label><input type="text" id="np-t"></div>
           <div class="ff">
             <label>Authors</label>
             <div class="authors-chips" id="np-auth-chips"></div>
-            <div class="authors-add-row">
-              <select id="np-auth-select"><option value="">+ Select lab member...</option></select>
-              <button class="btn btn-o btn-sm" onclick="addAuthorMember()">Add</button>
-            </div>
-            <div class="authors-add-row" style="margin-top:.4rem">
-              <input type="text" id="np-auth-custom" placeholder="Or type custom name...">
-              <button class="btn btn-o btn-sm" onclick="addAuthorCustom()">Add</button>
+            <div class="g2" style="margin-top:.4rem">
+              <div style="display:flex;gap:.5rem"><select id="np-auth-select"></select><button class="btn btn-o btn-sm" onclick="addAuthorMember()">Add</button></div>
+              <div style="display:flex;gap:.5rem"><input type="text" id="np-auth-custom" placeholder="Custom name..."><button class="btn btn-o btn-sm" onclick="addAuthorCustom()">Add</button></div>
             </div>
           </div>
-          <div class="d3">
-            <div class="ff"><label>Publication Date</label><input type="date" id="np-date"></div>
-            <div class="ff"><label>Year</label><input type="text" id="np-yr" placeholder="2025"></div>
+          <div class="g3">
+            <div class="ff"><label>Date</label><input type="date" id="np-date"></div>
+            <div class="ff"><label>Year</label><input type="text" id="np-yr"></div>
             <div class="ff"><label>Type</label><select id="np-type"><option>Journal Paper</option><option>Conference Paper</option><option>Preprint</option><option>Book Chapter</option></select></div>
           </div>
           <div class="ff"><label>Journal / Conference Name</label><input type="text" id="np-venue"></div>
-          <div class="ff"><label>Abstract</label><textarea id="np-abs" style="min-height:90px" placeholder="Paste abstract here..."></textarea></div>
-          <div class="ff"><label>DOI / Link</label><input type="text" id="np-doi" placeholder="https://doi.org/..."></div>
-          <button class="btn btn-p" onclick="addPub()">+ Add Publication</button>
+          <div class="ff"><label>Abstract</label><textarea id="np-abs" style="min-height:90px"></textarea></div>
+          <div class="ff"><label>DOI / Link</label><input type="text" id="np-doi"></div>
+          <div style="display:flex;gap:1rem;">
+             <button class="btn btn-p" id="btn-save-pub" onclick="savePub()">+ Save Publication</button>
+             <button class="btn btn-o" id="btn-cancel-pub" style="display:none" onclick="resetPubForm()">Cancel Edit</button>
+          </div>
         </div>
-        <div class="dcard"><h3>My Papers</h3><div id="my-pubs"></div></div>
+        <div class="dcard"><h3>Manage Papers</h3><div id="my-pubs"></div></div>
       </div>
 
       <div class="dsec" id="d-lab">
-        <div class="dpt">Lab Settings</div>
+        <div class="dpt">Settings & Logos</div>
         <div class="dcard">
-          <h3>Logo</h3>
-          <div class="ff">
-            <label>Lab Logo (PNG with white or transparent background)</label>
-            <div class="up-wrap" onclick="trigUp('up-logo','logos',url=>{setVal('ls-logo',url);showPrev('prev-logo','ph-logo',url);updateFavicon(url)})">
-              <img class="up-preview" id="prev-logo" src="">
-              <span class="up-ph" id="ph-logo">🏛️</span>
-              <span class="up-label">Click to upload logo</span>
-              <span class="up-hint">Will show on white background in navbar. Also sets favicon.</span>
-              <span class="up-spinner" id="spin-up-logo">⏳ Uploading...</span>
-              <input class="up-input" type="file" accept="image/*" id="up-logo">
+          <div class="d2">
+            <div class="ff">
+              <label>ILAMPS Logo</label>
+              <div class="up-wrap" onclick="trigUp('up-logo','logos',url=>{setVal('ls-logo',url);showPrev('prev-logo','ph-logo',url);})">
+                <img class="up-preview" id="prev-logo" src="">
+                <span class="up-ph" id="ph-logo">🏛️</span>
+                <input class="up-input" type="file" accept="image/*" id="up-logo">
+              </div>
+              <input type="hidden" id="ls-logo">
+            </div>
+            <div class="ff">
+              <label>JUST Logo (University)</label>
+              <div class="up-wrap" onclick="trigUp('up-just-logo','logos',url=>{setVal('ls-just-logo',url);showPrev('prev-just-logo','ph-just-logo',url);})">
+                <img class="up-preview" id="prev-just-logo" src="">
+                <span class="up-ph" id="ph-just-logo">🏫</span>
+                <input class="up-input" type="file" accept="image/*" id="up-just-logo">
+              </div>
+              <input type="hidden" id="ls-just-logo">
             </div>
           </div>
-          <input type="hidden" id="ls-logo">
-          <button class="btn btn-p" onclick="saveLogoSetting()">💾 Save Logo</button>
-        </div>
-        <div class="dcard">
-          <h3>General Info</h3>
-          <div class="d2">
-            <div class="ff"><label>Lab Short Name</label><input type="text" id="ls-name"></div>
-            <div class="ff"><label>Founded Year</label><input type="text" id="ls-founded"></div>
-          </div>
-          <div class="ff"><label>Full Name</label><input type="text" id="ls-fullname"></div>
-          <div class="ff"><label>University</label><input type="text" id="ls-uni"></div>
-          <div class="ff"><label>Department</label><input type="text" id="ls-dept"></div>
-          <div class="ff"><label>About (Paragraph 1)</label><textarea id="ls-a1"></textarea></div>
-          <div class="ff"><label>About (Paragraph 2)</label><textarea id="ls-a2"></textarea></div>
-          <button class="btn btn-p" onclick="saveLabSettings()">💾 Save</button>
-        </div>
-        <div class="dcard">
-          <h3>Contact Info</h3>
+          <div class="ff"><label>Lab Name</label><input type="text" id="ls-name"></div>
+          <div class="g2"><div class="ff"><label>University</label><input type="text" id="ls-uni"></div><div class="ff"><label>Department</label><input type="text" id="ls-dept"></div></div>
+          <div class="ff"><label>About</label><textarea id="ls-a1"></textarea></div>
           <div class="ff"><label>Address</label><textarea id="ls-addr"></textarea></div>
-          <div class="d2"><div class="ff"><label>Lab Email</label><input type="email" id="ls-email"></div><div class="ff"><label>Phone</label><input type="text" id="ls-phone"></div></div>
-          <div class="ff"><label>Join Us Text</label><textarea id="ls-join"></textarea></div>
-          <div class="ff"><label>Requirements (one per line)</label><textarea id="ls-reqs"></textarea></div>
-          <button class="btn btn-p" onclick="saveContact()">💾 Save Contact</button>
+          <div class="g2"><div class="ff"><label>Email</label><input type="email" id="ls-email"></div><div class="ff"><label>Phone</label><input type="text" id="ls-phone"></div></div>
+          <button class="btn btn-p" onclick="saveLabSettings()">💾 Save Settings</button>
         </div>
       </div>
 
       <div class="dsec" id="d-pi">
         <div class="dpt">PI / Supervisor</div>
         <div class="dcard">
-          <h3>PI Photo</h3>
           <div class="ff">
             <div class="up-wrap" onclick="trigUp('up-pi','pi',url=>{setVal('pi-photo',url);showPrev('prev-pi','ph-pi',url)})">
-              <img class="up-preview" id="prev-pi" src="">
-              <span class="up-ph" id="ph-pi">👨‍🔬</span>
-              <span class="up-label">Click to upload PI photo</span>
-              <span class="up-hint">Square photo recommended · You can crop after selecting</span>
-              <span class="up-spinner" id="spin-up-pi">⏳ Uploading...</span>
-              <input class="up-input" type="file" accept="image/*" id="up-pi">
+              <img class="up-preview" id="prev-pi" src=""><span class="up-ph" id="ph-pi">👨‍🔬</span><input class="up-input" type="file" accept="image/*" id="up-pi">
             </div>
           </div>
           <input type="hidden" id="pi-photo">
-        </div>
-        <div class="dcard">
-          <h3>PI Information</h3>
-          <div class="d2"><div class="ff"><label>Full Name</label><input type="text" id="pi-name"></div><div class="ff"><label>Designation</label><input type="text" id="pi-desig"></div></div>
-          <div class="d2"><div class="ff"><label>Department</label><input type="text" id="pi-dept"></div><div class="ff"><label>University</label><input type="text" id="pi-uni"></div></div>
+          <div class="g2"><div class="ff"><label>Full Name</label><input type="text" id="pi-name"></div><div class="ff"><label>Designation</label><input type="text" id="pi-desig"></div></div>
+          <div class="g2"><div class="ff"><label>Department</label><input type="text" id="pi-dept"></div><div class="ff"><label>University</label><input type="text" id="pi-uni"></div></div>
           <div class="ff"><label>Email</label><input type="email" id="pi-email"></div>
-          <div class="ff"><label>Biography</label><textarea id="pi-bio" style="min-height:95px"></textarea></div>
-          <div class="ff"><label>Research Interests (one per line)</label><textarea id="pi-ints"></textarea></div>
-          <div class="d3"><div class="ff"><label>Google Scholar</label><input type="text" id="pi-gs"></div><div class="ff"><label>ResearchGate</label><input type="text" id="pi-rg"></div><div class="ff"><label>ORCID</label><input type="text" id="pi-orcid"></div></div>
+          <div class="ff"><label>Biography</label><textarea id="pi-bio"></textarea></div>
+          <div class="ff"><label>Interests (one per line)</label><textarea id="pi-ints"></textarea></div>
           <button class="btn btn-p" onclick="savePI()">💾 Save PI</button>
         </div>
       </div>
 
       <div class="dsec" id="d-hero">
         <div class="dpt">Hero Slides</div>
-        <div class="dps">Auto-rotating slideshow on the homepage. Add multiple images for best effect.</div>
         <div class="dcard">
-          <h3>Add Slide</h3>
           <div class="ff">
-            <label>Slide Image (landscape 16:9 recommended)</label>
             <div class="up-wrap" onclick="trigUp('up-slide','slides',url=>{setVal('ns-url',url);showPrev('prev-slide','ph-slide',url)})">
-              <img class="up-preview" id="prev-slide" src="">
-              <span class="up-ph" id="ph-slide">🖼️</span>
-              <span class="up-label">Click to upload slide image</span>
-              <span class="up-hint">Max 5MB · Crop to 16:9 for best results</span>
-              <span class="up-spinner" id="spin-up-slide">⏳ Uploading...</span>
-              <input class="up-input" type="file" accept="image/*" id="up-slide">
+              <img class="up-preview" id="prev-slide" src=""><span class="up-ph" id="ph-slide">🖼️</span><input class="up-input" type="file" accept="image/*" id="up-slide">
             </div>
           </div>
           <input type="hidden" id="ns-url">
-          <div class="ff"><label>Caption (optional)</label><input type="text" id="ns-cap" placeholder="Lab group photo, 2026"></div>
+          <div class="ff"><label>Caption</label><input type="text" id="ns-cap"></div>
           <button class="btn btn-p" onclick="addSlide()">+ Add Slide</button>
         </div>
         <div class="dcard"><h3>Current Slides</h3><div class="aci-list" id="slides-list"></div></div>
       </div>
 
       <div class="dsec" id="d-members">
-        <div class="dpt">Members Management</div>
-        <div class="dps">Approve and manage lab members. Approved members appear publicly.</div>
+        <div class="dpt">Members</div>
         <div class="dcard"><h3>All Members</h3><div id="members-list"></div></div>
       </div>
 
       <div class="dsec" id="d-research">
         <div class="dpt">Research Areas</div>
         <div class="dcard">
-          <h3>Add Research Area</h3>
-          <div class="d2"><div class="ff"><label>Icon (emoji)</label><input type="text" id="ra-icon" placeholder="🔬"></div><div class="ff"><label>Title</label><input type="text" id="ra-title"></div></div>
+          <h3 id="res-form-title">Add Area</h3>
+          <div class="g2"><div class="ff"><label>Icon (emoji)</label><input type="text" id="ra-icon"></div><div class="ff"><label>Title</label><input type="text" id="ra-title"></div></div>
           <div class="ff"><label>Description</label><textarea id="ra-desc"></textarea></div>
-          <button class="btn btn-p" onclick="addResearch()">+ Add</button>
+          <div style="display:flex;gap:1rem;">
+            <button class="btn btn-p" id="btn-save-res" onclick="saveResearch()">+ Save Area</button>
+            <button class="btn btn-o" id="btn-cancel-res" style="display:none" onclick="resetResForm()">Cancel Edit</button>
+          </div>
         </div>
         <div class="dcard"><h3>Current Areas</h3><div class="aci-list" id="research-admin"></div></div>
       </div>
 
       <div class="dsec" id="d-ongoing">
-        <div class="dpt">Ongoing Projects</div>
+        <div class="dpt">Projects</div>
         <div class="dcard">
-          <h3>Add Project</h3>
+          <h3 id="proj-form-title">Add Project</h3>
           <div class="ff"><label>Title</label><input type="text" id="op-t"></div>
-          <div class="d2"><div class="ff"><label>Status</label><select id="op-s"><option value="active">Active</option><option value="completed">Completed</option><option value="planned">Planned</option></select></div><div class="ff"><label>Members (comma separated)</label><input type="text" id="op-m"></div></div>
+          <div class="g2"><div class="ff"><label>Status</label><select id="op-s"><option value="active">Active</option><option value="completed">Completed</option><option value="planned">Planned</option></select></div><div class="ff"><label>Members (comma sep)</label><input type="text" id="op-m"></div></div>
           <div class="ff"><label>Description</label><textarea id="op-d"></textarea></div>
-          <button class="btn btn-p" onclick="addProject()">+ Add</button>
+          <div style="display:flex;gap:1rem;">
+             <button class="btn btn-p" id="btn-save-proj" onclick="saveProject()">+ Save Project</button>
+             <button class="btn btn-o" id="btn-cancel-proj" style="display:none" onclick="resetProjForm()">Cancel Edit</button>
+          </div>
         </div>
         <div class="dcard"><h3>Current Projects</h3><div class="aci-list" id="proj-admin"></div></div>
       </div>
 
       <div class="dsec" id="d-news">
-        <div class="dpt">News &amp; Announcements</div>
+        <div class="dpt">News</div>
         <div class="dcard">
-          <h3>Add News Item</h3>
+          <h3 id="news-form-title">Add News</h3>
           <div class="ff">
-            <label>Featured Image</label>
             <div class="up-wrap" onclick="trigUp('up-news-img','news',url=>{newsImgUrl=url;showPrev('prev-news-img','ph-news-img',url)})">
-              <img class="up-preview" id="prev-news-img" src="">
-              <span class="up-ph" id="ph-news-img">📰</span>
-              <span class="up-label">Upload featured image (optional)</span>
-              <span class="up-hint">Shown as thumbnail on news card</span>
-              <span class="up-spinner" id="spin-up-news-img">⏳ Uploading...</span>
-              <input class="up-input" type="file" accept="image/*" id="up-news-img">
+              <img class="up-preview" id="prev-news-img" src=""><span class="up-ph" id="ph-news-img">📰</span><input class="up-input" type="file" accept="image/*" id="up-news-img">
             </div>
           </div>
-          <div class="d2"><div class="ff"><label>Date (e.g. May 2026)</label><input type="text" id="nw-d"></div><div class="ff"><label>Category</label><select id="nw-cat"><option>General</option><option>Publication</option><option>Conference</option><option>Award</option><option>Event</option></select></div></div>
+          <div class="g2"><div class="ff"><label>Date (Text)</label><input type="text" id="nw-d"></div><div class="ff"><label>Category</label><select id="nw-cat"><option>General</option><option>Publication</option><option>Event</option></select></div></div>
           <div class="ff"><label>Headline</label><input type="text" id="nw-t"></div>
-          <div class="ff"><label>Description</label><textarea id="nw-desc" style="min-height:90px"></textarea></div>
-          <button class="btn btn-p" onclick="addNews()">+ Add News</button>
+          <div class="ff"><label>Description</label><textarea id="nw-desc"></textarea></div>
+          <div style="display:flex;gap:1rem;">
+            <button class="btn btn-p" id="btn-save-news" onclick="saveNews()">+ Save News</button>
+            <button class="btn btn-o" id="btn-cancel-news" style="display:none" onclick="resetNewsForm()">Cancel Edit</button>
+          </div>
         </div>
-        <div class="dcard"><h3>All News Items</h3><div class="aci-list" id="news-admin"></div></div>
+        <div class="dcard"><h3>All News</h3><div class="aci-list" id="news-admin"></div></div>
       </div>
 
       <div class="dsec" id="d-gallery">
         <div class="dpt">Gallery</div>
         <div class="dcard">
-          <h3>Add Photo</h3>
+          <h3 id="gal-form-title">Add Photo</h3>
           <div class="ff">
-            <label>Gallery Photo</label>
             <div class="up-wrap" onclick="trigUp('up-gal','gallery',url=>{setVal('g-url',url);showPrev('prev-gal','ph-gal',url)})">
-              <img class="up-preview" id="prev-gal" src="">
-              <span class="up-ph" id="ph-gal">📸</span>
-              <span class="up-label">Click to upload photo</span>
-              <span class="up-hint">Max 5MB</span>
-              <span class="up-spinner" id="spin-up-gal">⏳ Uploading...</span>
-              <input class="up-input" type="file" accept="image/*" id="up-gal">
+              <img class="up-preview" id="prev-gal" src=""><span class="up-ph" id="ph-gal">📸</span><input class="up-input" type="file" accept="image/*" id="up-gal">
             </div>
+            <input type="hidden" id="g-url">
           </div>
-          <input type="hidden" id="g-url">
-          <div class="ff"><label>Caption</label><input type="text" id="g-cap"></div>
-          <button class="btn btn-p" onclick="addGallery()">+ Add Photo</button>
+          <div class="g2">
+             <div class="ff"><label>Caption</label><input type="text" id="g-cap"></div>
+             <div class="ff"><label>Date</label><input type="date" id="g-date"></div>
+          </div>
+          <div style="display:flex;gap:1rem;">
+             <button class="btn btn-p" id="btn-save-gal" onclick="saveGallery()">+ Save Photo</button>
+             <button class="btn btn-o" id="btn-cancel-gal" style="display:none" onclick="resetGalForm()">Cancel Edit</button>
+          </div>
         </div>
         <div class="dcard"><h3>Gallery Photos</h3><div class="aci-list" id="gal-admin"></div></div>
       </div>
@@ -998,16 +853,19 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 </div>
 
 <script>
-// ═══ INIT ═══
+// ═══ INIT & GLOBALS ═══
 const {createClient}=supabase;
 let db;
 try{db=createClient(SUPABASE_URL,SUPABASE_ANON);}catch(e){}
 let CU=null,CP=null;
 let slides=[],slideIdx=0,slideTimer=null;
 let pubThumbUrl='', pubDetailUrl='', newsImgUrl='', profilePhotoUrl='';
-let npAuthors=[]; 
 let npAuthorsList=[];
 let cropCb=null,cropper=null,cropFile=null,cropFolder='';
+
+// State tracking for Edits
+let editState = { pub: null, news: null, gal: null, proj: null, res: null };
+let fetchedData = { pubs: [], news: [], gal: [], proj: [], res: [] };
 
 // ═══ HELPERS ═══
 const $=id=>document.getElementById(id);
@@ -1018,32 +876,46 @@ const gS=(arr,k,fb='')=>{const f=(arr||[]).find(r=>r.key===k);return f?f.value:f
 const ini=n=>(n||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
 function showToast(msg,dur=3000){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur)}
 function showPrev(prevId,phId,url){const p=$(prevId),ph=$(phId);if(p){p.src=url;p.classList.add('show')}if(ph)ph.style.display='none'}
+function hidePrev(prevId,phId){const p=$(prevId),ph=$(phId);if(p){p.src='';p.classList.remove('show')}if(ph)ph.style.display='block'}
 
-// Scroll to top
+// Scroll & Favicon
 window.addEventListener('scroll',()=>$('scroll-top').classList.toggle('show',window.scrollY>300));
-
-// Favicon from logo
 function updateFavicon(url){if(!url)return;const l=$('favicon-link');if(l)l.href=url}
 
-// ═══ ROUTER ═══
-function goPage(p){
+// ═══ SPA HASH ROUTING ═══
+// Handles dedicated pages without full page reload.
+window.addEventListener('hashchange', handleHash);
+function handleHash() {
+  const hash = window.location.hash.replace('#', '');
+  if (!hash || hash === 'home') return loadPage('home');
+  
+  const parts = hash.split('/');
+  const page = parts[0];
+  const id = parts[1];
+  
+  if (page === 'profile' && id) { loadPage('profile'); buildProfileDetail(id); }
+  else if (page === 'publication' && id) { loadPage('publication'); buildPubDetail(id); }
+  else if (page === 'newsdetail' && id) { loadPage('newsdetail'); buildNewsDetail(id); }
+  else { loadPage(page); }
+}
+
+function loadPage(p) {
   document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
-  $(`page-${p}`).classList.add('active');
-  const navA=document.querySelector(`.nav-links a[onclick="goPage('${p}')"]`);
-  if(navA)navA.classList.add('active');
+  const pageEl = $(`page-${p}`);
+  if(pageEl) pageEl.classList.add('active');
+  const navA = document.querySelector(`.nav-links a[onclick="goPage('${p}')"]`);
+  if(navA) navA.classList.add('active');
   window.scrollTo(0,0);
   $('nav-links').classList.remove('open');
-  loadPageData(p);
 }
-function loadPageData(p){
-  if(p==='home')renderHome();
-  else if(p==='team')renderTeamPage();
-  else if(p==='research')renderResearchPage();
-  else if(p==='publications')renderAllPubs();
-  else if(p==='news')renderAllNews();
-  else if(p==='gallery')renderGallery();
-  else if(p==='contact')renderContact();
+
+function goPage(p, id=null) {
+  if (id) {
+    window.location.hash = `${p}/${id}`;
+  } else {
+    window.location.hash = p;
+  }
 }
 
 // ═══ SLIDESHOW ═══
@@ -1053,14 +925,10 @@ async function loadSlides(){
   slides=data||[];
   const wrap=$('slides-wrap');
   if(!slides.length){
-    wrap.innerHTML=`<div class="hero-no-slide"><span class="hero-no-slide-icon">🖼️</span><span class="hero-no-slide-txt">Add hero slides from Admin Dashboard</span></div>`;
+    wrap.innerHTML=`<div class="hero-no-slide"><span class="hero-no-slide-txt">Add slides from Dashboard</span></div>`;
     return;
   }
-  wrap.innerHTML=slides.map((s,i)=>`
-    <div class="slide${i===0?' active':''}" id="sl${i}">
-      <img src="${s.image_url}" alt="${s.caption||''}">
-      <div class="slide-overlay"></div>
-    </div>`).join('');
+  wrap.innerHTML=slides.map((s,i)=>`<div class="slide${i===0?' active':''}" id="sl${i}"><img src="${s.image_url}"><div class="slide-overlay"></div></div>`).join('');
   const dots=$('slide-dots');
   dots.innerHTML=slides.map((_,i)=>`<button class="slide-dot${i===0?' active':''}" onclick="goSlide(${i})"></button>`).join('');
   if(slides.length>1){$('sl-prev').style.display='flex';$('sl-next').style.display='flex';}
@@ -1074,57 +942,35 @@ function goSlide(i){
 function slideDir(d){const n=(slideIdx+d+slides.length)%slides.length;goSlide(n);}
 function startSlideTimer(){clearInterval(slideTimer);if(slides.length>1)slideTimer=setInterval(()=>slideDir(1),5000);}
 
-// ═══ IMAGE UPLOAD + CROP ═══
+// ═══ UPLOAD & CROP ═══
 function trigUp(inputId,folder,cb){
   cropCb=cb; cropFolder=folder;
   $(inputId).onchange=e=>{
     const file=e.target.files[0]; if(!file)return;
     cropFile=file;
     const reader=new FileReader();
-    reader.onload=ev=>{
-      const img=$('crop-img');
-      img.src=ev.target.result;
-      openCropModal();
+    reader.onload=ev=>{$('crop-img').src=ev.target.result; $('mo-crop').classList.add('open');
+      setTimeout(()=>{if(cropper)cropper.destroy();cropper=new Cropper($('crop-img'),{viewMode:1,autoCropArea:.85,movable:true,zoomable:true,rotatable:false,scalable:false});},150);
     };
-    reader.readAsDataURL(file);
-    e.target.value='';
+    reader.readAsDataURL(file); e.target.value='';
   };
   $(inputId).click();
 }
-function openCropModal(){
-  $('mo-crop').classList.add('open');
-  setTimeout(()=>{
-    if(cropper){cropper.destroy();cropper=null;}
-    cropper=new Cropper($('crop-img'),{viewMode:1,autoCropArea:.85,movable:true,zoomable:true,rotatable:false,scalable:false});
-  },150);
-}
-function cancelCrop(){closeMo('crop');if(cropper){cropper.destroy();cropper=null;}}
-function setCropRatio(r){
-  document.querySelectorAll('.crop-ratio-btn').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
-  if(cropper)cropper.setAspectRatio(isNaN(r)?NaN:r);
-}
+function cancelCrop(){$('mo-crop').classList.remove('open');if(cropper){cropper.destroy();cropper=null;}}
 async function confirmCrop(){
   if(!cropper)return;
   const canvas=cropper.getCroppedCanvas({maxWidth:1600,maxHeight:1200});
   canvas.toBlob(async blob=>{
-    closeMo('crop');
+    $('mo-crop').classList.remove('open');
     if(cropper){cropper.destroy();cropper=null;}
-    await uploadBlob(blob,cropFolder,cropCb);
+    try{
+      const fname=`${cropFolder}/${Date.now()}.jpg`;
+      const {data,error}=await db.storage.from('ilamps-media').upload(fname,blob,{contentType:'image/jpeg',upsert:false});
+      if(error)throw error;
+      const {data:{publicUrl}}=db.storage.from('ilamps-media').getPublicUrl(fname);
+      cropCb(publicUrl); showToast('✓ Uploaded!');
+    }catch(err){showToast('❌ Upload failed.');}
   },'image/jpeg',0.88);
-}
-async function uploadBlob(blob,folder,cb){
-  const spinId=`spin-up-${folder}`;
-  const sp=$(spinId);if(sp)sp.style.display='block';
-  try{
-    const fname=`${folder}/${Date.now()}.jpg`;
-    const {data,error}=await db.storage.from('ilamps-media').upload(fname,blob,{contentType:'image/jpeg',cacheControl:'3600',upsert:false});
-    if(error)throw error;
-    const {data:{publicUrl}}=db.storage.from('ilamps-media').getPublicUrl(fname);
-    cb(publicUrl);
-    showToast('✓ Image uploaded!');
-  }catch(err){showToast('❌ Upload failed: '+err.message,4000);}
-  finally{if(sp)sp.style.display='none';}
 }
 
 // ═══ AUTH ═══
@@ -1134,362 +980,281 @@ const swMo=(a,b)=>{closeMo(a);openMo(b)};
 document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
 
 async function signIn(){
-  const btn=$('l-btn');btn.textContent='...';btn.disabled=true;
-  const err=$('l-err');err.style.display='none';
   const {error}=await db.auth.signInWithPassword({email:getVal('l-email'),password:getVal('l-pwd')});
-  btn.textContent='Sign In →';btn.disabled=false;
-  if(error){err.textContent=error.message;err.style.display='block';return;}
+  if(error)return $('l-err').textContent=error.message;
   closeMo('login');await loadUser();openDash();showToast('✓ Welcome back!');
 }
-async function signUp(){
-  const btn=$('s-btn');btn.textContent='...';btn.disabled=true;
-  const err=$('s-err');err.style.display='none';
-  const nm=getVal('s-name'),role=getVal('s-role'),em=getVal('s-email'),pw=getVal('s-pwd');
-  if(!nm||!em||!pw){err.textContent='Fill all fields.';err.style.display='block';btn.textContent='Create Account →';btn.disabled=false;return;}
-  const {data,error}=await db.auth.signUp({email:em,password:pw,options:{data:{name:nm}}});
-  btn.textContent='Create Account →';btn.disabled=false;
-  if(error){err.textContent=error.message;err.style.display='block';return;}
-  if(data.user)await db.from('profiles').update({name:nm,role,email:em}).eq('id',data.user.id);
-  closeMo('signup');await loadUser();openDash();showToast('✓ Account created! Admin will approve soon.');
-}
-async function signOut(){
-  await db.auth.signOut();CU=null;CP=null;
-  $('nav-in-logged').style.display='none';$('nav-out').style.display='flex';
-  closeDash();showToast('Logged out.');
-}
+async function signOut(){await db.auth.signOut();CU=null;CP=null;$('nav-in-logged').style.display='none';$('nav-out').style.display='flex';closeDash();}
 async function loadUser(){
-  if(!db)return;
   const {data:{user}}=await db.auth.getUser();
-  if(!user){$('nav-in-logged').style.display='none';$('nav-out').style.display='flex';return;}
-  CU=user;
+  if(!user)return; CU=user;
   const {data:p}=await db.from('profiles').select('*').eq('id',user.id).single();
-  CP=p;
-  $('nav-in-logged').style.display='flex';$('nav-out').style.display='none';
-  setText('dash-name',p?.name||user.email);
-  const chip=$('dash-role');chip.textContent=p?.is_admin?'Admin':(p?.role||'Member');
+  CP=p; $('nav-in-logged').style.display='flex';$('nav-out').style.display='none';
   $('admin-nav').style.display=p?.is_admin?'block':'none';
 }
 
 // ═══ DASHBOARD ═══
-function openDash(){$('dash').classList.add('open');document.body.style.overflow='hidden';loadDashboard();}
+function openDash(){$('dash').classList.add('open');document.body.style.overflow='hidden';loadProfileForm();if(CP?.is_admin)loadLabForm();}
 function closeDash(){$('dash').classList.remove('open');document.body.style.overflow='';}
 document.querySelectorAll('.dni').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.dni').forEach(b=>b.classList.remove('active'));
     document.querySelectorAll('.dsec').forEach(s=>s.classList.remove('active'));
     btn.classList.add('active');$(btn.dataset.sec).classList.add('active');
-    loadSecData(btn.dataset.sec);
+    const sec=btn.dataset.sec;
+    if(sec==='d-profile')loadProfileForm(); else if(sec==='d-mypubs')loadMyPubs();
+    else if(sec==='d-lab')loadLabForm(); else if(sec==='d-pi')loadPIForm();
+    else if(sec==='d-hero')loadSlidesAdmin(); else if(sec==='d-members')loadMembersAdmin();
+    else if(sec==='d-research')loadResearchAdmin(); else if(sec==='d-ongoing')loadProjAdmin();
+    else if(sec==='d-news')loadNewsAdmin(); else if(sec==='d-gallery')loadGalAdmin();
   });
 });
-function loadSecData(sec){
-  const map={
-    'd-profile':loadProfileForm,'d-mypubs':loadMyPubs,
-    'd-lab':loadLabForm,'d-pi':loadPIForm,'d-hero':loadSlidesAdmin,
-    'd-members':loadMembersAdmin,'d-research':loadResearchAdmin,
-    'd-ongoing':loadProjAdmin,'d-news':loadNewsAdmin,'d-gallery':loadGalAdmin
-  };
-  if(map[sec])map[sec]();
-}
-async function loadDashboard(){loadProfileForm();if(CP?.is_admin)loadLabForm();}
 
-// ── PROFILE ──
+// Profile
 function loadProfileForm(){
-  const p=CP;if(!p)return;
-  setVal('p-name',p.name);setVal('p-role',p.role);setVal('p-desig',p.designation);
-  setVal('p-research',p.research);setVal('p-bio',p.bio);setVal('p-email',p.email);
-  setVal('p-website',p.website);setVal('p-linkedin',p.linkedin);setVal('p-gs',p.google_scholar);
-  if(p.photo_url){showPrev('prev-profile','ph-profile',p.photo_url);profilePhotoUrl=p.photo_url;}
-  $('d-pending').style.display=p.approved?'none':'block';
+  if(!CP)return;
+  ['name','role','designation','research','bio','email','website','linkedin','google_scholar'].forEach(k=>setVal(`p-${k==='google_scholar'?'gs':k}`,CP[k]));
+  if(CP.photo_url){showPrev('prev-profile','ph-profile',CP.photo_url);profilePhotoUrl=CP.photo_url;}
 }
 async function saveProfile(){
-  const {error}=await db.from('profiles').update({
-    name:getVal('p-name'),role:getVal('p-role'),designation:getVal('p-desig'),
-    research:getVal('p-research'),bio:getVal('p-bio'),email:getVal('p-email'),
-    photo_url:profilePhotoUrl||CP?.photo_url||'',
+  await db.from('profiles').update({
+    name:getVal('p-name'),role:getVal('p-role'),designation:getVal('p-desig'),research:getVal('p-research'),
+    bio:getVal('p-bio'),email:getVal('p-email'),photo_url:profilePhotoUrl||'',
     website:getVal('p-website'),linkedin:getVal('p-linkedin'),google_scholar:getVal('p-gs')
   }).eq('id',CU.id);
-  if(error)showToast('❌ '+error.message);
-  else{showToast('✓ Profile saved!');await loadUser();}
+  showToast('✓ Saved!');await loadUser();
 }
 
-// ── PUBLICATIONS ──
+// ── CRUD EDITS (Pubs) ──
 async function loadMyPubs(){
   const {data}=await db.from('publications').select('*').eq('user_id',CU.id).order('pub_date',{ascending:false});
-  $('my-pubs').innerHTML=(data&&data.length)?data.map(p=>`
-    <div class="pubi-dash">
-      ${p.thumbnail_image?`<img src="${p.thumbnail_image}" style="width:54px;height:42px;object-fit:cover;border-radius:6px;flex-shrink:0;border:1px solid var(--border)">`:''}
-      <div class="pubi-dash-b"><div class="pubi-dash-t">${p.title}</div><div class="pubi-dash-m">${p.authors_list||p.authors} · ${p.venue} · ${p.pub_date || p.year}</div></div>
-      <button class="btn btn-d btn-sm" onclick="delPub('${p.id}')">🗑</button>
-    </div>`).join(''):'<div class="empty">No publications yet.</div>';
+  fetchedData.pubs = data || [];
+  $('my-pubs').innerHTML=fetchedData.pubs.map(p=>`
+    <div class="aci">
+      <div class="aci-h"><span class="aci-t">${p.title}</span>
+        <div style="display:flex;gap:.38rem">
+          <button class="btn btn-g btn-sm" onclick="triggerEditPub('${p.id}')">Edit</button>
+          <button class="btn btn-d btn-sm" onclick="delRow('publications','${p.id}',loadMyPubs)">Del</button>
+        </div>
+      </div>
+      <small style="color:var(--muted)">${p.venue} · ${p.pub_date || p.year}</small>
+    </div>`).join('');
+  loadMemberSelect();
+}
+function triggerEditPub(id) {
+  const p = fetchedData.pubs.find(x => x.id === id); if(!p) return;
+  editState.pub = id;
+  setVal('np-t', p.title); setVal('np-date', p.pub_date); setVal('np-yr', p.year);
+  setVal('np-type', p.type); setVal('np-venue', p.venue); setVal('np-abs', p.abstract); setVal('np-doi', p.doi);
+  pubThumbUrl = p.thumbnail_image; pubDetailUrl = p.detail_image;
+  if(pubThumbUrl) showPrev('prev-pub-thumb','ph-pub-thumb', pubThumbUrl); else hidePrev('prev-pub-thumb','ph-pub-thumb');
+  if(pubDetailUrl) showPrev('prev-pub-detail','ph-pub-detail', pubDetailUrl); else hidePrev('prev-pub-detail','ph-pub-detail');
+  npAuthorsList = [];
+  if(p.authors_list) p.authors_list.split(',').forEach(a => npAuthorsList.push({name: a.trim()}));
+  renderAuthChips();
+  $('pub-form-title').textContent = 'Edit Publication'; $('btn-save-pub').textContent = '💾 Update Publication'; $('btn-cancel-pub').style.display='inline-flex';
+  $('d-mypubs').scrollIntoView({behavior: 'smooth'});
+}
+function resetPubForm() {
+  editState.pub = null;
+  ['np-t','np-yr','np-venue','np-doi','np-abs','np-date'].forEach(id=>setVal(id,''));
+  npAuthorsList=[]; renderAuthChips(); pubThumbUrl=''; pubDetailUrl='';
+  hidePrev('prev-pub-thumb','ph-pub-thumb'); hidePrev('prev-pub-detail','ph-pub-detail');
+  $('pub-form-title').textContent = 'Add Publication'; $('btn-save-pub').textContent = '+ Save Publication'; $('btn-cancel-pub').style.display='none';
 }
 async function loadMemberSelect(){
-  const {data}=await db.from('profiles').select('id,name').eq('approved',true).neq('role','pending');
-  const sel=$('np-auth-select');
-  sel.innerHTML='<option value="">+ Select lab member...</option>'+(data||[]).map(m=>`<option value="${m.id}" data-name="${m.name}">${m.name}</option>`).join('');
+  const {data}=await db.from('profiles').select('id,name').eq('approved',true);
+  $('np-auth-select').innerHTML='<option value="">+ Lab member...</option>'+(data||[]).map(m=>`<option value="${m.id}" data-name="${m.name}">${m.name}</option>`).join('');
 }
-function addAuthorMember(){
-  const sel=$('np-auth-select');
-  const id=sel.value,name=sel.options[sel.selectedIndex]?.dataset?.name;
-  if(!id||!name)return;
-  if(!npAuthorsList.find(a=>a.user_id===id)){npAuthorsList.push({name,user_id:id});renderAuthChips();}
-  sel.value='';
-}
-function addAuthorCustom(){
-  const nm=getVal('np-auth-custom');
-  if(!nm)return;
-  if(!npAuthorsList.find(a=>a.name===nm)){npAuthorsList.push({name:nm});renderAuthChips();}
-  setVal('np-auth-custom','');
-}
+function addAuthorMember(){const sel=$('np-auth-select');const id=sel.value,name=sel.options[sel.selectedIndex]?.dataset?.name;if(id&&name){npAuthorsList.push({name,user_id:id});renderAuthChips();}sel.value='';}
+function addAuthorCustom(){const nm=getVal('np-auth-custom');if(nm){npAuthorsList.push({name:nm});renderAuthChips();}setVal('np-auth-custom','');}
 function removeAuthor(i){npAuthorsList.splice(i,1);renderAuthChips();}
-function renderAuthChips(){
-  $('np-auth-chips').innerHTML=npAuthorsList.map((a,i)=>
-    `<span class="auth-chip">${a.name}<button class="auth-chip-rm" onclick="removeAuthor(${i})">×</button></span>`
-  ).join('');
-}
-async function addPub(){
+function renderAuthChips(){$('np-auth-chips').innerHTML=npAuthorsList.map((a,i)=>`<span class="auth-chip">${a.name}<button class="auth-chip-rm" onclick="removeAuthor(${i})">×</button></span>`).join('');}
+
+async function savePub(){
   const title=getVal('np-t');if(!title)return showToast('❌ Title required');
   const authStr=npAuthorsList.map(a=>a.name).join(', ');
-  
-  // Track linked members so it shows on their profile too
-  const linkedUsers = npAuthorsList.filter(a => a.user_id).map(a => a.user_id);
-  const pubDate = getVal('np-date');
-
-  const {error}=await db.from('publications').insert({
-    user_id:CU.id, title,
-    authors:authStr, authors_list:authStr,
-    pub_date: pubDate ? pubDate : null,
+  const linkedUsers = npAuthorsList.filter(a=>a.user_id).map(a=>a.user_id);
+  const payload = {
+    title, authors:authStr, authors_list:authStr, pub_date: getVal('np-date') || null,
     year:getVal('np-yr'), venue:getVal('np-venue'), type:getVal('np-type'),
-    doi:getVal('np-doi'), abstract:getVal('np-abs'),
-    thumbnail_image: pubThumbUrl || '',
-    detail_image: pubDetailUrl || '',
-    linked_users: linkedUsers
-  });
+    doi:getVal('np-doi'), abstract:getVal('np-abs'), thumbnail_image:pubThumbUrl||'', detail_image:pubDetailUrl||'', linked_users:linkedUsers
+  };
   
-  if(error)return showToast('❌ '+error.message);
-  showToast('✓ Publication added!');
-  
-  ['np-t','np-yr','np-venue','np-doi','np-abs','np-date'].forEach(id=>setVal(id,''));
-  npAuthorsList=[];renderAuthChips();
-  pubThumbUrl=''; pubDetailUrl='';
-  
-  $('prev-pub-thumb').classList.remove('show');$('ph-pub-thumb').style.display='block';
-  $('prev-pub-detail').classList.remove('show');$('ph-pub-detail').style.display='block';
-  
-  loadMyPubs();renderAllPubs();renderHome();loadCounts();
-}
-async function delPub(id){
-  if(!confirm('Delete?'))return;
-  await db.from('publications').delete().eq('id',id);
-  showToast('✓ Deleted.');loadMyPubs();renderAllPubs();renderHome();loadCounts();
+  if (editState.pub) {
+    await db.from('publications').update(payload).eq('id', editState.pub);
+    showToast('✓ Updated!');
+  } else {
+    payload.user_id = CU.id;
+    await db.from('publications').insert(payload);
+    showToast('✓ Added!');
+  }
+  resetPubForm(); loadMyPubs(); initPublicData();
 }
 
-// ── LAB SETTINGS ──
+// ── CRUD EDITS (Research, Proj, News, Gal) ──
+async function loadResearchAdmin(){
+  const {data}=await db.from('research_areas').select('*').order('sort_order'); fetchedData.res=data||[];
+  $('research-admin').innerHTML=fetchedData.res.map(a=>`
+    <div class="aci"><div class="aci-h"><span class="aci-t">${a.icon} ${a.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-g btn-sm" onclick="triggerEditRes('${a.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('research_areas','${a.id}',loadResearchAdmin)">Del</button></div></div></div>`).join('');
+}
+function triggerEditRes(id){
+  const x=fetchedData.res.find(i=>i.id===id); if(!x)return; editState.res=id;
+  setVal('ra-icon',x.icon); setVal('ra-title',x.title); setVal('ra-desc',x.description);
+  $('res-form-title').textContent='Edit Area'; $('btn-save-res').textContent='💾 Update'; $('btn-cancel-res').style.display='inline-flex';
+}
+function resetResForm(){ editState.res=null; ['ra-icon','ra-title','ra-desc'].forEach(id=>setVal(id,'')); $('res-form-title').textContent='Add Area'; $('btn-save-res').textContent='+ Save Area'; $('btn-cancel-res').style.display='none'; }
+async function saveResearch(){
+  const payload = {icon:getVal('ra-icon'), title:getVal('ra-title'), description:getVal('ra-desc')};
+  if(editState.res) await db.from('research_areas').update(payload).eq('id',editState.res); else { payload.sort_order=99; await db.from('research_areas').insert(payload); }
+  showToast('✓ Saved'); resetResForm(); loadResearchAdmin(); initPublicData();
+}
+
+async function loadProjAdmin(){
+  const {data}=await db.from('ongoing_projects').select('*').order('sort_order'); fetchedData.proj=data||[];
+  $('proj-admin').innerHTML=fetchedData.proj.map(p=>`<div class="aci"><div class="aci-h"><span class="aci-t">${p.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-g btn-sm" onclick="triggerEditProj('${p.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('ongoing_projects','${p.id}',loadProjAdmin)">Del</button></div></div></div>`).join('');
+}
+function triggerEditProj(id){
+  const x=fetchedData.proj.find(i=>i.id===id); if(!x)return; editState.proj=id;
+  setVal('op-t',x.title); setVal('op-s',x.status); setVal('op-m',(x.members||[]).join(', ')); setVal('op-d',x.description);
+  $('proj-form-title').textContent='Edit Project'; $('btn-save-proj').textContent='💾 Update'; $('btn-cancel-proj').style.display='inline-flex';
+}
+function resetProjForm(){ editState.proj=null; ['op-t','op-m','op-d'].forEach(id=>setVal(id,'')); $('proj-form-title').textContent='Add Project'; $('btn-save-proj').textContent='+ Save Project'; $('btn-cancel-proj').style.display='none'; }
+async function saveProject(){
+  const payload = {title:getVal('op-t'), status:getVal('op-s'), description:getVal('op-d'), members:getVal('op-m').split(',').map(s=>s.trim()).filter(Boolean)};
+  if(editState.proj) await db.from('ongoing_projects').update(payload).eq('id',editState.proj); else { payload.sort_order=99; await db.from('ongoing_projects').insert(payload); }
+  showToast('✓ Saved'); resetProjForm(); loadProjAdmin(); initPublicData();
+}
+
+async function loadNewsAdmin(){
+  const {data}=await db.from('news').select('*').order('created_at',{ascending:false}); fetchedData.news=data||[];
+  $('news-admin').innerHTML=fetchedData.news.map(n=>`<div class="aci"><div class="aci-h"><span class="aci-t">${n.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-g btn-sm" onclick="triggerEditNews('${n.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('news','${n.id}',loadNewsAdmin)">Del</button></div></div></div>`).join('');
+}
+function triggerEditNews(id){
+  const x=fetchedData.news.find(i=>i.id===id); if(!x)return; editState.news=id;
+  setVal('nw-d',x.date_label); setVal('nw-cat',x.category); setVal('nw-t',x.title); setVal('nw-desc',x.description);
+  newsImgUrl = x.featured_image; if(newsImgUrl) showPrev('prev-news-img','ph-news-img',newsImgUrl); else hidePrev('prev-news-img','ph-news-img');
+  $('news-form-title').textContent='Edit News'; $('btn-save-news').textContent='💾 Update'; $('btn-cancel-news').style.display='inline-flex';
+}
+function resetNewsForm(){ editState.news=null; ['nw-d','nw-t','nw-desc'].forEach(id=>setVal(id,'')); newsImgUrl=''; hidePrev('prev-news-img','ph-news-img'); $('news-form-title').textContent='Add News'; $('btn-save-news').textContent='+ Save News'; $('btn-cancel-news').style.display='none'; }
+async function saveNews(){
+  const payload = {date_label:getVal('nw-d'), category:getVal('nw-cat'), title:getVal('nw-t'), description:getVal('nw-desc'), featured_image:newsImgUrl};
+  if(editState.news) await db.from('news').update(payload).eq('id',editState.news); else await db.from('news').insert(payload);
+  showToast('✓ Saved'); resetNewsForm(); loadNewsAdmin(); initPublicData();
+}
+
+async function loadGalAdmin(){
+  const {data}=await db.from('gallery').select('*').order('item_date',{ascending:false}); fetchedData.gal=data||[];
+  $('gal-admin').innerHTML=fetchedData.gal.map(g=>`<div class="aci" style="display:flex;align-items:center;gap:.8rem"><img src="${g.url}" style="width:50px;height:40px;object-fit:cover;border-radius:4px;"><div style="flex:1" class="aci-t">${g.caption||'Photo'}</div><div style="display:flex;gap:.3rem"><button class="btn btn-g btn-sm" onclick="triggerEditGal('${g.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('gallery','${g.id}',loadGalAdmin)">Del</button></div></div>`).join('');
+}
+function triggerEditGal(id){
+  const x=fetchedData.gal.find(i=>i.id===id); if(!x)return; editState.gal=id;
+  setVal('g-url',x.url); setVal('g-cap',x.caption); setVal('g-date',x.item_date);
+  if(x.url) showPrev('prev-gal','ph-gal',x.url);
+  $('gal-form-title').textContent='Edit Photo'; $('btn-save-gal').textContent='💾 Update'; $('btn-cancel-gal').style.display='inline-flex';
+}
+function resetGalForm(){ editState.gal=null; ['g-url','g-cap','g-date'].forEach(id=>setVal(id,'')); hidePrev('prev-gal','ph-gal'); $('gal-form-title').textContent='Add Photo'; $('btn-save-gal').textContent='+ Save Photo'; $('btn-cancel-gal').style.display='none'; }
+async function saveGallery(){
+  const payload = {url:getVal('g-url'), caption:getVal('g-cap'), item_date:getVal('g-date') || null};
+  if(editState.gal) await db.from('gallery').update(payload).eq('id',editState.gal); else await db.from('gallery').insert(payload);
+  showToast('✓ Saved'); resetGalForm(); loadGalAdmin(); initPublicData();
+}
+
+async function delRow(table,id,reload){if(confirm('Delete?')){await db.from(table).delete().eq('id',id); showToast('✓ Deleted.'); reload(); initPublicData();}}
+
+// Settings & Admin
 async function loadLabForm(){
   const {data:s}=await db.from('lab_settings').select('*');if(!s)return;
   const g=(k,f='')=>gS(s,k,f);
-  setVal('ls-name',g('lab_name'));setVal('ls-founded',g('founded'));
-  setVal('ls-fullname',g('lab_fullname'));setVal('ls-uni',g('university'));setVal('ls-dept',g('department'));
-  setVal('ls-a1',g('about'));setVal('ls-a2',g('about2'));
-  setVal('ls-addr',g('contact_address'));setVal('ls-email',g('contact_email'));setVal('ls-phone',g('contact_phone'));
-  setVal('ls-join',g('join_text'));setVal('ls-reqs',g('join_reqs','').split('|').join('\n'));
-  const logo=g('lab_logo');setVal('ls-logo',logo);if(logo){showPrev('prev-logo','ph-logo',logo);}
+  ['name','fullname','uni','dept','a1','a2','addr','email','phone'].forEach(k=>setVal('ls-'+k,g(k==='name'?'lab_name':(k==='fullname'?'lab_fullname':(k==='uni'?'university':(k==='dept'?'department':(k==='a1'?'about':(k==='a2'?'about2':(k==='addr'?'contact_address':(k==='email'?'contact_email':'contact_phone'))))))))));
+  if(g('lab_logo')){setVal('ls-logo',g('lab_logo'));showPrev('prev-logo','ph-logo',g('lab_logo'));}
+  if(g('just_logo')){setVal('ls-just-logo',g('just_logo'));showPrev('prev-just-logo','ph-just-logo',g('just_logo'));}
 }
 async function ups(k,v){await db.from('lab_settings').upsert({key:k,value:v},{onConflict:'key'});}
-async function saveLogoSetting(){await ups('lab_logo',getVal('ls-logo'));showToast('✓ Logo saved!');renderHome();}
 async function saveLabSettings(){
   await Promise.all([
-    ups('lab_name',getVal('ls-name')),ups('founded',getVal('ls-founded')),
-    ups('lab_fullname',getVal('ls-fullname')),ups('university',getVal('ls-uni')),ups('department',getVal('ls-dept')),
-    ups('about',getVal('ls-a1')),ups('about2',getVal('ls-a2'))
+    ups('lab_logo',getVal('ls-logo')), ups('just_logo',getVal('ls-just-logo')), ups('lab_name',getVal('ls-name')),
+    ups('university',getVal('ls-uni')), ups('department',getVal('ls-dept')), ups('about',getVal('ls-a1')),
+    ups('contact_address',getVal('ls-addr')), ups('contact_email',getVal('ls-email')), ups('contact_phone',getVal('ls-phone'))
   ]);
-  showToast('✓ Lab settings saved!');renderHome();
-}
-async function saveContact(){
-  await Promise.all([
-    ups('contact_address',getVal('ls-addr')),ups('contact_email',getVal('ls-email')),ups('contact_phone',getVal('ls-phone')),
-    ups('join_text',getVal('ls-join')),
-    ups('join_reqs',getVal('ls-reqs').split('\n').map(s=>s.trim()).filter(Boolean).join('|'))
-  ]);
-  showToast('✓ Contact saved!');
+  showToast('✓ Settings saved!'); initPublicData();
 }
 
-// ── PI ──
 async function loadPIForm(){
   const {data:s}=await db.from('lab_settings').select('*');if(!s)return;
   const g=(k,f='')=>gS(s,k,f);
-  setVal('pi-name',g('pi_name'));setVal('pi-desig',g('pi_designation'));
-  setVal('pi-dept',g('pi_department'));setVal('pi-uni',g('pi_university'));
-  setVal('pi-email',g('pi_email'));setVal('pi-bio',g('pi_bio'));
+  ['name','desig','dept','uni','email','bio','gs','rg','orcid'].forEach(k=>setVal('pi-'+k,g('pi_'+(k==='gs'?'scholar':k))));
   setVal('pi-ints',g('pi_interests','').split('|').join('\n'));
-  setVal('pi-gs',g('pi_scholar'));setVal('pi-rg',g('pi_rg'));setVal('pi-orcid',g('pi_orcid'));
-  const photo=g('pi_photo');setVal('pi-photo',photo);if(photo)showPrev('prev-pi','ph-pi',photo);
+  if(g('pi_photo')){setVal('pi-photo',g('pi_photo'));showPrev('prev-pi','ph-pi',g('pi_photo'));}
 }
 async function savePI(){
   await Promise.all([
-    ups('pi_name',getVal('pi-name')),ups('pi_designation',getVal('pi-desig')),
-    ups('pi_department',getVal('pi-dept')),ups('pi_university',getVal('pi-uni')),
-    ups('pi_email',getVal('pi-email')),ups('pi_photo',getVal('pi-photo')),ups('pi_bio',getVal('pi-bio')),
-    ups('pi_interests',getVal('pi-ints').split('\n').map(s=>s.trim()).filter(Boolean).join('|')),
+    ups('pi_name',getVal('pi-name')),ups('pi_designation',getVal('pi-desig')),ups('pi_department',getVal('pi-dept')),
+    ups('pi_university',getVal('pi-uni')),ups('pi_email',getVal('pi-email')),ups('pi_photo',getVal('pi-photo')),
+    ups('pi_bio',getVal('pi-bio')),ups('pi_interests',getVal('pi-ints').split('\n').map(s=>s.trim()).filter(Boolean).join('|')),
     ups('pi_scholar',getVal('pi-gs')),ups('pi_rg',getVal('pi-rg')),ups('pi_orcid',getVal('pi-orcid'))
   ]);
-  showToast('✓ PI saved!');renderTeamPage();
+  showToast('✓ PI saved!'); initPublicData();
 }
 
-// ── SLIDES ADMIN ──
-async function loadSlidesAdmin(){
-  const {data}=await db.from('hero_slides').select('*').order('sort_order');
-  $('slides-list').innerHTML=(data&&data.length)?data.map(s=>`
-    <div class="aci" style="display:flex;align-items:center;gap:.875rem">
-      <img src="${s.image_url}" style="width:80px;height:50px;object-fit:cover;border-radius:7px;border:1px solid var(--border);flex-shrink:0">
-      <div style="flex:1"><div class="aci-t">${s.caption||'Slide (no caption)'}</div></div>
-      <button class="btn btn-d btn-sm" onclick="delRow('hero_slides','${s.id}',loadSlidesAdmin,loadSlides)">Delete</button>
-    </div>`).join(''):'<div class="empty">No slides yet.</div>';
-}
-async function addSlide(){
-  const url=getVal('ns-url');if(!url)return showToast('❌ Upload an image first');
-  await db.from('hero_slides').insert({image_url:url,caption:getVal('ns-cap'),sort_order:99});
-  showToast('✓ Slide added!');setVal('ns-url','');setVal('ns-cap','');
-  $('prev-slide').classList.remove('show');$('ph-slide').style.display='block';
-  loadSlidesAdmin();loadSlides();
-}
-
-// ── MEMBERS ADMIN ──
-async function loadMembersAdmin(){
-  const {data}=await db.from('profiles').select('*').order('created_at');
-  $('members-list').innerHTML=(data&&data.length)?`<table class="admin-table">
-    <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Admin</th><th>Actions</th></tr></thead>
-    <tbody>${data.map(m=>`<tr>
-      <td><strong>${m.name||'—'}</strong></td>
-      <td style="color:var(--muted);font-size:.75rem">${m.email||'—'}</td>
-      <td><select onchange="updateRole('${m.id}',this.value)" style="padding:.2rem .4rem;border:1px solid var(--border);border-radius:5px;font-size:.74rem;font-family:var(--f)">${['graduate','undergrad','ra','alumni','pending'].map(r=>`<option${m.role===r?' selected':''}>${r}</option>`).join('')}</select></td>
-      <td><span class="badge ${m.approved?'badge-active':'badge-planned'}">${m.approved?'Approved':'Pending'}</span></td>
-      <td><input type="checkbox"${m.is_admin?' checked':''} onchange="toggleAdmin('${m.id}',this.checked)"></td>
-      <td style="display:flex;gap:.3rem">
-        <button class="btn btn-sm" style="background:rgba(16,185,129,.1);color:#059669;border:1px solid rgba(16,185,129,.18)" onclick="approveMem('${m.id}',true)">✓</button>
-        <button class="btn btn-d btn-sm" onclick="approveMem('${m.id}',false)">✗</button>
-      </td>
-    </tr>`).join('')}</tbody></table>`:'<div class="empty">No members.</div>';
-}
-async function approveMem(id,v){await db.from('profiles').update({approved:v}).eq('id',id);showToast(v?'✓ Approved!':'Hidden.');loadMembersAdmin();loadCounts();}
-async function updateRole(id,r){await db.from('profiles').update({role:r}).eq('id',id);showToast('✓ Role updated.');}
-async function toggleAdmin(id,v){await db.from('profiles').update({is_admin:v}).eq('id',id);showToast(v?'✓ Admin granted.':'Admin removed.');}
-
-// ── RESEARCH ADMIN ──
-async function loadResearchAdmin(){
-  const {data}=await db.from('research_areas').select('*').order('sort_order');
-  $('research-admin').innerHTML=(data&&data.length)?data.map(a=>`
-    <div class="aci"><div class="aci-h"><span class="aci-t">${a.icon} ${a.title}</span><button class="btn btn-d btn-sm" onclick="delRow('research_areas','${a.id}',loadResearchAdmin,renderResearchPage)">Delete</button></div>
-    <small style="color:var(--muted);font-size:.76rem">${a.description}</small></div>`).join(''):'<div class="empty">No areas.</div>';
-}
-async function addResearch(){
-  const t=getVal('ra-title');if(!t)return showToast('❌ Title required');
-  await db.from('research_areas').insert({icon:getVal('ra-icon')||'🔬',title:t,description:getVal('ra-desc'),sort_order:99});
-  showToast('✓ Added!');setVal('ra-icon','');setVal('ra-title','');setVal('ra-desc','');
-  loadResearchAdmin();
-}
-
-// ── PROJ ADMIN ──
-async function loadProjAdmin(){
-  const {data}=await db.from('ongoing_projects').select('*').order('sort_order');
-  $('proj-admin').innerHTML=(data&&data.length)?data.map(p=>`
-    <div class="aci"><div class="aci-h"><span class="aci-t">${p.title}</span><div style="display:flex;gap:.38rem"><span class="badge badge-${p.status}">${p.status}</span><button class="btn btn-d btn-sm" onclick="delRow('ongoing_projects','${p.id}',loadProjAdmin,renderResearchPage)">Delete</button></div></div>
-    <small style="color:var(--muted);font-size:.76rem">${p.description}</small></div>`).join(''):'<div class="empty">No projects.</div>';
-}
-async function addProject(){
-  const t=getVal('op-t');if(!t)return showToast('❌ Title required');
-  const mems=getVal('op-m').split(',').map(s=>s.trim()).filter(Boolean);
-  await db.from('ongoing_projects').insert({title:t,status:getVal('op-s'),description:getVal('op-d'),members:mems,sort_order:99});
-  showToast('✓ Added!');setVal('op-t','');setVal('op-d','');setVal('op-m','');
-  loadProjAdmin();
-}
-
-// ── NEWS ADMIN ──
-async function loadNewsAdmin(){
-  const {data}=await db.from('news').select('*').order('created_at',{ascending:false});
-  $('news-admin').innerHTML=(data&&data.length)?data.map(n=>`
-    <div class="aci"><div class="aci-h"><span class="aci-t">${n.date_label} · ${n.title}</span><button class="btn btn-d btn-sm" onclick="delRow('news','${n.id}',loadNewsAdmin)">Delete</button></div>
-    <small style="color:var(--muted);font-size:.76rem">${n.description}</small></div>`).join(''):'<div class="empty">No news.</div>';
-}
-async function addNews(){
-  const t=getVal('nw-t');if(!t)return showToast('❌ Title required');
-  await db.from('news').insert({date_label:getVal('nw-d'),title:t,description:getVal('nw-desc'),featured_image:newsImgUrl||'',category:getVal('nw-cat')});
-  showToast('✓ News added!');setVal('nw-d','');setVal('nw-t','');setVal('nw-desc','');
-  newsImgUrl='';$('prev-news-img').classList.remove('show');$('ph-news-img').style.display='block';
-  loadNewsAdmin();renderAllNews();renderHome();
-}
-
-// ── GALLERY ADMIN ──
-async function loadGalAdmin(){
-  const {data}=await db.from('gallery').select('*').order('sort_order');
-  $('gal-admin').innerHTML=(data&&data.length)?data.map(g=>`
-    <div class="aci" style="display:flex;align-items:center;gap:.8rem">
-      <img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--border);flex-shrink:0">
-      <div style="flex:1"><div class="aci-t">${g.caption||'No caption'}</div></div>
-      <button class="btn btn-d btn-sm" onclick="delRow('gallery','${g.id}',loadGalAdmin,renderGallery)">Delete</button>
-    </div>`).join(''):'<div class="empty">No photos.</div>';
-}
-async function addGallery(){
-  const url=getVal('g-url');if(!url)return showToast('❌ Upload a photo first');
-  await db.from('gallery').insert({url,caption:getVal('g-cap'),sort_order:99});
-  showToast('✓ Photo added!');setVal('g-url','');setVal('g-cap','');
-  $('prev-gal').classList.remove('show');$('ph-gal').style.display='block';
-  loadGalAdmin();renderGallery();
-}
-async function delRow(table,id,reload,render2){
-  if(!confirm('Delete?'))return;
-  await db.from(table).delete().eq('id',id);
-  showToast('✓ Deleted.');reload();if(render2)render2();
-}
-
-// ═══ PUBLIC RENDER ═══
-async function loadCounts(){
-  if(!db)return;
-  const [{count:pubs},{count:projs},{count:mems}]=await Promise.all([
-    db.from('publications').select('*',{count:'exact',head:true}),
-    db.from('ongoing_projects').select('*',{count:'exact',head:true}).eq('status','active'),
-    db.from('profiles').select('*',{count:'exact',head:true}).eq('approved',true)
-  ]);
-  ['hs-pubs','ab-pubs'].forEach(id=>setText(id,pubs+''));
-  ['hs-projs','ab-projs'].forEach(id=>setText(id,projs+''));
-  ['hs-mems','ab-mems'].forEach(id=>setText(id,mems+''));
-  setText('pub-total-count',pubs?`(${pubs})`:'' );
-}
-
-async function renderHome(){
+// ═══ PUBLIC RENDERING ═══
+async function initPublicData() {
   if(!db)return;
   const {data:s}=await db.from('lab_settings').select('*');if(!s)return;
   const g=(k,f='')=>gS(s,k,f);
-  setText('h-name',g('lab_name','ILAMPS'));
-  setText('nav-lab-name',g('lab_name','ILAMPS'));
-  setText('h-uni',g('department')+' · '+g('university'));
-  setText('h-desc',g('about'));
-  setText('hs-founded',g('founded','—'));setText('ab-founded',g('founded','—'));
-  setText('ab-fullname',g('lab_fullname','ILAMPS'));
-  setText('ab-a1',g('about'));setText('ab-a2',g('about2'));
-  const logo=g('lab_logo');
-  if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}" alt="logo">`;updateFavicon(logo);}
-  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · ${g('university','JUST')}`);
   
-  const {data:news}=await db.from('news').select('*').order('created_at',{ascending:false}).limit(3);
-  $('home-news').innerHTML=(news&&news.length)?news.map(n=>newsCard(n,'home')).join(''):'<div class="empty">No news yet.</div>';
+  // Header & Global
+  setText('h-name',g('lab_name','ILAMPS')); setText('nav-lab-name',g('lab_name','ILAMPS'));
+  setText('h-uni',g('department')+' · '+g('university')); setText('h-desc',g('about'));
+  const logo=g('lab_logo'); if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}">`;updateFavicon(logo);}
   
-  // Latest publications ordered by exact publication date
-  const {data:pubs}=await db.from('publications').select('*').order('pub_date',{ascending:false}).limit(3);
-  $('home-pubs').innerHTML=(pubs&&pubs.length)?pubs.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications yet.</div>';
-  
-  const {data:mems}=await db.from('profiles').select('*').eq('approved',true).neq('role','pending').limit(4);
-  $('home-team').innerHTML=(mems&&mems.length)?mems.map(m=>memberCard(m)).join(''):'<div class="empty">No members yet.</div>';
-  const {data:areas}=await db.from('research_areas').select('title').limit(6);
-  $('ab-tags').innerHTML=(areas||[]).map(a=>`<span class="tag-b">${a.title}</span>`).join('');
-  await loadCounts();
+  // Footer
+  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')}`);
+  setText('f-addr', g('contact_address')); setText('f-email', g('contact_email')); $('f-email').href='mailto:'+g('contact_email');
+  const jlogo = g('just_logo');
+  if(logo) { $('f-logo-box-1').style.display='flex'; $('f-logo-ilamps').src=logo; }
+  if(jlogo) { $('f-logo-box-2').style.display='flex'; $('f-logo-just').src=jlogo; }
+
+  // Home Sections
+  const [{count:pubs},{count:projs},{count:mems}]=await Promise.all([
+    db.from('publications').select('*',{count:'exact',head:true}),
+    db.from('ongoing_projects').select('*',{count:'exact',head:true}),
+    db.from('profiles').select('*',{count:'exact',head:true}).eq('approved',true)
+  ]);
+  ['hs-pubs','ab-pubs'].forEach(id=>setText(id,pubs||'0'));
+  ['hs-projs','ab-projs'].forEach(id=>setText(id,projs||'0'));
+  ['hs-mems','ab-mems'].forEach(id=>setText(id,mems||'0'));
+  setText('pub-total-count',pubs?`(${pubs})`:'');
+
+  // Home PI
+  const photo=g('pi_photo');
+  $('home-pi-container').innerHTML=`
+    <div style="text-align:center">
+      ${photo?`<img src="${photo}" class="pi-photo">`:`<div class="pi-photo-ph">👨‍🔬</div>`}
+      <div class="pi-name">${g('pi_name')}</div><div class="pi-desig">${g('pi_designation')}</div><div class="pi-dept">${g('pi_department')}</div>
+    </div>
+    <div><span class="pi-sl">Biography</span><p class="pi-bio">${g('pi_bio')}</p><button class="btn btn-o btn-sm" style="margin-top:1rem" onclick="goPage('team')">View Full Profile</button></div>`;
+
+  // Fetch Latest Data
+  const [{data:news},{data:pubsData},{data:memsData},{data:galData}] = await Promise.all([
+    db.from('news').select('*').order('created_at',{ascending:false}).limit(3),
+    db.from('publications').select('*').order('pub_date',{ascending:false}).limit(4),
+    db.from('profiles').select('*').eq('approved',true).limit(4),
+    db.from('gallery').select('*').order('item_date',{ascending:false}).limit(3)
+  ]);
+
+  $('home-news').innerHTML=(news&&news.length)?news.map(n=>newsCard(n)).join(''):'<div class="empty">No news yet.</div>';
+  $('home-pubs').innerHTML=(pubsData&&pubsData.length)?pubsData.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications.</div>';
+  $('home-gallery').innerHTML=(galData&&galData.length)?galData.map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span><span class="gi-date">${g.item_date||''}</span></div></div>`).join(''):'<div class="empty">No gallery images.</div>';
+
+  // Load All Pages Data
+  renderTeamPage(); renderResearchPage(); renderAllPubs(); renderAllNews(); renderGallery(); renderContact();
 }
 
 function pubCardHome(p){
-  // Max 10 chars for abstract preview
-  const shortAbs = p.abstract ? (p.abstract.length > 10 ? p.abstract.substring(0, 10) + '...' : p.abstract) : '';
-  
-  return `<div class="pubi-home" onclick="showPubDetail(${JSON.stringify(p).replace(/"/g,'&quot;')})">
-    ${p.thumbnail_image ? `<img class="pubi-home-img" src="${p.thumbnail_image}" alt="featured">` : `<div class="pubi-home-img" style="background:var(--off);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--gray-light)">📄</div>`}
+  const shortAbs = p.abstract ? (p.abstract.length > 100 ? p.abstract.substring(0, 100) + '...' : p.abstract) : '';
+  return `<div class="pubi-home" onclick="goPage('publication', '${p.id}')">
+    ${p.thumbnail_image ? `<img class="pubi-home-img" src="${p.thumbnail_image}">` : `<div class="pubi-home-img" style="background:var(--off);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--gray-light)">📄</div>`}
     <div class="pubi-home-body">
       <div class="pub-title">${p.title}</div>
       <div class="pub-authors" style="margin-bottom:.3rem">${p.authors_list||p.authors||''}</div>
@@ -1499,176 +1264,122 @@ function pubCardHome(p){
   </div>`;
 }
 
-function pubCard(p,ctx){
-  return `<div class="pubi" onclick="showPubDetail(${JSON.stringify(p).replace(/"/g,'&quot;')})">
-    <div class="pubi-top"><span class="pub-type">${p.type}</span><span class="pub-yr">${p.pub_date || p.year}</span></div>
-    <div class="pub-title">${p.title}</div>
-    <div class="pub-authors">${p.authors_list||p.authors||''}</div>
-    <div class="pub-venue">${p.venue||''}</div>
-    ${p.abstract?`<div class="pub-abs">${p.abstract}</div>`:''}
-  </div>`;
-}
-
-function showPubDetail(p){
-  $('pub-detail-body').innerHTML=`
-    ${p.detail_image ? `<img class="detail-img" src="${p.detail_image}" alt="">` : ''}
-    <div style="padding:1.25rem 1.4rem">
-      <div class="detail-meta"><span class="pub-type">${p.type}</span><span class="pub-yr">${p.pub_date || p.year}</span></div>
-      <div class="detail-title">${p.title}</div>
-      <div class="detail-authors">${p.authors_list||p.authors||''}</div>
-      <div class="detail-venue">${p.venue||''}</div>
-      ${p.abstract?`<span class="detail-abstract-label">Abstract</span><p class="detail-abstract">${p.abstract}</p>`:''}
-      ${p.doi?`<a href="${p.doi}" target="_blank" class="btn btn-p" style="margin-top:1rem;display:inline-flex">🔗 View Paper / DOI</a>`:''}
-    </div>`;
-  openMo('pub');
-}
-
-function newsCard(n,ctx){
-  return `<div class="nc" onclick="showNewsDetail(${JSON.stringify(n).replace(/"/g,'&quot;')})">
-    ${n.featured_image?`<img class="nc-img" src="${n.featured_image}" alt="">`:`<div class="nc-img-ph">📰</div>`}
+function newsCard(n){
+  return `<div class="nc" onclick="goPage('newsdetail', '${n.id}')">
+    ${n.featured_image?`<img class="nc-img" src="${n.featured_image}">`:`<div class="nc-img-ph">📰</div>`}
     <div class="nc-dbar"><span>${n.date_label||'—'}</span><span class="nc-cat">${n.category||'General'}</span></div>
-    <div class="nc-body"><h3>${n.title}</h3><p>${(n.description||'').substring(0,140)}${n.description&&n.description.length>140?'...':''}</p></div>
+    <div class="nc-body"><h3>${n.title}</h3><p>${(n.description||'').substring(0,120)}...</p></div>
   </div>`;
 }
 
-function showNewsDetail(n){
-  $('news-detail-body').innerHTML=`
-    ${n.featured_image?`<img class="detail-img" src="${n.featured_image}" alt="">`:''}
-    <div style="padding:1.25rem 1.4rem">
-      <div class="detail-meta"><span class="tag-b">${n.category||'General'}</span><span style="font-size:.78rem;color:var(--gray);font-weight:600">${n.date_label}</span></div>
-      <div class="detail-title">${n.title}</div>
-      <p class="detail-abstract">${n.description||''}</p>
-    </div>`;
-  openMo('news');
-}
-
-function memberCard(m){
-  return `<div class="tc" onclick="showMemberProfile('${m.id}')">
-    ${m.photo_url?`<img src="${m.photo_url}" class="tc-av" alt="${m.name}">`:`<div class="tc-av-ph">${ini(m.name)}</div>`}
-    <div class="tc-name">${m.name||'—'}</div>
-    <div class="tc-role">${m.designation||m.role||'Researcher'}</div>
-    <p class="tc-res">${m.research||''}</p>
-  </div>`;
-}
-
-async function showMemberProfile(userId){
-  const {data:m}=await db.from('profiles').select('*').eq('id',userId).single();
-  if(!m)return;
+// ── DEDICATED PAGES RENDERING ──
+async function buildProfileDetail(id) {
+  const {data:m}=await db.from('profiles').select('*').eq('id',id).single();
+  if(!m) return $('dp-profile-body').innerHTML='<div class="empty">Profile not found.</div>';
   
-  // Show paper if the user uploaded it OR they are linked in the linked_users array
-  const {data:pubs}=await db.from('publications')
-    .select('*')
-    .or(`user_id.eq.${userId},linked_users.cs.{${userId}}`)
-    .order('pub_date',{ascending:false});
-    
-  const links=[];
-  if(m.email)links.push(`<a href="mailto:${m.email}" class="pi-link" title="Email">✉</a>`);
-  if(m.google_scholar)links.push(`<a href="${m.google_scholar}" target="_blank" class="pi-link" title="Scholar">GS</a>`);
-  if(m.linkedin)links.push(`<a href="${m.linkedin}" target="_blank" class="pi-link" title="LinkedIn">in</a>`);
-  if(m.website)links.push(`<a href="${m.website}" target="_blank" class="pi-link" title="Website">🌐</a>`);
+  const {data:pubs}=await db.from('publications').select('*').or(`user_id.eq.${id},linked_users.cs.{${id}}`).order('pub_date',{ascending:false});
   
-  $('mm-body').innerHTML=`
-    <div class="mm-hero">
-      ${m.photo_url?`<img src="${m.photo_url}" class="mm-photo" alt="${m.name}">`:`<div class="mm-photo-ph">${ini(m.name)}</div>`}
-      <div>
-        <div class="mm-info-name">${m.name||'—'}</div>
-        <div class="mm-info-role">${m.designation||m.role||'Researcher'}</div>
-        <div class="mm-info-dept">${m.research||''}</div>
-        ${links.length?`<div class="pi-links" style="justify-content:flex-start;margin-top:.75rem">${links.join('')}</div>`:''}
+  $('dp-profile-body').innerHTML=`
+    <button class="back-btn" onclick="history.back()">← Back</button>
+    <div class="dp-container">
+      <div class="dp-hero">
+        ${m.photo_url?`<img src="${m.photo_url}" class="dp-photo">`:`<div class="dp-photo-ph">${ini(m.name)}</div>`}
+        <div>
+          <div class="dp-name">${m.name||'—'}</div>
+          <div class="dp-role">${m.designation||m.role||'Researcher'}</div>
+          <div class="dp-dept">${m.research||''}</div>
+        </div>
       </div>
-    </div>
-    <div class="mm-content">
-      ${m.bio?`<span class="mm-section-label">About</span><p class="mm-bio">${m.bio}</p>`:''}
-      <span class="mm-section-label">Publications (${pubs?pubs.length:0})</span>
-      <div class="mm-pubs-list">
-        ${pubs&&pubs.length?pubs.map(p=>{
-          // RegEx to Bold only this specific member's name in the authors list
-          const boldNameStr = (p.authors_list || p.authors || '').replace(new RegExp(`(${m.name})`, 'gi'), '<strong style="color:var(--navy);">$1</strong>');
-          
-          return `
-          <div class="mm-pub-item" onclick="showPubDetail(${JSON.stringify(p).replace(/"/g,'&quot;')});closeMo('member')">
-            <div class="mm-pub-t">${p.title}</div>
-            <div style="font-size:.75rem; color:var(--muted); margin-bottom:.3rem;">${boldNameStr}</div>
-            <div class="mm-pub-m">${p.venue} · ${p.pub_date || p.year} · <span style="color:var(--accent);font-weight:600">${p.type}</span></div>
-          </div>`
-        }).join(''):'<div class="empty" style="padding:1rem">No publications yet.</div>'}
+      ${m.bio?`<div class="dp-section"><span class="dp-slabel">Biography</span><p style="color:var(--muted);line-height:1.7">${m.bio}</p></div>`:''}
+      <div class="dp-section"><span class="dp-slabel">Publications (${pubs?pubs.length:0})</span>
+        <div class="pub-list">
+          ${(pubs||[]).map(p=>{
+            const boldNameStr = (p.authors_list||'').replace(new RegExp(`(${m.name})`, 'gi'), '<strong style="color:var(--navy);">$1</strong>');
+            return `<div class="pubi" onclick="goPage('publication', '${p.id}')">
+              <div class="pubi-top"><span class="pub-type">${p.type}</span><span class="pub-yr">${p.pub_date||p.year}</span></div>
+              <div class="pub-title">${p.title}</div>
+              <div class="pub-authors">${boldNameStr}</div>
+              <div class="pub-venue">${p.venue||''}</div>
+            </div>`;
+          }).join('')}
+        </div>
       </div>
     </div>`;
-  openMo('member');
+}
+
+async function buildPubDetail(id) {
+  const {data:p}=await db.from('publications').select('*').eq('id',id).single();
+  if(!p) return $('dp-pub-body').innerHTML='<div class="empty">Publication not found.</div>';
+  $('dp-pub-body').innerHTML=`
+    <button class="back-btn" onclick="history.back()">← Back</button>
+    <div class="dp-container">
+      ${p.detail_image ? `<img class="dp-img" src="${p.detail_image}">` : ''}
+      <div style="display:flex;gap:.5rem;margin-bottom:1rem"><span class="tag-b">${p.type}</span><span style="font-size:.8rem;color:var(--gray);font-weight:600">${p.pub_date||p.year}</span></div>
+      <div class="dp-title">${p.title}</div>
+      <div style="font-size:1.1rem;color:var(--accent);font-weight:600;margin-bottom:1rem">${p.authors_list||p.authors||''}</div>
+      <div style="font-size:1rem;color:var(--muted);font-style:italic;margin-bottom:2rem">${p.venue||''}</div>
+      ${p.abstract?`<span class="dp-slabel">Abstract</span><p style="color:var(--muted);line-height:1.8;margin-bottom:2rem">${p.abstract}</p>`:''}
+      ${p.doi?`<a href="${p.doi}" target="_blank" class="btn btn-p">🔗 View Full Paper</a>`:''}
+    </div>`;
+}
+
+async function buildNewsDetail(id) {
+  const {data:n}=await db.from('news').select('*').eq('id',id).single();
+  if(!n) return $('dp-news-body').innerHTML='<div class="empty">News not found.</div>';
+  $('dp-news-body').innerHTML=`
+    <button class="back-btn" onclick="history.back()">← Back</button>
+    <div class="dp-container">
+      ${n.featured_image ? `<img class="dp-img" src="${n.featured_image}">` : ''}
+      <div style="display:flex;gap:.5rem;margin-bottom:1rem"><span class="tag-b">${n.category||'General'}</span><span style="font-size:.8rem;color:var(--gray);font-weight:600">${n.date_label}</span></div>
+      <div class="dp-title">${n.title}</div>
+      <p style="color:var(--muted);line-height:1.8;white-space:pre-wrap;">${n.description}</p>
+    </div>`;
 }
 
 async function renderTeamPage(){
-  $('team-load').style.display='flex';
-  const {data:s}=await db.from('lab_settings').select('*');if(s)renderPI(s);
   const {data:mems}=await db.from('profiles').select('*').eq('approved',true).neq('role','pending').order('created_at');
+  const mg=mems.filter(m=>m.role==='graduate'||m.role==='ra'), mu=mems.filter(m=>m.role==='undergrad'), ma=mems.filter(m=>m.role==='alumni');
+  $('team-grad').innerHTML=mg.length?`<div class="tg-label">Graduates</div><div class="team-grid">${mg.map(m=>memberCardHTML(m)).join('')}</div><br><br>`:'';
+  $('team-ug').innerHTML=mu.length?`<div class="tg-label">Undergraduates</div><div class="team-grid">${mu.map(m=>memberCardHTML(m)).join('')}</div><br><br>`:'';
+  $('team-alumni').innerHTML=ma.length?`<div class="tg-label">Alumni</div><div class="team-grid">${ma.map(m=>memberCardHTML(m)).join('')}</div>`:'';
   $('team-load').style.display='none';
-  renderTeamGroup('team-grad',(mems||[]).filter(m=>m.role==='graduate'||m.role==='ra'),'Graduate Students & Research Assistants');
-  renderTeamGroup('team-ug',(mems||[]).filter(m=>m.role==='undergrad'),'Undergraduate Students');
-  renderTeamGroup('team-alumni',(mems||[]).filter(m=>m.role==='alumni'),'Alumni');
 }
-function renderTeamGroup(id,mems,label){
-  const el=$(id);if(!el)return;
-  if(!mems||!mems.length){el.innerHTML='';return;}
-  el.innerHTML=`<div class="team-grp"><div class="tg-label">${label}<span class="tg-cnt">${mems.length}</span></div><div class="team-grid">${mems.map(m=>memberCard(m)).join('')}</div></div>`;
+function memberCardHTML(m){
+  return `<div class="tc" onclick="goPage('profile', '${m.id}')">
+    ${m.photo_url?`<img src="${m.photo_url}" class="tc-av">`:`<div class="tc-av-ph">${ini(m.name)}</div>`}
+    <div class="tc-name">${m.name||'—'}</div>
+    <div class="tc-role">${m.designation||m.role}</div>
+  </div>`;
 }
-function renderPI(s){
-  const g=(k,f='')=>gS(s,k,f);
-  const photo=g('pi_photo');
-  $('pi-photo-w').innerHTML=photo?`<img src="${photo}" class="pi-photo" alt="PI">`:`<div class="pi-photo-ph">👨‍🔬</div>`;
-  setText('pi-name',g('pi_name'));setText('pi-desig',g('pi_designation'));
-  setText('pi-dept',g('pi_department')+'\n'+g('pi_university'));setText('pi-bio',g('pi_bio'));
-  const em=g('pi_email');const ep=$('pi-email');ep.textContent=em;ep.href='mailto:'+em;
-  $('pi-ints').innerHTML=g('pi_interests','').split('|').filter(Boolean).map(i=>`<span class="pi-int">${i}</span>`).join('');
-  let lk='';
-  if(g('pi_scholar'))lk+=`<a href="${g('pi_scholar')}" class="pi-link" target="_blank">GS</a>`;
-  if(g('pi_rg'))lk+=`<a href="${g('pi_rg')}" class="pi-link" target="_blank">RG</a>`;
-  if(g('pi_orcid'))lk+=`<a href="${g('pi_orcid')}" class="pi-link" target="_blank">ID</a>`;
-  if(em)lk+=`<a href="mailto:${em}" class="pi-link">✉</a>`;
-  $('pi-links').innerHTML=lk;
-}
+
 async function renderResearchPage(){
-  const [{data:areas},{data:projs}]=await Promise.all([
-    db.from('research_areas').select('*').order('sort_order'),
-    db.from('ongoing_projects').select('*').order('sort_order')
-  ]);
-  $('research-grid').innerHTML=(areas&&areas.length)?areas.map(a=>`<div class="rc"><span class="rc-icon">${a.icon}</span><h3>${a.title}</h3><p>${a.description}</p></div>`).join(''):'<div class="empty">No areas yet.</div>';
-  $('proj-list').innerHTML=(projs&&projs.length)?projs.map(p=>`<div class="pc"><div><h3>${p.title}</h3><p>${p.description}</p><div class="pc-mems">${(p.members||[]).map(m=>`<span class="pc-mem">${m}</span>`).join('')}</div></div><span class="badge badge-${p.status||'active'}">${p.status||'active'}</span></div>`).join(''):'<div class="empty">No projects yet.</div>';
+  const [{data:areas},{data:projs}]=await Promise.all([db.from('research_areas').select('*').order('sort_order'),db.from('ongoing_projects').select('*').order('sort_order')]);
+  $('research-grid').innerHTML=(areas||[]).map(a=>`<div class="rc"><span class="rc-icon">${a.icon}</span><h3>${a.title}</h3><p>${a.description}</p></div>`).join('');
+  $('proj-list').innerHTML=(projs||[]).map(p=>`<div class="pc"><div><h3>${p.title}</h3><p>${p.description}</p><div class="pc-mems">${(p.members||[]).map(m=>`<span class="pc-mem">${m}</span>`).join('')}</div></div><span class="badge badge-${p.status||'active'}">${p.status||'active'}</span></div>`).join('');
 }
 async function renderAllPubs(){
   const {data}=await db.from('publications').select('*').order('pub_date',{ascending:false});
-  setText('pub-total-count',data?`(${data.length})`:'');
-  $('all-pubs').innerHTML=(data&&data.length)?data.map(p=>pubCard(p,'page')).join(''):'<div class="empty">No publications yet. Lab members can add papers from their dashboard.</div>';
+  $('all-pubs').innerHTML=(data||[]).map(p=>`<div class="pubi" onclick="goPage('publication', '${p.id}')"><div class="pubi-top"><span class="pub-type">${p.type}</span><span class="pub-yr">${p.pub_date||p.year}</span></div><div class="pub-title">${p.title}</div><div class="pub-authors">${p.authors_list||p.authors||''}</div><div class="pub-venue">${p.venue||''}</div></div>`).join('');
 }
 async function renderAllNews(){
   const {data}=await db.from('news').select('*').order('created_at',{ascending:false});
-  $('all-news').innerHTML=(data&&data.length)?data.map(n=>newsCard(n,'page')).join(''):'<div class="empty">No news yet.</div>';
+  $('all-news').innerHTML=(data||[]).map(n=>newsCard(n)).join('');
 }
 async function renderGallery(){
-  const {data}=await db.from('gallery').select('*').order('sort_order');
-  const items=(data&&data.length)?data:Array(6).fill(null);
-  $('gal-grid').innerHTML=items.map(g=>g?`<div class="gi"><img src="${g.url}" alt="${g.caption||''}"><div class="gi-cap">${g.caption||''}</div></div>`:`<div class="gi"><div class="gi-ph"><span class="gi-ph-i">📸</span><span>Add from Dashboard</span></div></div>`).join('');
+  const {data}=await db.from('gallery').select('*').order('item_date',{ascending:false});
+  $('gal-grid').innerHTML=(data||[]).map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span><span class="gi-date">${g.item_date||''}</span></div></div>`).join('');
 }
 async function renderContact(){
-  const {data:s}=await db.from('lab_settings').select('*');if(!s)return;
-  const g=(k,f='')=>gS(s,k,f);
-  setText('c-addr',g('contact_address'));
-  const ce=$('c-email');ce.textContent=g('contact_email');ce.href='mailto:'+g('contact_email');
-  if(g('contact_phone')){$('c-phone-w').style.display='flex';setText('c-phone',g('contact_phone'));}
-  setText('c-join',g('join_text'));
-  $('c-reqs').innerHTML=g('join_reqs','').split('|').filter(Boolean).map(r=>`<li>${r}</li>`).join('');
-  $('c-apply').href=`mailto:${g('contact_email')}?subject=ILAMPS Application`;
+  const {data:s}=await db.from('lab_settings').select('*');if(!s)return; const g=(k,f='')=>gS(s,k,f);
+  setText('c-addr',g('contact_address')); $('c-email').textContent=g('contact_email'); $('c-email').href='mailto:'+g('contact_email');
+  setText('c-join',g('join_text')); $('c-reqs').innerHTML=g('join_reqs','').split('|').filter(Boolean).map(r=>`<li>${r}</li>`).join('');
 }
 
-// ═══ NAV ═══
 $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
-
-// ═══ INIT ═══
 async function init(){
-  if(!db){showToast('⚙️ Add Supabase credentials in index.html',6000);return;}
-  await loadUser();
-  await renderHome();
-  await loadSlides();
-  loadMemberSelect();
+  if(!db)return showToast('⚙️ Configure Supabase first');
+  await loadUser(); await initPublicData(); await loadSlides();
+  handleHash(); // process URL on first load
 }
 init();
 </script>
