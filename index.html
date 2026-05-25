@@ -115,7 +115,7 @@ button{font-family:var(--f);cursor:pointer}
 .hs-num:hover{color:var(--accent-light)}
 .hs-lbl{font-size:.65rem;color:var(--gray-light);letter-spacing:.1em;text-transform:uppercase;margin-top:.4rem;font-weight:600}
 
-/* Mobile Hero Ordered correctly using display:contents */
+/* Mobile Hero Reordering Rules */
 @media(max-width:900px){
   .hero-split { display:flex; flex-direction:column; padding-top:110px; gap:1.2rem; text-align:left;}
   .hero-content { display: contents; }
@@ -133,7 +133,21 @@ button{font-family:var(--f);cursor:pointer}
 .view-all{display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;font-weight:700;color:var(--accent);cursor:pointer;margin-top:2.5rem;transition:var(--tr);letter-spacing:.01em}
 .view-all:hover{gap:.7rem; color:var(--navy)}
 
-/* PI CARD */
+/* ABOUT & BADGES SYSTEM */
+.about-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:4rem;align-items:center}
+.about-big{background:var(--navy);border-radius:var(--rl);padding:1.75rem;position:relative;overflow:hidden;margin-bottom:.875rem; cursor:pointer;}
+.about-big::after{content:'';position:absolute;top:-25px;right:-25px;width:90px;height:90px;background:rgba(74,123,200,.12);border-radius:50%}
+.about-big-num{font-size:2.75rem;font-weight:900;color:var(--accent-light);line-height:1;}
+.about-big:hover .about-big-num{color:#fff}
+.about-big-lbl{font-size:.78rem;color:rgba(255,255,255,.58);margin-top:.28rem}
+.about-sm-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+.about-sm{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center;box-shadow:var(--shadow);cursor:pointer;transition:var(--tr)}
+.about-sm:hover{border-color:var(--accent);transform:translateY(-2px)}
+.about-sm .num{font-size:1.6rem;font-weight:800;color:var(--navy)}
+.about-sm .lbl{font-size:.63rem;color:var(--muted);margin-top:.18rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr;gap:2rem}.about-sm-row{grid-template-columns:1fr 1fr}}
+
+/* PI CONTAINER */
 .pi-card{display:grid;grid-template-columns:260px 1fr;gap:3rem;align-items:start;background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:2.5rem;box-shadow:var(--shadow);transition:var(--tr)}
 .pi-card:hover{box-shadow:var(--shadow-lg)}
 .pi-photo,.pi-photo-ph{width:180px;height:180px;border-radius:50%;margin:0 auto 1.2rem;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(74,123,200,.15)}
@@ -170,7 +184,7 @@ button{font-family:var(--f);cursor:pointer}
 .pub-authors{font-size:.85rem;color:var(--muted);margin-bottom:.3rem}
 .pub-venue{font-size:.85rem;color:var(--gray);font-style:italic}
 
-/* HOME PUB CARD (SQUARE THUMBNAIL) */
+/* HOME PUB CARD */
 .pubi-home { display: flex; gap: 1.5rem; background: #fff; border: 1px solid var(--border); border-radius: var(--rl); padding: 1.5rem; transition: var(--tr); cursor: pointer; align-items: flex-start; box-shadow:var(--shadow) }
 .pubi-home:hover { box-shadow: var(--shadow-lg); border-color: rgba(74,123,200,.3); transform: translateY(-3px); }
 .pubi-home-img { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; flex-shrink: 0; border: 1px solid var(--border); }
@@ -185,7 +199,6 @@ button{font-family:var(--f);cursor:pointer}
 .nc-img{width:100%;height:180px;object-fit:cover;display:block}
 .nc-img-ph{width:100%;height:180px;background:linear-gradient(135deg,var(--silver),#ccd5e0);display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--gray-light)}
 .nc-dbar{background:var(--navy);color:var(--accent-light);padding:.6rem 1.2rem;font-size:.7rem;letter-spacing:.1em;font-weight:700;display:flex;align-items:center;justify-content:space-between}
-.nc-cat{font-size:.6rem;background:rgba(74,123,200,.3);padding:.1rem .45rem;border-radius:3px;text-transform:uppercase;letter-spacing:.06em}
 .nc-body{padding:1.5rem}
 .nc-body h3{font-size:1.05rem;font-weight:800;color:var(--navy);margin-bottom:.6rem;line-height:1.4}
 .nc-body p{font-size:.85rem;color:var(--muted);line-height:1.7}
@@ -239,11 +252,10 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem; font-s
 .ff input,.ff textarea,.ff select{width:100%;padding:.7rem 1rem;background:var(--off);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--f);font-size:.9rem;transition:var(--tr)}
 .ff input:focus,.ff textarea:focus{outline:none;border-color:var(--accent);background:#fff;box-shadow:0 0 0 4px rgba(74,123,200,.1)}
 
-/* DASHBOARD & ADMIN */
+/* DASHBOARD */
 #dash{display:none;position:fixed;inset:0;z-index:9900;flex-direction:column;background:#eef1f7}
 #dash.open{display:flex}
 .dn{background:var(--navy);height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;border-bottom:1px solid rgba(255,255,255,.07);box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:10;}
-.dn-brand{font-size:1.2rem;font-weight:900;color:#fff;}
 .dl{display:grid;grid-template-columns:240px 1fr;flex:1;overflow:hidden}
 .ds{background:#fff;border-right:1px solid var(--border);padding:1.5rem 1rem;overflow-y:auto;box-shadow:4px 0 15px rgba(0,0,0,.02);z-index:5;}
 .dc{padding:2rem;overflow-y:auto;flex:1}
@@ -261,20 +273,6 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem; font-s
 .dni.active{background:rgba(74,123,200,.1);color:var(--accent);font-weight:700}
 .dnsep{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-light);padding:.5rem 1rem .3rem;margin-top:1rem}
 
-/* DASHBOARD UPLOAD COMPONENT */
-.up-wrap{border:2px dashed var(--border);border-radius:var(--r);padding:1.5rem;text-align:center;transition:var(--tr);cursor:pointer;position:relative;overflow:hidden;background:var(--off)}
-.up-wrap:hover, .up-wrap.active-drop{border-color:var(--accent);background:rgba(74,123,200,.04)}
-.up-preview{width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:.8rem;display:none;box-shadow:var(--shadow)}
-.up-preview.show{display:block}
-.up-ph{font-size:2rem;display:block;margin-bottom:.5rem;opacity:.5}
-.up-label{font-size:.85rem;font-weight:600;color:var(--navy)}
-.up-hint{font-size:.7rem;color:var(--muted);margin-top:.4rem;display:block}
-.up-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2;}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
-@media(max-width:768px){.dl{grid-template-columns:1fr}.ds{display:none}.g2,.g3{grid-template-columns:1fr}.dc{padding:1rem;}}
-
-/* DEDICATED PAGES (Details) */
 .dp-container{background:#fff; border:1px solid var(--border); border-radius:var(--rl); padding:3rem; margin-top:2rem; box-shadow:var(--shadow-lg);}
 .dp-hero{display:flex; gap:2.5rem; align-items:center; border-bottom:1px solid var(--border); padding-bottom:2.5rem; margin-bottom:2.5rem;}
 .dp-photo{width:150px; height:150px; border-radius:50%; object-fit:cover; border:4px solid var(--accent); flex-shrink:0; box-shadow:0 8px 24px rgba(74,123,200,.2)}
@@ -290,12 +288,6 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem; font-s
 </style>
 </head>
 <body>
-
-<!-- CONFIG -->
-<script>
-const SUPABASE_URL  = 'https://rqviytqzrbsmdppcxzwr.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxdml5dHF6cmJzbWRwcGN4endyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2OTYxMzcsImV4cCI6MjA5NTI3MjEzN30.876Ml_UovPdcGqRxmnRwp5Iw0Z4-nR6vdIh1ZnEggio';
-</script>
 
 <div class="toast" id="toast"></div>
 <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
@@ -360,6 +352,31 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
       </div>
     </div>
   </section>
+
+  <!-- HOME: OVERVIEW CARDS FOR METERED METRICS -->
+  <div class="home-sec">
+    <div class="con">
+      <div class="about-grid">
+        <div>
+          <div class="about-big" onclick="goPage('publications')">
+            <div class="about-big-num" id="ab-pubs">—</div>
+            <div class="about-big-lbl">Publications &amp; abstracts · View all</div>
+          </div>
+          <div class="about-sm-row">
+            <div class="about-sm" onclick="goPage('research')"><div class="num" id="ab-projs">—</div><div class="lbl">Projects</div></div>
+            <div class="about-sm" onclick="goPage('team')"><div class="num" id="ab-mems">—</div><div class="lbl">Members</div></div>
+            <div class="about-sm"><div class="num" id="ab-founded">—</div><div class="lbl">Founded</div></div>
+          </div>
+        </div>
+        <div class="about-content">
+          <span class="slabel">About the Laboratory</span>
+          <h2 class="stitle" id="ab-fullname">ILAMPS Laboratory</h2>
+          <p id="ab-a1" style="color:var(--muted); line-height:1.75; font-size:.95rem;"></p>
+          <div class="about-tags" id="ab-tags"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- HOME: TEAM SECTION (Top 6 based on rank) -->
   <div class="home-sec gray">
@@ -480,7 +497,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 <footer>
   <div class="con">
     <div class="footer-grid">
-      <!-- Logos -->
       <div>
         <div class="f-title" style="font-size:1.4rem; line-height:1.5">ILAMPS</div>
         <div class="f-logos">
@@ -488,13 +504,11 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
           <div class="f-logo-box" id="f-logo-box-2" style="display:none"><img id="f-logo-just" src=""></div>
         </div>
       </div>
-      <!-- Contact -->
       <div>
         <div class="f-title">Contact</div>
         <div style="display:flex;gap:10px;margin-bottom:.8rem;align-items:flex-start"><span>📍</span><p id="f-addr"></p></div>
         <div style="display:flex;gap:10px;align-items:center"><span>✉️</span><a id="f-email" class="f-link" style="margin:0"></a></div>
       </div>
-      <!-- Links -->
       <div>
         <div class="f-title">Quick Links</div>
         <a onclick="goPage('team')" class="f-link">Team</a>
@@ -635,14 +649,14 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
               <label>Thumbnail (Square)</label>
               <div class="up-wrap" onclick="prepareUpload('publications', 1, url=>{pubThumbUrl=url;showPrev('prev-pub-thumb','ph-pub-thumb',url)})">
                 <img class="up-preview" id="prev-pub-thumb" src=""><span class="up-ph" id="ph-pub-thumb">🔳</span>
-                <span class="up-label">Upload or Paste</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
+                <span class="up-label">Upload or Paste Image</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
               </div>
             </div>
             <div class="ff">
               <label>Detail Image (Banner)</label>
               <div class="up-wrap" onclick="prepareUpload('publications', 16/9, url=>{pubDetailUrl=url;showPrev('prev-pub-detail','ph-pub-detail',url)})">
                 <img class="up-preview" id="prev-pub-detail" src=""><span class="up-ph" id="ph-pub-detail">🖼️</span>
-                <span class="up-label">Upload or Paste</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
+                <span class="up-label">Upload or Paste Image</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
               </div>
             </div>
           </div>
@@ -698,7 +712,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
           </div>
           <div class="g2"><div class="ff"><label>Lab Full Name</label><input type="text" id="ls-fullname"></div><div class="ff"><label>Lab Short Name</label><input type="text" id="ls-name"></div></div>
           <div class="g3"><div class="ff"><label>Founded Year</label><input type="text" id="ls-founded"></div><div class="ff"><label>University</label><input type="text" id="ls-uni"></div><div class="ff"><label>Department</label><input type="text" id="ls-dept"></div></div>
-          <div class="ff"><label>About</label><textarea id="ls-a1" style="min-height:80px"></textarea></div>
+          <div class="ff"><label>About Lab Intro Paragraph</label><textarea id="ls-a1" style="min-height:80px"></textarea></div>
           <div class="ff"><label>Address</label><textarea id="ls-addr"></textarea></div>
           <div class="g2"><div class="ff"><label>Email</label><input type="email" id="ls-email"></div><div class="ff"><label>Phone</label><input type="text" id="ls-phone"></div></div>
           <button class="btn btn-p" onclick="saveLabSettings()">💾 Save Settings</button>
@@ -822,11 +836,9 @@ let pubThumbUrl='', pubDetailUrl='', newsImgUrl='', profilePhotoUrl='';
 let npAuthorsList=[];
 let cropCb=null,cropper=null,cropFolder='',targetRatio=NaN;
 
-// State tracking for Edits
 let editState = { pub: null, news: null, gal: null, proj: null, res: null };
 let fetchedData = { pubs: [], news: [], gal: [], proj: [], res: [] };
 
-// Role Hierarchy Mapping (Lower is higher priority)
 const roleRanks = {
   'Principal Investigator': 1, 'Assistant Investigator': 2, 'Research Assistant': 3,
   'PhD. Student': 4, 'MSc. Student': 5, 'Graduate Research Student': 6,
@@ -836,7 +848,7 @@ const getRank = role => roleRanks[role] || 10;
 
 // ═══ HELPERS ═══
 const $=id=>document.getElementById(id);
-const setText=(id,v)=>{const e=$(id);if(e)e.textContent=v||''};
+const setText=(id,v)=>{const e=$(id);if(e)e.textContent=v||'0'};
 const setVal=(id,v)=>{const e=$(id);if(e)e.value=v||''};
 const getVal=id=>{const e=$(id);return e?e.value.trim():''};
 const gS=(arr,k,fb='')=>{const f=(arr||[]).find(r=>r.key===k);return f?f.value:fb};
@@ -1202,7 +1214,7 @@ async function delRow(table,id,reload){if(confirm('Delete?')){await db.from(tabl
 // Settings 
 async function loadLabForm(){
   const {data:s}=await db.from('lab_settings').select('*');if(!s)return; const g=(k,f='')=>gS(s,k,f);
-  ['name','fullname','founded','uni','dept','a1','addr','email','phone'].forEach(k=>setVal('ls-'+k,g(k==='name'?'lab_name':(k==='fullname'?'lab_fullname':(k==='uni'?'university':(k==='dept'?'department':(k==='a1'?'about':(k==='addr'?'contact_address':(k==='email'?'contact_email':k)))))))));
+  ['name','fullname','founded','uni','dept','a1','addr','email','phone'].forEach(k=>setVal('ls-'+k,g(k==='name'?'lab_name':(k==='uni'?'university':(k==='dept'?'department':(k==='a1'?'about':(k==='addr'?'contact_address':(k==='email'?'contact_email':k)))))))));
   if(g('lab_logo')){setVal('ls-logo',g('lab_logo'));showPrev('prev-logo','ph-logo',g('lab_logo'));}
   if(g('just_logo')){setVal('ls-just-logo',g('just_logo'));showPrev('prev-just-logo','ph-just-logo',g('just_logo'));}
 }
@@ -1228,6 +1240,9 @@ async function initPublicData() {
   setText('h-name', `${labFullName} (${labShortName})`);
   setText('nav-lab-name', labShortName);
   setText('h-desc',g('about'));
+  setText('ab-fullname', labFullName);
+  setText('ab-a1', g('about'));
+  
   const logo=g('lab_logo'); if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}">`;updateFavicon(logo);}
   
   setText('f-addr', g('contact_address')); setText('f-email', g('contact_email')); $('f-email').href='mailto:'+g('contact_email');
@@ -1235,32 +1250,40 @@ async function initPublicData() {
   if(logo) { $('f-logo-box-1').style.display='flex'; $('f-logo-ilamps').src=logo; }
   if(jlogo) { $('f-logo-box-2').style.display='flex'; $('f-logo-just').src=jlogo; }
 
+  // COUNT AGGREGATIONS OVER LIFETIME INSTANCES
   const [{count:pubs},{count:projs},{count:mems}]=await Promise.all([
     db.from('publications').select('*',{count:'exact',head:true}),
     db.from('ongoing_projects').select('*',{count:'exact',head:true}),
     db.from('profiles').select('*',{count:'exact',head:true}).eq('approved',true)
   ]);
-  ['hs-pubs'].forEach(id=>setText(id,pubs||'0'));
-  ['hs-projs'].forEach(id=>setText(id,projs||'0'));
-  ['hs-mems'].forEach(id=>setText(id,mems||'0'));
-  setText('hs-founded',g('founded','—'));
+  
+  // Binding values safely to both overview sections
+  ['hs-pubs','ab-pubs'].forEach(id=>setText(id,pubs||'0'));
+  ['hs-projs','ab-projs'].forEach(id=>setText(id,projs||'0'));
+  ['hs-mems','ab-mems'].forEach(id=>setText(id,mems||'0'));
+  
+  const fYear = g('founded','—');
+  setText('hs-founded', fYear);
+  setText('ab-founded', fYear);
   setText('pub-total-count',pubs?`(${pubs})`:'');
 
-  // Fetch Latest Data
+  // Fetch Group Matrix Nodes
   const [{data:news},{data:pubsData},{data:memsData},{data:galData}] = await Promise.all([
     db.from('news').select('*').order('created_at',{ascending:false}).limit(3),
     db.from('publications').select('*').order('pub_date',{ascending:false}).limit(4),
-    db.from('profiles').select('*').eq('approved',true), // Fetch all members to sort
+    db.from('profiles').select('*').eq('approved',true),
     db.from('gallery').select('*').order('item_date',{ascending:false}).limit(3)
   ]);
 
-  // Sort Members by Hierarchy Rank
   const sortedMems = (memsData || []).sort((a,b) => getRank(a.role) - getRank(b.role));
   
   $('home-team').innerHTML=sortedMems.slice(0,6).map(m=>memberCardHTML(m)).join('');
   $('home-news').innerHTML=(news&&news.length)?news.map(n=>newsCard(n)).join(''):'<div class="empty">No news yet.</div>';
   $('home-pubs').innerHTML=(pubsData&&pubsData.length)?pubsData.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications.</div>';
   $('home-gallery').innerHTML=(galData&&galData.length)?galData.map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span><span class="gi-date">${g.item_date||''}</span></div></div>`).join(''):'<div class="empty">No gallery images.</div>';
+
+  const {data:areas}=await db.from('research_areas').select('title').limit(6);
+  $('ab-tags').innerHTML=(areas||[]).map(a=>`<span class="tag-b">${a.title}</span>`).join('');
 
   renderTeamPage(sortedMems); renderResearchPage(); renderAllPubs(); renderAllNews(); renderGallery(); renderContact();
 }
@@ -1415,8 +1438,8 @@ async function renderTeamPage(sortedMems){
     if (mems.length) {
       if (title === 'Principal Investigator') {
         html += `<div style="margin-bottom:4rem"><span class="dp-slabel" style="font-size:1rem;margin-bottom:1.5rem">${title}</span><div class="pi-card">${mems.map(m=>`
-          <div style="text-align:center"><img src="${m.photo_url}" class="pi-photo"><div class="pi-name">${m.name}</div><div class="pi-desig">${m.designation}</div><div class="pi-dept">${m.department}<br>${m.university}</div></div>
-          <div><span class="pi-sl">Biography</span><p class="pi-bio">${m.bio}</p><button class="btn btn-o btn-sm" style="margin-top:1rem" onclick="goPage('profile', '${m.slug||m.id}')">View Full Profile</button></div>
+          <div style="text-align:center"><img src="${m.photo_url}" class="pi-photo"><div class="pi-name">${m.name}</div><div class="pi-desig">${m.designation}</div><div class="pi-dept">${m.department || ''}<br>${m.university || ''}</div></div>
+          <div><span class="pi-sl">Biography</span><p class="pi-bio">${m.bio || ''}</p><button class="btn btn-o btn-sm" style="margin-top:1rem" onclick="goPage('profile', '${m.slug||m.id}')">View Full Profile</button></div>
         `).join('')}</div></div>`;
       } else {
         html += `<div style="margin-bottom:4rem"><span class="dp-slabel" style="font-size:1rem">${title}</span><div class="team-grid">${mems.map(m=>memberCardHTML(m)).join('')}</div></div>`;
@@ -1435,7 +1458,7 @@ async function renderResearchPage(){
 }
 async function renderAllPubs(){
   const {data}=await db.from('publications').select('*').order('pub_date',{ascending:false});
-  $('all-pubs').innerHTML=(data||[]).map(p=>{
+  $('all-pubs').innerHTML=(data||[]).map(p=> {
     const statusBadge = p.status ? `<span style="font-size:0.7rem; padding:0.15rem 0.5rem; border-radius:4px; background:var(--silver); color:var(--navy); font-weight:700">${p.status}</span>` : '';
     return `<div class="pubi" onclick="goPage('publication', '${p.id}')"><div class="pubi-top"><span class="pub-type">${p.type}</span>${statusBadge}<span class="pub-yr">${p.pub_date||p.year}</span></div><div class="pub-title">${p.title}</div><div class="pub-authors">${p.authors_list||p.authors||''}</div><div class="pub-venue">${p.venue||''}</div></div>`;
   }).join('');
@@ -1457,7 +1480,7 @@ async function renderContact(){
 $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
 
 async function init(){
-  if(!db)return showToast('⚙️ Configure Supabase first');
+  if(!db)return showToast('❌ Configure Supabase client nodes correctly');
   await loadUser(); await initPublicData(); await loadSlides();
   handleRoute(); 
 }
