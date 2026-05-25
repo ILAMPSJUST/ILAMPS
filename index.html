@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ILAMPS – Interdisciplinary Laboratory for Advanced Materials Processing and Simulations</title>
+<meta name="description" content="ILAMPS – Computational materials science, ion implantation simulation and ML research at JUST, Bangladesh.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+/* ════ VARIABLES ════ */
+:root{
+  --navy:#0d1f42;--navy-mid:#1a3566;--navy-light:#2a4a8a;
+  --gray:#6b7a8d;--gray-light:#a8b5c2;--silver:#e8edf2;
+  --accent:#4a7bc8;--accent-light:#7aa5d9;--accent-glow:rgba(74,123,200,.2);
+  --gold:#c8a84a;--white:#fff;--off-white:#f5f7fa;
+  --text:#1a2332;--text-muted:#556070;--border:#dde3ea;
+  --shadow:0 4px 24px rgba(13,31,66,.08);--shadow-lg:0 12px 48px rgba(13,31,66,.15);
+  --radius:12px;--radius-lg:20px;
+  --fd:'Playfair Display',Georgia,serif;--fb:'DM Sans',sans-serif;--fm:'JetBrains Mono',monospace;
+  --tr:0.3s cubic-bezier(.4,0,.2,1)
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);color:var(--text);background:var(--white);line-height:1.7;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--fd);font-weight:700;line-height:1.25;letter-spacing:-.02em}
+.container{max-width:1200px;margin:0 auto;padding:0 2rem}
+section{padding:5.5rem 0}
+.section-label{font-family:var(--fm);font-size:.7rem;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:.75rem}
+.section-title{font-size:clamp(1.9rem,4vw,2.6rem);color:var(--navy);margin-bottom:1.1rem}
+.section-subtitle{font-size:.975rem;color:var(--text-muted);max-width:600px;line-height:1.8}
+.section-header{margin-bottom:3rem}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.6rem;border-radius:8px;font-size:.875rem;font-weight:600;text-decoration:none;transition:var(--tr);cursor:pointer;border:none;font-family:var(--fb);white-space:nowrap}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#5a8bd4;transform:translateY(-1px);box-shadow:0 6px 20px rgba(74,123,200,.35)}
+.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.2)}.btn-ghost:hover{background:rgba(255,255,255,.14)}
+.btn-outline{background:transparent;color:var(--navy);border:1px solid var(--border)}.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-danger{background:rgba(239,68,68,.15);color:#ef4444;border:1px solid rgba(239,68,68,.3)}.btn-danger:hover{background:rgba(239,68,68,.25)}
+.btn-sm{padding:.4rem .9rem;font-size:.78rem}
+.tag{background:var(--silver);color:var(--navy-mid);padding:.32rem .8rem;border-radius:50px;font-size:.76rem;font-weight:500;border:1px solid var(--border)}
+.tag-blue{background:rgba(74,123,200,.1);color:var(--accent);border-color:rgba(74,123,200,.2)}
+.badge{display:inline-flex;align-items:center;gap:.35rem;padding:.22rem .65rem;border-radius:50px;font-size:.7rem;font-weight:600}
+.badge-active{background:rgba(16,185,129,.12);color:#059669}
+.badge-pending{background:rgba(245,158,11,.12);color:#d97706}
+.badge-completed{background:rgba(99,102,241,.12);color:#6366f1}
+.badge::before{content:'';width:5px;height:5px;background:currentColor;border-radius:50%}
+
+/* ═══ NAV ═══ */
+#navbar{position:fixed;top:0;left:0;right:0;z-index:900;background:rgba(13,31,66,.97);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.07);transition:var(--tr)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:68px;gap:1.5rem}
+.nav-logo{display:flex;align-items:center;gap:.8rem;text-decoration:none;flex-shrink:0}
+.nav-logo-box{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--navy-mid));display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:.6rem;font-weight:700;color:#fff;line-height:1.1;text-align:center}
+.nav-logo-text .nm{font-family:var(--fd);font-size:1.15rem;font-weight:700;color:#fff;letter-spacing:-.01em;line-height:1}
+.nav-logo-text .sb{font-size:.58rem;color:var(--gray-light);letter-spacing:.07em;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:.1rem;list-style:none}
+.nav-links a{display:block;padding:.42rem .78rem;font-size:.83rem;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;border-radius:6px;transition:var(--tr)}
+.nav-links a:hover{color:#fff;background:rgba(255,255,255,.09)}
+.nav-auth{display:flex;align-items:center;gap:.75rem;flex-shrink:0}
+.nav-ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px}
+.nav-ham span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:var(--tr)}
+@media(max-width:900px){
+  .nav-ham{display:flex}
+  .nav-links{display:none;position:absolute;top:68px;left:0;right:0;flex-direction:column;background:var(--navy);padding:.875rem;border-top:1px solid rgba(255,255,255,.07);gap:.2rem}
+  .nav-links.open{display:flex}
+  .nav-links a{width:100%;padding:.68rem 1rem}
+}
+
+/* ═══ HERO ═══ */
+#hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;background:var(--navy);padding:0}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 70% 50%,rgba(74,123,200,.14),transparent 60%),linear-gradient(135deg,#0a1428,#1a3566 60%,#0d2a4a)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(74,123,200,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(74,123,200,.055) 1px,transparent 1px);background-size:54px 54px}
+.hero-dots{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(74,123,200,.17) 1.5px,transparent 1.5px);background-size:27px 27px;mask-image:radial-gradient(ellipse 55% 55% at 74% 45%,black 40%,transparent 80%)}
+.hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;min-height:100vh;padding-top:68px}
+.hero-content{padding:4rem 0}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(74,123,200,.15);border:1px solid rgba(74,123,200,.3);border-radius:50px;padding:.33rem .85rem;font-family:var(--fm);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-light);margin-bottom:1.4rem}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--accent-light);border-radius:50%;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
+.hero-title{font-size:clamp(2.25rem,5vw,3.6rem);font-weight:900;color:#fff;line-height:1.08;margin-bottom:.85rem;letter-spacing:-.035em}
+.hero-title em{color:var(--accent-light);font-style:italic}
+.hero-uni{font-size:.78rem;color:var(--gray-light);letter-spacing:.07em;text-transform:uppercase;margin-bottom:1.4rem;font-weight:300;line-height:1.6}
+.hero-desc{font-size:.98rem;color:rgba(255,255,255,.6);line-height:1.8;margin-bottom:2.4rem;max-width:470px}
+.hero-actions{display:flex;gap:.875rem;flex-wrap:wrap}
+.hero-stats{display:flex;gap:2.25rem;margin-top:2.75rem;padding-top:1.75rem;border-top:1px solid rgba(255,255,255,.09)}
+.hero-stat-num{font-family:var(--fd);font-size:1.9rem;font-weight:700;color:#fff;line-height:1}
+.hero-stat-label{font-size:.68rem;color:var(--gray-light);letter-spacing:.08em;text-transform:uppercase;margin-top:.28rem}
+.hero-img-wrap{display:flex;align-items:center;justify-content:center}
+.hero-img-ph{width:100%;max-width:500px;height:420px;background:linear-gradient(145deg,rgba(26,53,102,.6),rgba(74,123,200,.18));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;border:2px dashed rgba(74,123,200,.32);border-radius:var(--radius-lg);position:relative;overflow:hidden}
+.hero-img-ph::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(74,123,200,.065) 1px,transparent 1px),linear-gradient(90deg,rgba(74,123,200,.065) 1px,transparent 1px);background-size:34px 34px}
+.hero-img-ph-icon{font-size:3rem;position:relative;z-index:1;opacity:.45}
+.hero-img-ph p{color:rgba(255,255,255,.32);font-size:.8rem;text-align:center;position:relative;z-index:1;line-height:1.5}
+#hero-img{width:100%;max-width:500px;height:420px;object-fit:cover;border-radius:var(--radius-lg);box-shadow:0 32px 80px rgba(0,0,0,.5);display:none}
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr}.hero-img-wrap{display:none}.hero-content{padding:2rem 0}}
+
+/* ═══ ABOUT ═══ */
+.about-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:center}
+.about-vis{display:flex;flex-direction:column;gap:1rem}
+.about-big{background:var(--navy);border-radius:var(--radius-lg);padding:2rem;position:relative;overflow:hidden}
+.about-big::after{content:'';position:absolute;top:-30px;right:-30px;width:110px;height:110px;background:rgba(74,123,200,.12);border-radius:50%}
+.about-big-num{font-family:var(--fd);font-size:2.8rem;font-weight:900;color:var(--accent-light);line-height:1}
+.about-big-lbl{font-size:.83rem;color:rgba(255,255,255,.62);margin-top:.32rem}
+.about-sm-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.about-sm{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;text-align:center;box-shadow:var(--shadow)}
+.about-sm .num{font-family:var(--fd);font-size:1.75rem;font-weight:700;color:var(--navy)}
+.about-sm .lbl{font-size:.7rem;color:var(--text-muted);margin-top:.22rem;text-transform:uppercase;letter-spacing:.06em}
+.about-content p{color:var(--text-muted);margin-bottom:.875rem;font-size:.965rem;line-height:1.8}
+.about-tags{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1.35rem}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr;gap:2.5rem}}
+
+/* ═══ SUPERVISOR ═══ */
+#supervisor{background:var(--navy)}
+#supervisor .section-label{color:var(--accent-light)}
+#supervisor .section-title{color:#fff}
+#supervisor .section-subtitle{color:rgba(255,255,255,.58)}
+.pi-card{display:grid;grid-template-columns:270px 1fr;gap:3.5rem;align-items:start;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);padding:2.75rem}
+.pi-photo-ph,.pi-photo{width:175px;height:175px;border-radius:50%;margin:0 auto 1.1rem;display:flex;align-items:center;justify-content:center}
+.pi-photo{object-fit:cover;border:4px solid var(--accent);display:block}
+.pi-photo-ph{background:rgba(74,123,200,.2);border:4px solid rgba(74,123,200,.3);font-size:3.25rem}
+.pi-name{font-family:var(--fd);font-size:1.3rem;font-weight:700;color:#fff;text-align:center;margin-bottom:.22rem}
+.pi-desig{font-size:.82rem;color:var(--accent-light);font-weight:500;text-align:center;margin-bottom:.18rem}
+.pi-dept{font-size:.76rem;color:rgba(255,255,255,.48);text-align:center;line-height:1.45}
+.pi-links{display:flex;justify-content:center;gap:.6rem;margin-top:1.1rem;flex-wrap:wrap}
+.pi-link{width:32px;height:32px;border-radius:7px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:.8rem;color:rgba(255,255,255,.6);transition:var(--tr)}
+.pi-link:hover{background:var(--accent);color:#fff}
+.pi-slabel{font-size:.68rem;color:var(--accent-light);font-family:var(--fm);font-weight:500;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.55rem;margin-top:1.35rem;display:block}
+.pi-slabel:first-child{margin-top:0}
+.pi-bio{color:rgba(255,255,255,.65);font-size:.92rem;line-height:1.85}
+.pi-int-list{display:flex;flex-wrap:wrap;gap:.4rem}
+.pi-int{background:rgba(74,123,200,.18);border:1px solid rgba(74,123,200,.28);color:var(--accent-light);padding:.28rem .75rem;border-radius:50px;font-size:.76rem}
+@media(max-width:768px){.pi-card{grid-template-columns:1fr;gap:2rem;padding:1.75rem}}
+
+/* ═══ TEAM ═══ */
+.team-grp{margin-bottom:2.75rem}
+.team-grp-label{font-family:var(--fd);font-size:1.15rem;font-weight:600;color:var(--navy);margin-bottom:1.2rem;padding-bottom:.68rem;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:.55rem}
+.team-grp-label .cnt{background:var(--accent);color:#fff;width:22px;height:22px;border-radius:50%;font-family:var(--fb);font-size:.7rem;display:inline-flex;align-items:center;justify-content:center;font-weight:600}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1.1rem}
+.team-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.65rem 1.25rem;text-align:center;transition:var(--tr);position:relative;overflow:hidden}
+.team-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--navy-light));opacity:0;transition:var(--tr)}
+.team-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}.team-card:hover::before{opacity:1}
+.team-av{width:80px;height:80px;border-radius:50%;object-fit:cover;margin:0 auto .8rem;display:block;border:3px solid var(--silver)}
+.team-av-ph{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--silver),var(--border));margin:0 auto .8rem;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:1.65rem;font-weight:700;color:var(--gray)}
+.team-cn{font-family:var(--fd);font-size:1rem;font-weight:700;color:var(--navy);margin-bottom:.18rem}
+.team-cr{font-size:.74rem;color:var(--accent);font-weight:500;margin-bottom:.55rem}
+.team-cs{font-size:.75rem;color:var(--text-muted);line-height:1.5}
+.team-empty{padding:2rem;text-align:center;color:var(--gray-light);border:2px dashed var(--border);border-radius:var(--radius-lg);font-size:.85rem}
+
+/* ═══ RESEARCH ═══ */
+#research{background:var(--off-white)}
+.research-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.35rem}
+.res-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.85rem;transition:var(--tr)}
+.res-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:rgba(74,123,200,.28)}
+.res-icon{font-size:2.1rem;margin-bottom:1rem;display:block}
+.res-card h3{font-size:1rem;color:var(--navy);margin-bottom:.55rem}
+.res-card p{font-size:.83rem;color:var(--text-muted);line-height:1.7}
+
+/* ═══ ONGOING ═══ */
+.proj-list{display:flex;flex-direction:column;gap:1.2rem}
+.proj-card{background:#fff;border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:0 var(--radius) var(--radius) 0;padding:1.55rem 1.85rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:start;transition:var(--tr)}
+.proj-card:hover{box-shadow:var(--shadow)}
+.proj-card h3{font-size:.975rem;color:var(--navy);margin-bottom:.38rem}
+.proj-card p{font-size:.83rem;color:var(--text-muted);line-height:1.65;margin-bottom:.65rem}
+.proj-mems{display:flex;flex-wrap:wrap;gap:.32rem}
+.proj-mem{font-size:.7rem;background:var(--silver);color:var(--navy-mid);padding:.18rem .58rem;border-radius:50px}
+
+/* ═══ PUBLICATIONS ═══ */
+#publications{background:var(--off-white)}
+.pub-list{display:flex;flex-direction:column;gap:1rem}
+.pub-item{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.55rem 1.85rem;display:grid;grid-template-columns:auto 1fr;gap:1.35rem;align-items:start;transition:var(--tr)}
+.pub-item:hover{box-shadow:var(--shadow);border-color:rgba(74,123,200,.28)}
+.pub-year{font-family:var(--fd);font-size:1.4rem;font-weight:700;color:var(--accent);line-height:1;min-width:44px}
+.pub-type{display:inline-block;background:rgba(74,123,200,.1);color:var(--accent);padding:.17rem .6rem;border-radius:4px;font-size:.66rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.4rem}
+.pub-title{font-family:var(--fd);font-size:.975rem;font-weight:600;color:var(--navy);margin-bottom:.3rem;line-height:1.4}
+.pub-authors{font-size:.8rem;color:var(--text-muted);margin-bottom:.2rem}
+.pub-venue{font-size:.8rem;color:var(--gray);font-style:italic}
+.pub-doi{display:inline-flex;align-items:center;gap:.32rem;margin-top:.6rem;font-size:.76rem;color:var(--accent);text-decoration:none;font-weight:500}
+.pub-doi:hover{text-decoration:underline}
+
+/* ═══ NEWS ═══ */
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.35rem}
+.news-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:var(--tr)}
+.news-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.news-dbar{background:var(--navy);color:var(--accent-light);padding:.65rem 1.25rem;font-family:var(--fm);font-size:.68rem;letter-spacing:.1em}
+.news-body{padding:1.25rem}
+.news-body h3{font-size:.94rem;color:var(--navy);margin-bottom:.55rem;line-height:1.4}
+.news-body p{font-size:.82rem;color:var(--text-muted);line-height:1.7}
+
+/* ═══ GALLERY ═══ */
+#gallery{background:var(--off-white)}
+.gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.875rem}
+.gal-item{border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;position:relative;background:var(--silver);border:1px solid var(--border)}
+.gal-item img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;display:block}
+.gal-item:hover img{transform:scale(1.06)}
+.gal-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.45rem;color:var(--gray-light);background:linear-gradient(135deg,var(--silver),#d5dde8)}
+.gal-ph-icon{font-size:1.75rem;opacity:.45}
+.gal-ph span{font-size:.7rem;opacity:.6}
+@media(max-width:768px){.gal-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ═══ CONTACT ═══ */
+#contact{background:var(--navy)}
+#contact .section-label{color:var(--accent-light)}
+#contact .section-title{color:#fff}
+#contact .section-subtitle{color:rgba(255,255,255,.58)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.contact-item{display:flex;gap:.875rem;align-items:flex-start;margin-bottom:1.65rem}
+.contact-icon{width:42px;height:42px;border-radius:10px;background:rgba(74,123,200,.2);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.contact-item h4{font-size:.68rem;font-family:var(--fm);letter-spacing:.12em;text-transform:uppercase;color:var(--accent-light);margin-bottom:.28rem}
+.contact-item p,.contact-item a{color:rgba(255,255,255,.68);font-size:.88rem;text-decoration:none;line-height:1.55}
+.join-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-lg);padding:2.25rem}
+.join-box h3{font-family:var(--fd);font-size:1.45rem;color:#fff;margin-bottom:.8rem}
+.join-box p{color:rgba(255,255,255,.6);font-size:.88rem;line-height:1.8;margin-bottom:1.25rem}
+.join-list{list-style:none;margin-bottom:1.85rem}
+.join-list li{color:rgba(255,255,255,.65);font-size:.85rem;padding:.46rem 0;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:.7rem}
+.join-list li::before{content:'→';color:var(--accent-light);flex-shrink:0}
+@media(max-width:768px){.contact-grid{grid-template-columns:1fr;gap:2rem}}
+
+/* ═══ FOOTER ═══ */
+footer{background:#060f22;color:rgba(255,255,255,.38);padding:2rem 0}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+footer p{font-size:.78rem}
+.footer-links{display:flex;gap:1.35rem}
+.footer-links a{font-size:.78rem;color:rgba(255,255,255,.32);text-decoration:none;transition:var(--tr)}
+.footer-links a:hover{color:rgba(255,255,255,.75)}
+
+/* ═══ LOADING ═══ */
+.loading{display:flex;align-items:center;justify-content:center;padding:4rem;gap:.75rem;color:var(--text-muted);font-size:.9rem}
+.spin{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty{text-align:center;padding:3rem;color:var(--gray-light);font-size:.875rem;border:2px dashed var(--border);border-radius:var(--radius-lg)}
+
+/* ═══ MODAL ═══ */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(5,12,30,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:#fff;border-radius:var(--radius-lg);width:100%;max-width:420px;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.25)}
+.modal-hdr{padding:1.5rem 1.75rem 0;display:flex;align-items:center;justify-content:space-between}
+.modal-hdr h2{font-family:var(--fd);font-size:1.5rem;color:var(--navy)}
+.modal-close{background:var(--silver);border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1.1rem;color:var(--gray);display:flex;align-items:center;justify-content:center;transition:var(--tr)}
+.modal-close:hover{background:var(--border);color:var(--navy)}
+.modal-body{padding:1.5rem 1.75rem 1.75rem}
+.modal-sub{font-size:.85rem;color:var(--text-muted);margin-bottom:1.5rem}
+.form-field{margin-bottom:1rem}
+.form-field label{display:block;font-size:.75rem;font-family:var(--fm);letter-spacing:.1em;text-transform:uppercase;color:var(--navy-mid);margin-bottom:.4rem;font-weight:500}
+.form-field input,.form-field textarea,.form-field select{width:100%;padding:.68rem .9rem;background:var(--off-white);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--fb);font-size:.875rem;transition:var(--tr)}
+.form-field input:focus,.form-field textarea:focus{outline:none;border-color:var(--accent);background:#fff}
+.form-field textarea{min-height:80px;resize:vertical}
+.form-err{color:#ef4444;font-size:.78rem;margin-top:.5rem;display:none}
+.form-divider{display:flex;align-items:center;gap:.75rem;margin:1.25rem 0;color:var(--gray-light);font-size:.78rem}
+.form-divider::before,.form-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.modal-footer{padding:1rem 1.75rem;background:var(--off-white);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:.8rem;color:var(--text-muted)}
+.modal-footer a{color:var(--accent);cursor:pointer;text-decoration:none}
+.modal-footer a:hover{text-decoration:underline}
+
+/* ═══ DASHBOARD ═══ */
+#dashboard-overlay{display:none;position:fixed;inset:0;z-index:950;flex-direction:column;background:#f0f3f8}
+#dashboard-overlay.open{display:flex}
+.dash-nav{background:var(--navy);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.08)}
+.dash-nav-brand{font-family:var(--fd);font-size:1.1rem;color:#fff;font-weight:700;display:flex;align-items:center;gap:.5rem}
+.dash-nav-brand span{font-size:.65rem;background:rgba(255,255,255,.12);padding:.2rem .5rem;border-radius:4px;color:var(--accent-light);font-family:var(--fm);font-weight:400;letter-spacing:.08em}
+.dash-nav-right{display:flex;align-items:center;gap:.75rem}
+.dash-user-chip{background:rgba(255,255,255,.1);border-radius:20px;padding:.3rem .875rem;font-size:.78rem;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:.5rem}
+.dash-layout{display:grid;grid-template-columns:220px 1fr;flex:1;overflow:hidden}
+.dash-sidebar{background:#fff;border-right:1px solid var(--border);padding:1.25rem .875rem;overflow-y:auto}
+.dash-nav-item{width:100%;text-align:left;padding:.55rem .875rem;border-radius:8px;border:none;background:transparent;color:var(--text-muted);font-size:.84rem;cursor:pointer;transition:var(--tr);font-family:var(--fb);margin-bottom:.18rem;display:flex;align-items:center;gap:.6rem}
+.dash-nav-item:hover{background:var(--off-white);color:var(--navy)}
+.dash-nav-item.active{background:rgba(74,123,200,.1);color:var(--accent);font-weight:600}
+.dash-nav-sep{font-family:var(--fm);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-light);padding:.4rem .875rem .3rem;margin-top:.625rem}
+.dash-content{padding:2rem;overflow-y:auto;flex:1}
+.dash-sec{display:none}.dash-sec.active{display:block}
+.dash-page-title{font-family:var(--fd);font-size:1.5rem;color:var(--navy);margin-bottom:.4rem;font-weight:700}
+.dash-page-sub{font-size:.85rem;color:var(--text-muted);margin-bottom:2rem}
+.dash-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.75rem;margin-bottom:1.25rem;box-shadow:var(--shadow)}
+.dash-card h3{font-family:var(--fd);font-size:1.05rem;color:var(--navy);margin-bottom:1.25rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+.d-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.d-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+.pub-item-dash{background:var(--off-white);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem 1.25rem;margin-bottom:.875rem;display:flex;align-items:flex-start;gap:1rem}
+.pub-item-dash-body{flex:1}
+.pub-item-dash-title{font-family:var(--fd);font-size:.92rem;font-weight:600;color:var(--navy);margin-bottom:.22rem}
+.pub-item-dash-meta{font-size:.76rem;color:var(--text-muted)}
+.pub-item-dash-actions{display:flex;gap:.5rem;flex-shrink:0;margin-top:.25rem}
+.status-chip{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .75rem;border-radius:50px;font-size:.72rem;font-weight:600}
+.status-approved{background:rgba(16,185,129,.12);color:#059669}
+.status-pending{background:rgba(245,158,11,.12);color:#d97706}
+
+/* Admin-specific */
+.admin-table{width:100%;border-collapse:collapse}
+.admin-table th{background:var(--off-white);padding:.6rem 1rem;font-family:var(--fm);font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);border-bottom:1px solid var(--border);text-align:left}
+.admin-table td{padding:.75rem 1rem;border-bottom:1px solid var(--border);font-size:.84rem;color:var(--text)}
+.admin-table tr:hover td{background:var(--off-white)}
+.admin-card-list{display:flex;flex-direction:column;gap:.875rem;margin-bottom:1rem}
+.admin-ci{background:var(--off-white);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem;position:relative}
+.admin-ci-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:.875rem}
+.admin-ci-title{font-size:.88rem;font-weight:600;color:var(--navy);font-family:var(--fd)}
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--navy);color:#fff;padding:.75rem 1.25rem;border-radius:10px;font-size:.85rem;z-index:9999;opacity:0;transform:translateY(10px);transition:all .3s ease;pointer-events:none}
+.toast.show{opacity:1;transform:none}
+@media(max-width:768px){.dash-layout{grid-template-columns:1fr}.dash-sidebar{display:none}.d-grid-2,.d-grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+  ⚙️  CONFIGURATION — Edit these 2 lines!
+  Get them from: supabase.com → your project → Settings → API
+════════════════════════════════════════ -->
+<script>
+const SUPABASE_URL  = 'https://rqviytqzrbsmdppcxzwr.supabase.co/rest/v1/';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxdml5dHF6cmJzbWRwcGN4endyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2OTYxMzcsImV4cCI6MjA5NTI3MjEzN30.876Ml_UovPdcGqRxmnRwp5Iw0Z4-nR6vdIh1ZnEggio';
+</script>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <div class="nav-logo-box">ILA<br>MPS</div>
+        <div class="nav-logo-text">
+          <span class="nm">ILAMPS</span>
+          <span class="sb">JUST · Bangladesh</span>
+        </div>
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#supervisor">PI</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#publications">Publications</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-auth">
+        <div id="nav-logged-out" style="display:flex;gap:.6rem">
+          <button class="btn btn-ghost btn-sm" onclick="openModal('login')">Login</button>
+        </div>
+        <div id="nav-logged-in" style="display:none;gap:.6rem;align-items:center">
+          <button class="btn btn-primary btn-sm" onclick="openDashboard()">My Dashboard</button>
+          <button class="btn btn-ghost btn-sm" onclick="signOut()">Logout</button>
+        </div>
+      </div>
+      <div class="nav-ham" id="nav-ham"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-bg"></div><div class="hero-grid"></div><div class="hero-dots"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-badge">Active Research Group · JUST, Bangladesh</div>
+        <h1 class="hero-title"><span id="h-lab-name">ILAMPS</span><br><em id="h-tagline">Advanced Materials &amp; Simulation</em></h1>
+        <p class="hero-uni" id="h-uni">Department of EEE · Jashore University of Science and Technology</p>
+        <p class="hero-desc" id="h-about">Loading...</p>
+        <div class="hero-actions">
+          <a href="#research" class="btn btn-primary">Explore Research</a>
+          <a href="#contact" class="btn btn-ghost">Join the Lab</a>
+        </div>
+        <div class="hero-stats">
+          <div><div class="hero-stat-num" id="h-pubs">—</div><div class="hero-stat-label">Publications</div></div>
+          <div><div class="hero-stat-num" id="h-projs">—</div><div class="hero-stat-label">Projects</div></div>
+          <div><div class="hero-stat-num" id="h-mems">—</div><div class="hero-stat-label">Members</div></div>
+          <div><div class="hero-stat-num" id="h-founded">—</div><div class="hero-stat-label">Founded</div></div>
+        </div>
+      </div>
+      <div class="hero-img-wrap">
+        <div class="hero-img-ph" id="hero-img-ph">
+          <div class="hero-img-ph-icon">🏛️</div>
+          <p>Lab Group Photo<br><small>Upload in Admin Dashboard</small></p>
+        </div>
+        <img id="hero-img" src="" alt="Lab photo">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-vis">
+        <div class="about-big">
+          <div class="about-big-num" id="a-pubs">5+</div>
+          <div class="about-big-lbl">Publications &amp; accepted abstracts</div>
+        </div>
+        <div class="about-sm-row">
+          <div class="about-sm"><div class="num" id="a-projs">3</div><div class="lbl">Active Projects</div></div>
+          <div class="about-sm"><div class="num" id="a-mems">8+</div><div class="lbl">Lab Members</div></div>
+          <div class="about-sm"><div class="num" id="a-founded">2021</div><div class="lbl">Founded</div></div>
+          <div class="about-sm"><div class="num">3</div><div class="lbl">Substrates</div></div>
+        </div>
+      </div>
+      <div class="about-content">
+        <span class="section-label">About the Laboratory</span>
+        <h2 class="section-title" id="a-fullname">ILAMPS</h2>
+        <p id="a-about1">Loading...</p>
+        <p id="a-about2"></p>
+        <div class="about-tags" id="a-tags"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SUPERVISOR ═══ -->
+<section id="supervisor">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Leadership</span>
+      <h2 class="section-title">Principal Investigator</h2>
+      <p class="section-subtitle">The research group is led by a faculty member dedicated to advancing computational materials science in Bangladesh.</p>
+    </div>
+    <div class="pi-card" id="pi-card">
+      <div style="text-align:center">
+        <div id="pi-photo-wrap"><div class="pi-photo-ph">👨‍🔬</div></div>
+        <div class="pi-name" id="pi-name">Loading...</div>
+        <div class="pi-desig" id="pi-desig"></div>
+        <div class="pi-dept" id="pi-dept"></div>
+        <div class="pi-links" id="pi-links"></div>
+      </div>
+      <div>
+        <span class="pi-slabel">Biography</span>
+        <p class="pi-bio" id="pi-bio">Loading...</p>
+        <span class="pi-slabel">Research Interests</span>
+        <div class="pi-int-list" id="pi-ints"></div>
+        <span class="pi-slabel">Contact</span>
+        <p class="pi-bio"><a id="pi-email" href="" style="color:var(--accent-light)"></a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TEAM ═══ -->
+<section id="team">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Research Group</span>
+      <h2 class="section-title">Our Team</h2>
+      <p class="section-subtitle">Motivated researchers working at the frontier of computational materials science.</p>
+    </div>
+    <div id="team-grad"></div>
+    <div id="team-ug"></div>
+    <div id="team-alumni"></div>
+    <div id="team-loading" class="loading"><div class="spin"></div>Loading members...</div>
+  </div>
+</section>
+
+<!-- ═══ RESEARCH ═══ -->
+<section id="research">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Our Focus</span>
+      <h2 class="section-title">Research Areas</h2>
+      <p class="section-subtitle">Problems at the intersection of physics-based simulation, machine learning, and advanced semiconductor materials.</p>
+    </div>
+    <div class="research-grid" id="research-grid"><div class="loading"><div class="spin"></div>Loading...</div></div>
+  </div>
+</section>
+
+<!-- ═══ ONGOING ═══ -->
+<section id="ongoing">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Currently Active</span>
+      <h2 class="section-title">Ongoing Projects</h2>
+      <p class="section-subtitle">Research projects currently in progress within the laboratory.</p>
+    </div>
+    <div class="proj-list" id="proj-list"><div class="loading"><div class="spin"></div>Loading...</div></div>
+  </div>
+</section>
+
+<!-- ═══ PUBLICATIONS ═══ -->
+<section id="publications">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Scholarly Output</span>
+      <h2 class="section-title">Publications</h2>
+      <p class="section-subtitle">Peer-reviewed contributions from all members of the ILAMPS research group.</p>
+    </div>
+    <div class="pub-list" id="pub-list"><div class="loading"><div class="spin"></div>Loading...</div></div>
+  </div>
+</section>
+
+<!-- ═══ NEWS ═══ -->
+<section id="news">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Latest Updates</span>
+      <h2 class="section-title">News &amp; Announcements</h2>
+      <p class="section-subtitle">Recent achievements, accepted papers, and milestones from the group.</p>
+    </div>
+    <div class="news-grid" id="news-grid"><div class="loading"><div class="spin"></div>Loading...</div></div>
+  </div>
+</section>
+
+<!-- ═══ GALLERY ═══ -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Lab Life</span>
+      <h2 class="section-title">Group Gallery</h2>
+      <p class="section-subtitle">Conferences, lab meetings, and team moments.</p>
+    </div>
+    <div class="gal-grid" id="gal-grid"><div class="loading"><div class="spin"></div>Loading...</div></div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Get In Touch</span>
+      <h2 class="section-title">Contact &amp; Join Us</h2>
+      <p class="section-subtitle" id="c-join-text">We welcome motivated students from EEE, Physics, Materials Science, and CS.</p>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div><h4>Address</h4><p id="c-address">Loading...</p></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div><h4>Email</h4><a id="c-email" href="" class="contact-item"></a></div>
+        </div>
+        <div class="contact-item" id="c-phone-wrap" style="display:none">
+          <div class="contact-icon">📞</div>
+          <div><h4>Phone</h4><p id="c-phone"></p></div>
+        </div>
+      </div>
+      <div class="join-box">
+        <h3>Prospective Members</h3>
+        <p id="c-join-desc">Loading...</p>
+        <ul class="join-list" id="c-join-list"></ul>
+        <a id="c-apply-btn" href="#" class="btn btn-primary">Send Application Email</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <p id="footer-copy">© ILAMPS · JUST, Bangladesh</p>
+      <div class="footer-links">
+        <a href="#about">About</a>
+        <a href="#publications">Publications</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ AUTH MODALS ═══ -->
+<div class="modal-overlay" id="modal-login">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h2>Welcome Back</h2>
+      <button class="modal-close" onclick="closeModal('login')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-sub">Sign in with your lab account email and password.</p>
+      <div class="form-field"><label>Email</label><input type="email" id="login-email" placeholder="you@example.com"></div>
+      <div class="form-field"><label>Password</label><input type="password" id="login-pwd" placeholder="••••••••"></div>
+      <div class="form-err" id="login-err"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:.5rem" id="login-btn" onclick="signIn()">Sign In →</button>
+    </div>
+    <div class="modal-footer">Don't have an account? <a onclick="switchModal('login','signup')">Request Access</a></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-signup">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <h2>Request Access</h2>
+      <button class="modal-close" onclick="closeModal('signup')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-sub">Create a lab account. Your profile will be visible after admin approval.</p>
+      <div class="d-grid-2">
+        <div class="form-field"><label>Full Name</label><input type="text" id="signup-name" placeholder="Your Name"></div>
+        <div class="form-field"><label>Role</label>
+          <select id="signup-role">
+            <option value="graduate">Graduate Student</option>
+            <option value="undergrad">Undergraduate</option>
+            <option value="ra">Research Assistant</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-field"><label>Email</label><input type="email" id="signup-email" placeholder="you@just.edu.bd"></div>
+      <div class="form-field"><label>Password</label><input type="password" id="signup-pwd" placeholder="Min. 8 characters"></div>
+      <div class="form-err" id="signup-err"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:.5rem" id="signup-btn" onclick="signUp()">Create Account →</button>
+    </div>
+    <div class="modal-footer">Already have an account? <a onclick="switchModal('signup','login')">Sign In</a></div>
+  </div>
+</div>
+
+<!-- ═══ MEMBER DASHBOARD ═══ -->
+<div id="dashboard-overlay">
+  <div class="dash-nav">
+    <div class="dash-nav-brand">ILAMPS <span id="dash-role-badge">Member</span></div>
+    <div class="dash-nav-right">
+      <div class="dash-user-chip">👤 <span id="dash-user-name">—</span></div>
+      <button class="btn btn-ghost btn-sm" onclick="closeDashboard()">← Back to Site</button>
+      <button class="btn btn-danger btn-sm" onclick="signOut()">Logout</button>
+    </div>
+  </div>
+
+  <div class="dash-layout">
+    <!-- SIDEBAR -->
+    <div class="dash-sidebar">
+      <div class="dash-nav-sep">Member</div>
+      <button class="dash-nav-item active" data-sec="d-profile">👤 My Profile</button>
+      <button class="dash-nav-item" data-sec="d-pubs">📄 My Publications</button>
+      <div id="admin-sidebar-items" style="display:none">
+        <div class="dash-nav-sep">Admin Panel</div>
+        <button class="dash-nav-item" data-sec="d-lab-settings">⚙️ Lab Settings</button>
+        <button class="dash-nav-item" data-sec="d-pi-settings">👨‍🔬 PI / Supervisor</button>
+        <button class="dash-nav-item" data-sec="d-members">👥 Members</button>
+        <button class="dash-nav-item" data-sec="d-research">🔬 Research Areas</button>
+        <button class="dash-nav-item" data-sec="d-ongoing">⚡ Ongoing Projects</button>
+        <button class="dash-nav-item" data-sec="d-news">📢 News</button>
+        <button class="dash-nav-item" data-sec="d-gallery">🖼️ Gallery</button>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="dash-content">
+
+      <!-- MY PROFILE -->
+      <div class="dash-sec active" id="d-profile">
+        <div class="dash-page-title">My Profile</div>
+        <div class="dash-page-sub">This information will appear on the public website after admin approval.</div>
+        <div id="d-pending-notice" style="display:none;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:var(--radius);padding:1rem;margin-bottom:1.5rem;font-size:.85rem;color:#92400e">
+          ⏳ <strong>Pending Approval</strong> — Your profile is awaiting admin approval before appearing on the public site.
+        </div>
+        <div class="dash-card">
+          <h3>Profile Information</h3>
+          <div class="d-grid-2">
+            <div class="form-field"><label>Full Name</label><input type="text" id="p-name"></div>
+            <div class="form-field"><label>Role / Position</label>
+              <select id="p-role">
+                <option value="graduate">Graduate Student</option>
+                <option value="undergrad">Undergraduate</option>
+                <option value="ra">Research Assistant</option>
+                <option value="alumni">Alumni</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-field"><label>Designation (e.g. MSc Researcher)</label><input type="text" id="p-designation"></div>
+          <div class="form-field"><label>Research Topic</label><input type="text" id="p-research" placeholder="Your main research focus"></div>
+          <div class="form-field"><label>Photo URL</label><input type="text" id="p-photo" placeholder="https://... (host on Google Drive, Imgur, etc.)"></div>
+          <div class="form-field"><label>Short Bio</label><textarea id="p-bio" placeholder="A short paragraph about yourself..."></textarea></div>
+          <div class="form-field"><label>Email (public)</label><input type="email" id="p-email"></div>
+          <button class="btn btn-primary" onclick="saveProfile()">💾 Save Profile</button>
+        </div>
+      </div>
+
+      <!-- MY PUBLICATIONS -->
+      <div class="dash-sec" id="d-pubs">
+        <div class="dash-page-title">My Publications</div>
+        <div class="dash-page-sub">Add your own papers — they'll appear on the public Publications page.</div>
+        <div class="dash-card">
+          <h3>Add New Publication</h3>
+          <div class="form-field"><label>Title</label><input type="text" id="np-title" placeholder="Full paper title"></div>
+          <div class="d-grid-2">
+            <div class="form-field"><label>Authors</label><input type="text" id="np-authors" placeholder="A. Hossain, A. Fahim, et al."></div>
+            <div class="form-field"><label>Year</label><input type="text" id="np-year" placeholder="2025"></div>
+          </div>
+          <div class="d-grid-2">
+            <div class="form-field"><label>Journal / Conference</label><input type="text" id="np-venue" placeholder="Computational Materials Science"></div>
+            <div class="form-field"><label>Type</label>
+              <select id="np-type">
+                <option>Journal Paper</option><option>Conference Paper</option>
+                <option>Preprint</option><option>Book Chapter</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-field"><label>DOI / Link</label><input type="text" id="np-doi" placeholder="https://doi.org/..."></div>
+          <button class="btn btn-primary" onclick="addPublication()">+ Add Publication</button>
+        </div>
+        <div class="dash-card">
+          <h3>My Papers</h3>
+          <div id="my-pubs-list"><div class="loading"><div class="spin"></div>Loading...</div></div>
+        </div>
+      </div>
+
+      <!-- LAB SETTINGS -->
+      <div class="dash-sec" id="d-lab-settings">
+        <div class="dash-page-title">Lab Settings</div>
+        <div class="dash-page-sub">These settings appear on the public homepage.</div>
+        <div class="dash-card">
+          <h3>General Info</h3>
+          <div class="d-grid-2">
+            <div class="form-field"><label>Lab Short Name</label><input type="text" id="ls-name"></div>
+            <div class="form-field"><label>Founded Year</label><input type="text" id="ls-founded"></div>
+          </div>
+          <div class="form-field"><label>Full Name</label><input type="text" id="ls-fullname"></div>
+          <div class="form-field"><label>Tagline</label><input type="text" id="ls-tagline"></div>
+          <div class="form-field"><label>University</label><input type="text" id="ls-uni"></div>
+          <div class="form-field"><label>Department</label><input type="text" id="ls-dept"></div>
+          <div class="form-field"><label>About (Paragraph 1)</label><textarea id="ls-about"></textarea></div>
+          <div class="form-field"><label>About (Paragraph 2)</label><textarea id="ls-about2"></textarea></div>
+          <div class="d-grid-3">
+            <div class="form-field"><label>Publications stat</label><input type="text" id="ls-pubs"></div>
+            <div class="form-field"><label>Projects stat</label><input type="text" id="ls-projs"></div>
+            <div class="form-field"><label>Members stat</label><input type="text" id="ls-mems"></div>
+          </div>
+          <div class="form-field"><label>Hero Image URL</label><input type="text" id="ls-hero-img" placeholder="https://..."></div>
+          <button class="btn btn-primary" onclick="saveLabSettings()">💾 Save Lab Settings</button>
+        </div>
+        <div class="dash-card">
+          <h3>Contact Info</h3>
+          <div class="form-field"><label>Address</label><textarea id="ls-addr"></textarea></div>
+          <div class="d-grid-2">
+            <div class="form-field"><label>Lab Email</label><input type="email" id="ls-email"></div>
+            <div class="form-field"><label>Phone (optional)</label><input type="text" id="ls-phone"></div>
+          </div>
+          <div class="form-field"><label>Join Us Text</label><textarea id="ls-join-text"></textarea></div>
+          <div class="form-field"><label>Requirements (one per line)</label><textarea id="ls-join-reqs" placeholder="Strong math/physics background&#10;Python programming skills"></textarea></div>
+          <button class="btn btn-primary" onclick="saveContactSettings()">💾 Save Contact Settings</button>
+        </div>
+      </div>
+
+      <!-- PI SETTINGS -->
+      <div class="dash-sec" id="d-pi-settings">
+        <div class="dash-page-title">PI / Supervisor</div>
+        <div class="dash-page-sub">Update the Principal Investigator's public profile.</div>
+        <div class="dash-card">
+          <h3>PI Information</h3>
+          <div class="d-grid-2">
+            <div class="form-field"><label>Full Name</label><input type="text" id="pi-s-name"></div>
+            <div class="form-field"><label>Designation</label><input type="text" id="pi-s-desig"></div>
+          </div>
+          <div class="d-grid-2">
+            <div class="form-field"><label>Department</label><input type="text" id="pi-s-dept"></div>
+            <div class="form-field"><label>University</label><input type="text" id="pi-s-uni"></div>
+          </div>
+          <div class="form-field"><label>Email</label><input type="email" id="pi-s-email"></div>
+          <div class="form-field"><label>Photo URL</label><input type="text" id="pi-s-photo"></div>
+          <div class="form-field"><label>Biography</label><textarea id="pi-s-bio" style="min-height:110px"></textarea></div>
+          <div class="form-field"><label>Research Interests (one per line)</label><textarea id="pi-s-ints"></textarea></div>
+          <div class="d-grid-3">
+            <div class="form-field"><label>Google Scholar URL</label><input type="text" id="pi-s-scholar"></div>
+            <div class="form-field"><label>ResearchGate URL</label><input type="text" id="pi-s-rg"></div>
+            <div class="form-field"><label>ORCID URL</label><input type="text" id="pi-s-orcid"></div>
+          </div>
+          <button class="btn btn-primary" onclick="savePISettings()">💾 Save PI Settings</button>
+        </div>
+      </div>
+
+      <!-- MEMBERS ADMIN -->
+      <div class="dash-sec" id="d-members">
+        <div class="dash-page-title">Members Management</div>
+        <div class="dash-page-sub">Approve members and assign roles. Approved members appear on the public site.</div>
+        <div class="dash-card">
+          <h3>All Registered Members</h3>
+          <div id="admin-members-list"><div class="loading"><div class="spin"></div>Loading members...</div></div>
+        </div>
+      </div>
+
+      <!-- RESEARCH AREAS -->
+      <div class="dash-sec" id="d-research">
+        <div class="dash-page-title">Research Areas</div>
+        <div class="dash-page-sub">Manage the research focus areas shown on the public site.</div>
+        <div class="dash-card">
+          <h3>Add Research Area</h3>
+          <div class="d-grid-2">
+            <div class="form-field"><label>Icon (emoji)</label><input type="text" id="ra-icon" placeholder="🔬"></div>
+            <div class="form-field"><label>Title</label><input type="text" id="ra-title"></div>
+          </div>
+          <div class="form-field"><label>Description</label><textarea id="ra-desc"></textarea></div>
+          <button class="btn btn-primary" onclick="addResearchArea()">+ Add Area</button>
+        </div>
+        <div class="dash-card">
+          <h3>Current Research Areas</h3>
+          <div class="admin-card-list" id="admin-research-list"></div>
+        </div>
+      </div>
+
+      <!-- ONGOING PROJECTS -->
+      <div class="dash-sec" id="d-ongoing">
+        <div class="dash-page-title">Ongoing Projects</div>
+        <div class="dash-page-sub">Manage active research projects.</div>
+        <div class="dash-card">
+          <h3>Add Project</h3>
+          <div class="form-field"><label>Title</label><input type="text" id="op-title"></div>
+          <div class="d-grid-2">
+            <div class="form-field"><label>Status</label>
+              <select id="op-status"><option value="active">Active</option><option value="completed">Completed</option><option value="planned">Planned</option></select>
+            </div>
+            <div class="form-field"><label>Members (comma separated)</label><input type="text" id="op-members" placeholder="Name 1, Name 2"></div>
+          </div>
+          <div class="form-field"><label>Description</label><textarea id="op-desc"></textarea></div>
+          <button class="btn btn-primary" onclick="addProject()">+ Add Project</button>
+        </div>
+        <div class="dash-card">
+          <h3>Current Projects</h3>
+          <div class="admin-card-list" id="admin-proj-list"></div>
+        </div>
+      </div>
+
+      <!-- NEWS -->
+      <div class="dash-sec" id="d-news">
+        <div class="dash-page-title">News &amp; Announcements</div>
+        <div class="dash-card">
+          <h3>Add News Item</h3>
+          <div class="d-grid-2">
+            <div class="form-field"><label>Date Label (e.g. May 2026)</label><input type="text" id="nw-date"></div>
+            <div class="form-field"><label>Headline</label><input type="text" id="nw-title"></div>
+          </div>
+          <div class="form-field"><label>Description</label><textarea id="nw-desc"></textarea></div>
+          <button class="btn btn-primary" onclick="addNews()">+ Add News</button>
+        </div>
+        <div class="dash-card">
+          <h3>All News Items</h3>
+          <div class="admin-card-list" id="admin-news-list"></div>
+        </div>
+      </div>
+
+      <!-- GALLERY -->
+      <div class="dash-sec" id="d-gallery">
+        <div class="dash-page-title">Gallery</div>
+        <div class="dash-page-sub">Add photo URLs. Host photos on Google Photos, Imgur, or Cloudflare Images.</div>
+        <div class="dash-card">
+          <h3>Add Photo</h3>
+          <div class="d-grid-2">
+            <div class="form-field"><label>Image URL</label><input type="text" id="gal-url" placeholder="https://..."></div>
+            <div class="form-field"><label>Caption (optional)</label><input type="text" id="gal-cap"></div>
+          </div>
+          <button class="btn btn-primary" onclick="addGalleryItem()">+ Add Photo</button>
+        </div>
+        <div class="dash-card">
+          <h3>Gallery Photos</h3>
+          <div class="admin-card-list" id="admin-gal-list"></div>
+        </div>
+      </div>
+
+    </div><!-- /dash-content -->
+  </div><!-- /dash-layout -->
+</div><!-- /dashboard-overlay -->
+
+<script>
+// ═══════════════════════════════════════════════════
+//  SUPABASE INIT
+// ═══════════════════════════════════════════════════
+const { createClient } = supabase;
+let db;
+try {
+  db = createClient(SUPABASE_URL, SUPABASE_ANON);
+} catch(e) {
+  console.warn('Supabase not configured. Add your credentials at the top of index.html');
+}
+
+let CURRENT_USER = null;
+let CURRENT_PROFILE = null;
+
+// ═══════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════
+function s(id){ return document.getElementById(id); }
+function setText(id, val){ const e=s(id); if(e) e.textContent=val||''; }
+function setVal(id, val){ const e=s(id); if(e) e.value=val||''; }
+function getVal(id){ const e=s(id); return e?e.value.trim():''; }
+function showToast(msg, dur=3000){
+  const t=s('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), dur);
+}
+function initials(name){ return (name||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+function getSetting(settings, key, fallback=''){
+  const f = settings.find(r=>r.key===key); return f?f.value:fallback;
+}
+
+// ═══════════════════════════════════════════════════
+//  AUTH
+// ═══════════════════════════════════════════════════
+function openModal(m){ s('modal-'+m).classList.add('open'); }
+function closeModal(m){ s('modal-'+m).classList.remove('open'); }
+function switchModal(from, to){ closeModal(from); openModal(to); }
+
+async function signIn(){
+  const btn=s('login-btn'); btn.textContent='Signing in...'; btn.disabled=true;
+  const err=s('login-err'); err.style.display='none';
+  const { data, error } = await db.auth.signInWithPassword({
+    email: getVal('login-email'), password: getVal('login-pwd')
+  });
+  btn.textContent='Sign In →'; btn.disabled=false;
+  if(error){ err.textContent=error.message; err.style.display='block'; return; }
+  closeModal('login');
+  await loadUser();
+  openDashboard();
+  showToast('✓ Welcome back!');
+}
+
+async function signUp(){
+  const btn=s('signup-btn'); btn.textContent='Creating...'; btn.disabled=true;
+  const err=s('signup-err'); err.style.display='none';
+  const name=getVal('signup-name'), role=getVal('signup-role'), email=getVal('signup-email'), pwd=getVal('signup-pwd');
+  if(!name||!email||!pwd){ err.textContent='Please fill all fields.'; err.style.display='block'; btn.textContent='Create Account →'; btn.disabled=false; return; }
+  const { data, error } = await db.auth.signUp({
+    email, password: pwd, options:{ data:{ name } }
+  });
+  btn.textContent='Create Account →'; btn.disabled=false;
+  if(error){ err.textContent=error.message; err.style.display='block'; return; }
+  // Update profile with name and role
+  if(data.user){
+    await db.from('profiles').update({ name, role, email }).eq('id', data.user.id);
+  }
+  closeModal('signup');
+  showToast('✓ Account created! Please verify your email, then sign in.', 5000);
+}
+
+async function signOut(){
+  await db.auth.signOut();
+  CURRENT_USER=null; CURRENT_PROFILE=null;
+  s('nav-logged-in').style.display='none';
+  s('nav-logged-out').style.display='flex';
+  closeDashboard();
+  showToast('Logged out successfully.');
+}
+
+async function loadUser(){
+  const { data:{ user } } = await db.auth.getUser();
+  if(!user){ s('nav-logged-in').style.display='none'; s('nav-logged-out').style.display='flex'; return; }
+  CURRENT_USER = user;
+  const { data:profile } = await db.from('profiles').select('*').eq('id',user.id).single();
+  CURRENT_PROFILE = profile;
+  s('nav-logged-in').style.display='flex'; s('nav-logged-out').style.display='none';
+  setText('dash-user-name', profile?.name||user.email);
+  const badge = s('dash-role-badge');
+  if(profile?.is_admin){ badge.textContent='Admin'; badge.style.background='rgba(200,168,74,.25)'; badge.style.color='#c8a84a'; }
+  else badge.textContent=profile?.role||'Member';
+  s('admin-sidebar-items').style.display = profile?.is_admin ? 'block' : 'none';
+}
+
+// ═══════════════════════════════════════════════════
+//  DASHBOARD
+// ═══════════════════════════════════════════════════
+function openDashboard(){
+  s('dashboard-overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  loadDashboard();
+}
+function closeDashboard(){
+  s('dashboard-overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+document.querySelectorAll('.dash-nav-item').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.dash-nav-item').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.dash-sec').forEach(sec=>sec.classList.remove('active'));
+    btn.classList.add('active');
+    s(btn.dataset.sec).classList.add('active');
+    loadSectionData(btn.dataset.sec);
+  });
+});
+
+function loadSectionData(sec){
+  if(sec==='d-profile') loadProfileForm();
+  else if(sec==='d-pubs') loadMyPubs();
+  else if(sec==='d-lab-settings') loadLabSettingsForm();
+  else if(sec==='d-pi-settings') loadPISettingsForm();
+  else if(sec==='d-members') loadAdminMembers();
+  else if(sec==='d-research') loadAdminResearch();
+  else if(sec==='d-ongoing') loadAdminProjects();
+  else if(sec==='d-news') loadAdminNews();
+  else if(sec==='d-gallery') loadAdminGallery();
+}
+
+function loadDashboard(){
+  loadProfileForm();
+  if(CURRENT_PROFILE?.is_admin) loadLabSettingsForm();
+}
+
+// ═══════════════════════════════════════════════════
+//  PROFILE
+// ═══════════════════════════════════════════════════
+function loadProfileForm(){
+  const p = CURRENT_PROFILE;
+  if(!p) return;
+  setVal('p-name', p.name); setVal('p-role', p.role); setVal('p-designation', p.designation);
+  setVal('p-research', p.research); setVal('p-photo', p.photo_url);
+  setVal('p-bio', p.bio); setVal('p-email', p.email);
+  s('d-pending-notice').style.display = p.approved ? 'none' : 'block';
+}
+
+async function saveProfile(){
+  const { error } = await db.from('profiles').update({
+    name: getVal('p-name'), role: getVal('p-role'), designation: getVal('p-designation'),
+    research: getVal('p-research'), photo_url: getVal('p-photo'),
+    bio: getVal('p-bio'), email: getVal('p-email')
+  }).eq('id', CURRENT_USER.id);
+  if(error) showToast('❌ Error: '+error.message);
+  else { showToast('✓ Profile saved!'); await loadUser(); }
+}
+
+// ═══════════════════════════════════════════════════
+//  PUBLICATIONS (Member)
+// ═══════════════════════════════════════════════════
+async function loadMyPubs(){
+  const el=s('my-pubs-list');
+  el.innerHTML='<div class="loading"><div class="spin"></div>Loading...</div>';
+  const { data } = await db.from('publications').select('*').eq('user_id',CURRENT_USER.id).order('year',{ascending:false});
+  if(!data||data.length===0){ el.innerHTML='<div class="empty">No publications yet. Add your first paper above!</div>'; return; }
+  el.innerHTML = data.map(p=>`
+    <div class="pub-item-dash">
+      <div class="pub-item-dash-body">
+        <div class="pub-item-dash-title">${p.title}</div>
+        <div class="pub-item-dash-meta">${p.authors} · ${p.venue} · ${p.year} · <span style="color:var(--accent)">${p.type}</span></div>
+      </div>
+      <div class="pub-item-dash-actions">
+        <button class="btn btn-danger btn-sm" onclick="deletePub('${p.id}')">🗑 Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+async function addPublication(){
+  const title=getVal('np-title');
+  if(!title){ showToast('❌ Please enter a title'); return; }
+  const { error } = await db.from('publications').insert({
+    user_id: CURRENT_USER.id,
+    title, authors:getVal('np-authors'), year:getVal('np-year'),
+    venue:getVal('np-venue'), type:getVal('np-type'), doi:getVal('np-doi')
+  });
+  if(error) showToast('❌ '+error.message);
+  else {
+    showToast('✓ Publication added!');
+    ['np-title','np-authors','np-year','np-venue','np-doi'].forEach(id=>setVal(id,''));
+    loadMyPubs(); renderPublications();
+  }
+}
+
+async function deletePub(id){
+  if(!confirm('Delete this publication?')) return;
+  await db.from('publications').delete().eq('id',id);
+  showToast('✓ Deleted.'); loadMyPubs(); renderPublications();
+}
+
+// ═══════════════════════════════════════════════════
+//  ADMIN — LAB SETTINGS
+// ═══════════════════════════════════════════════════
+async function loadLabSettingsForm(){
+  const { data } = await db.from('lab_settings').select('*');
+  if(!data) return;
+  const g = (k,f='')=>getSetting(data,k,f);
+  setVal('ls-name',g('lab_name')); setVal('ls-founded',g('founded'));
+  setVal('ls-fullname',g('lab_fullname')); setVal('ls-tagline',g('lab_tagline'));
+  setVal('ls-uni',g('university')); setVal('ls-dept',g('department'));
+  setVal('ls-about',g('about')); setVal('ls-about2',g('about2'));
+  setVal('ls-pubs',g('total_pubs')); setVal('ls-projs',g('total_projects')); setVal('ls-mems',g('total_members'));
+  setVal('ls-hero-img',g('hero_image'));
+  setVal('ls-addr',g('contact_address')); setVal('ls-email',g('contact_email')); setVal('ls-phone',g('contact_phone'));
+  setVal('ls-join-text',g('join_text'));
+  setVal('ls-join-reqs',(g('join_reqs')).split('|').join('\n'));
+}
+
+async function upsertSetting(key, value){
+  await db.from('lab_settings').upsert({key,value},{onConflict:'key'});
+}
+
+async function saveLabSettings(){
+  const kvs = {
+    lab_name:getVal('ls-name'), founded:getVal('ls-founded'),
+    lab_fullname:getVal('ls-fullname'), lab_tagline:getVal('ls-tagline'),
+    university:getVal('ls-uni'), department:getVal('ls-dept'),
+    about:getVal('ls-about'), about2:getVal('ls-about2'),
+    total_pubs:getVal('ls-pubs'), total_projects:getVal('ls-projs'), total_members:getVal('ls-mems'),
+    hero_image:getVal('ls-hero-img')
+  };
+  await Promise.all(Object.entries(kvs).map(([k,v])=>upsertSetting(k,v)));
+  showToast('✓ Lab settings saved!'); renderSite();
+}
+
+async function saveContactSettings(){
+  const kvs = {
+    contact_address:getVal('ls-addr'), contact_email:getVal('ls-email'), contact_phone:getVal('ls-phone'),
+    join_text:getVal('ls-join-text'),
+    join_reqs:getVal('ls-join-reqs').split('\n').map(s=>s.trim()).filter(Boolean).join('|')
+  };
+  await Promise.all(Object.entries(kvs).map(([k,v])=>upsertSetting(k,v)));
+  showToast('✓ Contact settings saved!'); renderContact();
+}
+
+// ═══════════════════════════════════════════════════
+//  ADMIN — PI SETTINGS
+// ═══════════════════════════════════════════════════
+async function loadPISettingsForm(){
+  const { data } = await db.from('lab_settings').select('*');
+  if(!data) return;
+  const g=(k,f='')=>getSetting(data,k,f);
+  setVal('pi-s-name',g('pi_name')); setVal('pi-s-desig',g('pi_designation'));
+  setVal('pi-s-dept',g('pi_department')); setVal('pi-s-uni',g('pi_university'));
+  setVal('pi-s-email',g('pi_email')); setVal('pi-s-photo',g('pi_photo'));
+  setVal('pi-s-bio',g('pi_bio'));
+  setVal('pi-s-ints',g('pi_interests','').split('|').join('\n'));
+  setVal('pi-s-scholar',g('pi_scholar')); setVal('pi-s-rg',g('pi_rg')); setVal('pi-s-orcid',g('pi_orcid'));
+}
+
+async function savePISettings(){
+  const kvs = {
+    pi_name:getVal('pi-s-name'), pi_designation:getVal('pi-s-desig'),
+    pi_department:getVal('pi-s-dept'), pi_university:getVal('pi-s-uni'),
+    pi_email:getVal('pi-s-email'), pi_photo:getVal('pi-s-photo'), pi_bio:getVal('pi-s-bio'),
+    pi_interests:getVal('pi-s-ints').split('\n').map(s=>s.trim()).filter(Boolean).join('|'),
+    pi_scholar:getVal('pi-s-scholar'), pi_rg:getVal('pi-s-rg'), pi_orcid:getVal('pi-s-orcid')
+  };
+  await Promise.all(Object.entries(kvs).map(([k,v])=>upsertSetting(k,v)));
+  showToast('✓ PI settings saved!'); renderPI();
+}
+
+// ═══════════════════════════════════════════════════
+//  ADMIN — MEMBERS
+// ═══════════════════════════════════════════════════
+async function loadAdminMembers(){
+  const el=s('admin-members-list');
+  el.innerHTML='<div class="loading"><div class="spin"></div>Loading...</div>';
+  const { data } = await db.from('profiles').select('*').order('created_at');
+  if(!data||!data.length){ el.innerHTML='<div class="empty">No members yet.</div>'; return; }
+  el.innerHTML=`<table class="admin-table">
+    <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Admin</th><th>Actions</th></tr></thead>
+    <tbody>${data.map(m=>`
+      <tr>
+        <td><strong>${m.name||'—'}</strong></td>
+        <td style="color:var(--text-muted)">${m.email||'—'}</td>
+        <td>
+          <select onchange="updateMemberRole('${m.id}',this.value)" style="padding:.25rem .5rem;border:1px solid var(--border);border-radius:6px;font-size:.78rem">
+            ${['graduate','undergrad','ra','alumni','pending'].map(r=>`<option${m.role===r?' selected':''}>${r}</option>`).join('')}
+          </select>
+        </td>
+        <td><span class="status-chip ${m.approved?'status-approved':'status-pending'}">${m.approved?'Approved':'Pending'}</span></td>
+        <td><input type="checkbox" ${m.is_admin?'checked':''} onchange="toggleAdmin('${m.id}',this.checked)"></td>
+        <td style="display:flex;gap:.4rem">
+          <button class="btn btn-sm" style="background:rgba(16,185,129,.1);color:#059669;border:1px solid rgba(16,185,129,.2)" onclick="approveMember('${m.id}',true)">✓ Approve</button>
+          <button class="btn btn-danger btn-sm" onclick="approveMember('${m.id}',false)">✗ Hide</button>
+        </td>
+      </tr>`).join('')}
+    </tbody>
+  </table>`;
+}
+
+async function approveMember(id,approved){
+  await db.from('profiles').update({approved}).eq('id',id);
+  showToast(approved?'✓ Member approved!':'Member hidden.'); loadAdminMembers(); renderTeam();
+}
+async function updateMemberRole(id,role){
+  await db.from('profiles').update({role}).eq('id',id);
+  showToast('✓ Role updated.');
+}
+async function toggleAdmin(id,is_admin){
+  await db.from('profiles').update({is_admin}).eq('id',id);
+  showToast(is_admin?'✓ Admin granted.':'Admin removed.');
+}
+
+// ═══════════════════════════════════════════════════
+//  ADMIN — RESEARCH AREAS
+// ═══════════════════════════════════════════════════
+async function loadAdminResearch(){
+  const { data } = await db.from('research_areas').select('*').order('sort_order');
+  const el=s('admin-research-list');
+  if(!data||!data.length){ el.innerHTML='<div class="empty">No research areas yet.</div>'; return; }
+  el.innerHTML=data.map(a=>`
+    <div class="admin-ci">
+      <div class="admin-ci-hdr">
+        <span class="admin-ci-title">${a.icon} ${a.title}</span>
+        <button class="btn btn-danger btn-sm" onclick="deleteRow('research_areas','${a.id}',loadAdminResearch,renderResearch)">Delete</button>
+      </div>
+      <small style="color:var(--text-muted)">${a.description}</small>
+    </div>`).join('');
+}
+
+async function addResearchArea(){
+  const icon=getVal('ra-icon')||'🔬', title=getVal('ra-title'), desc=getVal('ra-desc');
+  if(!title) return showToast('❌ Title required');
+  await db.from('research_areas').insert({icon,title,description:desc,sort_order:99});
+  showToast('✓ Research area added!'); setVal('ra-icon',''); setVal('ra-title',''); setVal('ra-desc','');
+  loadAdminResearch(); renderResearch();
+}
+
+// ═══════════════════════════════════════════════════
+//  ADMIN — ONGOING PROJECTS
+// ═══════════════════════════════════════════════════
+async function loadAdminProjects(){
+  const { data } = await db.from('ongoing_projects').select('*').order('sort_order');
+  const el=s('admin-proj-list');
+  if(!data||!data.length){ el.innerHTML='<div class="empty">No projects yet.</div>'; return; }
+  el.innerHTML=data.map(p=>`
+    <div class="admin-ci">
+      <div class="admin-ci-hdr">
+        <span class="admin-ci-title">${p.title}</span>
+        <div style="display:flex;gap:.5rem">
+          <span class="badge badge-${p.status||'active'}">${p.status||'active'}</span>
+          <button class="btn btn-danger btn-sm" onclick="deleteRow('ongoing_projects','${p.id}',loadAdminProjects,renderOngoing)">Delete</button>
+        </div>
+      </div>
+      <small style="color:var(--text-muted)">${p.description}</small>
+    </div>`).join('');
+}
+
+async function addProject(){
+  const title=getVal('op-title');
+  if(!title) return showToast('❌ Title required');
+  const mems=getVal('op-members').split(',').map(m=>m.trim()).filter(Boolean);
+  await db.from('ongoing_projects').insert({
+    title,status:getVal('op-status'),description:getVal('op-desc'),members:mems,sort_order:99
+  });
+  showToast('✓ Project added!'); setVal('op-title',''); setVal('op-desc',''); setVal('op-members','');
+  loadAdminProjects(); renderOngoing();
+}
+
+// ═══════════════════════════════════════════════════
+//  ADMIN — NEWS
+// ═══════════════════════════════════════════════════
+async function loadAdminNews(){
+  const { data } = await db.from('news').select('*').order('created_at',{ascending:false});
+  const el=s('admin-news-list');
+  if(!data||!data.length){ el.innerHTML='<div class="empty">No news yet.</div>'; return; }
+  el.innerHTML=data.map(n=>`
+    <div class="admin-ci">
+      <div class="admin-ci-hdr">
+        <span class="admin-ci-title">${n.date_label} · ${n.title}</span>
+        <button class="btn btn-danger btn-sm" onclick="deleteRow('news','${n.id}',loadAdminNews,renderNews)">Delete</button>
+      </div>
+      <small style="color:var(--text-muted)">${n.description}</small>
+    </div>`).join('');
+}
+
+async function addNews(){
+  const title=getVal('nw-title');
+  if(!title) return showToast('❌ Title required');
+  await db.from('news').insert({date_label:getVal('nw-date'),title,description:getVal('nw-desc')});
+  showToast('✓ News added!'); setVal('nw-date',''); setVal('nw-title',''); setVal('nw-desc','');
+  loadAdminNews(); renderNews();
+}
+
+// ═══════════════════════════════════════════════════
+//  ADMIN — GALLERY
+// ═══════════════════════════════════════════════════
+async function loadAdminGallery(){
+  const { data } = await db.from('gallery').select('*').order('sort_order');
+  const el=s('admin-gal-list');
+  if(!data||!data.length){ el.innerHTML='<div class="empty">No photos yet.</div>'; return; }
+  el.innerHTML=data.map(g=>`
+    <div class="admin-ci" style="display:flex;align-items:center;gap:1rem">
+      <img src="${g.url}" style="width:64px;height:48px;object-fit:cover;border-radius:6px;border:1px solid var(--border)" onerror="this.style.display='none'">
+      <div style="flex:1"><small style="color:var(--navy);font-weight:600">${g.caption||'No caption'}</small><br><small style="color:var(--text-muted);font-size:.7rem">${g.url.substring(0,60)}...</small></div>
+      <button class="btn btn-danger btn-sm" onclick="deleteRow('gallery','${g.id}',loadAdminGallery,renderGallery)">Delete</button>
+    </div>`).join('');
+}
+
+async function addGalleryItem(){
+  const url=getVal('gal-url');
+  if(!url) return showToast('❌ URL required');
+  await db.from('gallery').insert({url,caption:getVal('gal-cap'),sort_order:99});
+  showToast('✓ Photo added!'); setVal('gal-url',''); setVal('gal-cap','');
+  loadAdminGallery(); renderGallery();
+}
+
+// Generic delete
+async function deleteRow(table, id, reloadFn, renderFn){
+  if(!confirm('Delete this item?')) return;
+  await db.from(table).delete().eq('id',id);
+  showToast('✓ Deleted.'); reloadFn(); if(renderFn) renderFn();
+}
+
+// ═══════════════════════════════════════════════════
+//  PUBLIC SITE RENDER
+// ═══════════════════════════════════════════════════
+async function renderSite(){
+  if(!db) return;
+  const { data:settings } = await db.from('lab_settings').select('*');
+  if(!settings) return;
+  const g=(k,f='')=>getSetting(settings,k,f);
+
+  // Hero & about
+  setText('h-lab-name', g('lab_name','ILAMPS'));
+  setText('h-tagline', g('lab_tagline','Advanced Materials & Simulation'));
+  setText('h-uni', g('department') + ' · ' + g('university'));
+  setText('h-about', g('about'));
+  setText('h-pubs', g('total_pubs','—')); setText('h-projs', g('total_projects','—'));
+  setText('h-mems', g('total_members','—')); setText('h-founded', g('founded','—'));
+
+  // Hero image
+  const heroImg=g('hero_image');
+  s('hero-img-ph').style.display = heroImg?'none':'flex';
+  const hi=s('hero-img'); hi.src=heroImg; hi.style.display=heroImg?'block':'none';
+
+  setText('a-pubs', g('total_pubs','5+'));
+  setText('a-projs', g('total_projects','3'));
+  setText('a-mems', g('total_members','8+'));
+  setText('a-founded', g('founded','2021'));
+  setText('a-fullname', g('lab_fullname','ILAMPS'));
+  setText('a-about1', g('about'));
+  setText('a-about2', g('about2'));
+
+  await renderPI(settings);
+  await renderTeam();
+  await renderResearch();
+  await renderOngoing();
+  await renderPublications();
+  await renderNews();
+  await renderGallery();
+  await renderContact(settings);
+  setText('footer-copy', `© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · ${g('university','JUST, Bangladesh')}`);
+}
+
+async function renderPI(settings){
+  let s_data = settings;
+  if(!s_data){ const {data}=await db.from('lab_settings').select('*'); s_data=data; }
+  if(!s_data) return;
+  const g=(k,f='')=>getSetting(s_data,k,f);
+  const photo=g('pi_photo');
+  s('pi-photo-wrap').innerHTML = photo
+    ? `<img src="${photo}" class="pi-photo" alt="PI">`
+    : `<div class="pi-photo-ph">👨‍🔬</div>`;
+  setText('pi-name', g('pi_name')); setText('pi-desig', g('pi_designation'));
+  setText('pi-dept', g('pi_department')+'\n'+g('pi_university'));
+  setText('pi-bio', g('pi_bio'));
+  const email=g('pi_email');
+  const pe=s('pi-email'); pe.textContent=email; pe.href='mailto:'+email;
+  const ints=g('pi_interests','').split('|').filter(Boolean);
+  s('pi-ints').innerHTML=ints.map(i=>`<span class="pi-int">${i}</span>`).join('');
+  let links='';
+  if(g('pi_scholar')) links+=`<a href="${g('pi_scholar')}" class="pi-link" target="_blank">GS</a>`;
+  if(g('pi_rg')) links+=`<a href="${g('pi_rg')}" class="pi-link" target="_blank">RG</a>`;
+  if(g('pi_orcid')) links+=`<a href="${g('pi_orcid')}" class="pi-link" target="_blank">ID</a>`;
+  if(email) links+=`<a href="mailto:${email}" class="pi-link">✉</a>`;
+  s('pi-links').innerHTML=links;
+}
+
+async function renderTeam(){
+  s('team-loading').style.display='none';
+  const { data:members } = await db.from('profiles').select('*').eq('approved',true).neq('role','pending');
+  const groups = {graduate:'Graduate Students & Research Assistants', undergrad:'Undergraduate Students', ra:'Research Assistants', alumni:'Alumni'};
+  Object.entries(groups).forEach(([role,label])=>{
+    const grp = (members||[]).filter(m=>m.role===role);
+    const el=s('team-'+role==='ra'?'grad':'team-'+role==='graduate'?'grad':role);
+    // Map to the right container
+  });
+  // Better approach: render all groups
+  renderTeamGroup('team-grad', (members||[]).filter(m=>m.role==='graduate'||m.role==='ra'), 'Graduate Students & Research Assistants');
+  renderTeamGroup('team-ug', (members||[]).filter(m=>m.role==='undergrad'), 'Undergraduate Students');
+  renderTeamGroup('team-alumni', (members||[]).filter(m=>m.role==='alumni'), 'Alumni');
+}
+
+function renderTeamGroup(containerId, members, label){
+  const el=s(containerId); if(!el) return;
+  if(!members.length){ el.innerHTML=''; return; }
+  el.innerHTML=`<div class="team-grp">
+    <div class="team-grp-label">${label} <span class="cnt">${members.length}</span></div>
+    <div class="team-grid">${members.map(m=>`
+      <div class="team-card">
+        ${m.photo_url?`<img src="${m.photo_url}" class="team-av" alt="${m.name}">`:`<div class="team-av-ph">${initials(m.name)}</div>`}
+        <div class="team-cn">${m.name||'—'}</div>
+        <div class="team-cr">${m.designation||m.role||'Researcher'}</div>
+        <p class="team-cs">${m.research||''}</p>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+async function renderResearch(){
+  const { data } = await db.from('research_areas').select('*').order('sort_order');
+  const el=s('research-grid');
+  if(!data||!data.length){ el.innerHTML='<div class="empty">No research areas added yet.</div>'; return; }
+  el.innerHTML=data.map(a=>`
+    <div class="res-card">
+      <span class="res-icon">${a.icon}</span>
+      <h3>${a.title}</h3>
+      <p>${a.description}</p>
+    </div>`).join('');
+}
+
+async function renderOngoing(){
+  const { data } = await db.from('ongoing_projects').select('*').order('sort_order');
+  const el=s('proj-list');
+  if(!data||!data.length){ el.innerHTML='<div class="empty">No ongoing projects listed yet.</div>'; return; }
+  el.innerHTML=data.map(p=>`
+    <div class="proj-card">
+      <div>
+        <h3>${p.title}</h3>
+        <p>${p.description}</p>
+        <div class="proj-mems">${(p.members||[]).map(m=>`<span class="proj-mem">${m}</span>`).join('')}</div>
+      </div>
+      <span class="badge badge-${p.status||'active'}">${p.status||'active'}</span>
+    </div>`).join('');
+}
+
+async function renderPublications(){
+  const { data } = await db.from('publications').select('*, profiles(name)').order('year',{ascending:false});
+  const el=s('pub-list');
+  if(!data||!data.length){ el.innerHTML='<div class="empty">No publications added yet. Lab members can add their papers from their dashboard.</div>'; return; }
+  el.innerHTML=data.map(p=>`
+    <div class="pub-item">
+      <div class="pub-year">${p.year}</div>
+      <div>
+        <span class="pub-type">${p.type}</span>
+        <div class="pub-title">${p.title}</div>
+        <div class="pub-authors">${p.authors}</div>
+        <div class="pub-venue">${p.venue}</div>
+        ${p.doi?`<a href="${p.doi}" class="pub-doi" target="_blank">🔗 DOI / PDF</a>`:''}
+      </div>
+    </div>`).join('');
+}
+
+async function renderNews(){
+  const { data } = await db.from('news').select('*').order('created_at',{ascending:false});
+  const el=s('news-grid');
+  if(!data||!data.length){ el.innerHTML='<div class="empty">No news items yet.</div>'; return; }
+  el.innerHTML=data.map(n=>`
+    <div class="news-card">
+      <div class="news-dbar">${n.date_label}</div>
+      <div class="news-body"><h3>${n.title}</h3><p>${n.description}</p></div>
+    </div>`).join('');
+}
+
+async function renderGallery(){
+  const { data } = await db.from('gallery').select('*').order('sort_order');
+  const el=s('gal-grid');
+  const items=data&&data.length?data:Array(6).fill(null);
+  el.innerHTML=items.map(g=>g
+    ?`<div class="gal-item"><img src="${g.url}" alt="${g.caption||''}"><div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.5));padding:.6rem;font-size:.72rem;color:#fff">${g.caption||''}</div></div>`
+    :`<div class="gal-item"><div class="gal-ph"><div class="gal-ph-icon">📸</div><span>Add photo in Dashboard</span></div></div>`
+  ).join('');
+}
+
+async function renderContact(settings){
+  let s_data=settings;
+  if(!s_data){ const {data}=await db.from('lab_settings').select('*'); s_data=data; }
+  if(!s_data) return;
+  const g=(k,f='')=>getSetting(s_data,k,f);
+  setText('c-address', g('contact_address'));
+  const ce=s('c-email'); ce.textContent=g('contact_email'); ce.href='mailto:'+g('contact_email');
+  if(g('contact_phone')){ s('c-phone-wrap').style.display='flex'; setText('c-phone',g('contact_phone')); }
+  setText('c-join-desc', g('join_text'));
+  s('c-join-list').innerHTML=g('join_reqs','').split('|').filter(Boolean).map(r=>`<li>${r}</li>`).join('');
+  const btn=s('c-apply-btn'); btn.href=`mailto:${g('contact_email')}?subject=ILAMPS Application`;
+}
+
+// About tags from research areas
+async function renderAboutTags(){
+  const { data } = await db.from('research_areas').select('title').limit(6);
+  const el=s('a-tags');
+  if(data) el.innerHTML=data.map(a=>`<span class="tag tag-blue">${a.title}</span>`).join('');
+}
+
+// ═══════════════════════════════════════════════════
+//  NAV MOBILE
+// ═══════════════════════════════════════════════════
+s('nav-ham').addEventListener('click',()=>s('nav-links').classList.toggle('open'));
+document.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>s('nav-links').classList.remove('open')));
+
+// Close modals on backdrop click
+document.querySelectorAll('.modal-overlay').forEach(overlay=>{
+  overlay.addEventListener('click', e=>{ if(e.target===overlay){ overlay.classList.remove('open'); }});
+});
+
+// ═══════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════
+async function init(){
+  if(!db){
+    // Show unconfigured warning
+    document.querySelectorAll('.loading').forEach(el=>{ el.innerHTML='<div class="empty">⚙️ Configure Supabase credentials at the top of index.html to load content.</div>'; });
+    return;
+  }
+  await loadUser();
+  await renderSite();
+  await renderAboutTags();
+}
+init();
+</script>
+</body>
+</html>
