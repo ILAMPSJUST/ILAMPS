@@ -189,7 +189,7 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem;font-si
 .dp-title{font-size:1.8rem;font-weight:900;color:var(--navy);margin-bottom:1rem;line-height:1.3}
 @media(max-width:600px){.dp-container{padding:1.5rem}.dp-hero{flex-direction:column;text-align:center}.dp-photo,.dp-photo-ph{width:120px;height:120px}}
 /* DASHBOARD */
-#dash{display:none;position:fixed;inset:0;z-index:9900;flex-direction:column;background:#eef1f7}#dash.open{display:flex}
+#dash{display:none;position:fixed;inset:0;z-index:9900;flex-direction:column;background:#eef1f7;overflow:hidden;}#dash.open{display:flex}
 .dn{background:var(--navy);height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;border-bottom:1px solid rgba(255,255,255,.07);box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:10}
 .dn-brand{font-size:1.2rem;font-weight:900;color:#fff}
 .dl{display:grid;grid-template-columns:240px 1fr;flex:1;overflow:hidden}
@@ -210,7 +210,14 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem;font-si
 .up-preview{width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:.8rem;display:none;box-shadow:var(--shadow)}.up-preview.show{display:block}
 .up-ph{font-size:2rem;display:block;margin-bottom:.5rem;opacity:.5}.up-label{font-size:.85rem;font-weight:600;color:var(--navy)}.up-hint{font-size:.7rem;color:var(--muted);margin-top:.4rem;display:block}
 .up-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2}
-@media(max-width:768px){.dl{display:block}.ds{display:none}#mob-dash-nav{display:block!important}.g2,.g3,.d2,.d3{grid-template-columns:1fr}.dc{padding:1rem}}
+@media(max-width:768px){
+  .dl{display:flex;flex-direction:column;flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;}
+  .ds{display:none}
+  #mob-dash-nav{display:block!important;position:sticky;top:0;background:#eef1f7;z-index:5;padding:.6rem 0 .4rem;}
+  .g2,.g3,.d2,.d3{grid-template-columns:1fr}
+  .dc{padding:.85rem;flex:1;overflow-y:visible;}
+  .dcard{padding:1.25rem;}
+}
 </style>
 </head>
 <body>
@@ -219,10 +226,9 @@ const SUPABASE_URL  = 'https://rqviytqzrbsmdppcxzwr.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxdml5dHF6cmJzbWRwcGN4endyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2OTYxMzcsImV4cCI6MjA5NTI3MjEzN30.876Ml_UovPdcGqRxmnRwp5Iw0Z4-nR6vdIh1ZnEggio';
 
 // ── EmailJS Config (for admin notifications) ──
-// Setup: emailjs.com → free account → Gmail service → template with {from_name}, {from_email}, {message} vars
-const EMAILJS_SERVICE_ID  = 'service_mh86scj';   // e.g. 'service_abc123'
-const EMAILJS_TEMPLATE_ID = 'template_g8i9owl';  // e.g. 'template_xyz789'
-const EMAILJS_PUBLIC_KEY  = 'dl0NwGrQSXRyfGvV-';   // e.g. 'user_ABCDEF123'
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   
 const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
 </script>
 <div class="toast" id="toast"></div>
@@ -317,7 +323,7 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start">
       <div>
         <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">📍</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Address</h4><p id="c-addr" style="color:rgba(255,255,255,.7);line-height:1.6"></p></div></div>
-        <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">✉️</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Email</h4><a id="c-email" href="" style="color:rgba(255,255,255,.7)"></a></div></div>
+        <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">✉️</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Email</h4><a id="c-email" href="" style="color:rgba(255,255,255,.7); font-weight: bold;"></a></div></div>
       </div>
       <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);padding:2.5rem">
         <h3 style="color:#fff;font-size:1.5rem;margin-bottom:1rem">Prospective Members</h3>
@@ -490,6 +496,11 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
           </div>
         </div>
         <div class="dcard"><h3>Manage Papers</h3><div id="my-pubs"></div></div>
+      <div class="dcard">
+        <h3>Author Name Manager</h3>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:.8rem">Replace abbreviated ORCID names (e.g. <em>Md.A. Hossain</em>) with full lab member names. After replacing, clicking the name on the website will open that member's profile.</p>
+        <div id="author-replace-list"><div class="empty" style="padding:1rem">Load publications to see author names.</div></div>
+      </div>
       </div>
 
       <div class="dsec" id="d-lab">
@@ -644,13 +655,14 @@ let pubThumbUrl='',pubDetailUrl='',newsImgUrl='',newsThumbUrl='',profilePhotoUrl
 let npAuthorsList=[];
 let cropCb=null,cropper=null,cropFolder='',targetRatio=NaN;
 let editState={pub:null,news:null,gal:null,proj:null,res:null};
+let authorReplaceCache=[];
+let globalMembers=[];
 let fetchedData={pubs:[],news:[],gal:[],proj:[],res:[]};
 const roleRanks={'Principal Investigator':1,'Assistant Investigator':2,'Research Assistant':3,'PhD. Student':4,'MSc. Student':5,'Graduate Research Student':6,'Undergraduate Student':7,'Lab Technician':8,'Alumni':9};
 const getRank=role=>roleRanks[role]||10;
 
 // ═══ HELPERS ═══
 const $=id=>document.getElementById(id);
-// FIX: setText handles numbers (0 is falsy in JS)
 const setText=(id,v)=>{const e=$(id);if(e)e.textContent=(v!=null)?String(v):''};
 const setVal=(id,v)=>{const e=$(id);if(e)e.value=v||''};
 const getVal=id=>{const e=$(id);return e?e.value.trim():''};
@@ -736,12 +748,23 @@ const openMo=m=>$(`mo-${m}`).classList.add('open');
 const closeMo=m=>$(`mo-${m}`).classList.remove('open');
 const swMo=(a,b)=>{closeMo(a);openMo(b);};
 document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o&&o.id!=='mo-crop')o.classList.remove('open')}));
+
 async function signIn(){
   const err=$('l-err');err.style.display='none';
-  const {error}=await db.auth.signInWithPassword({email:getVal('l-email'),password:getVal('l-pwd')});
+  const {data,error}=await db.auth.signInWithPassword({email:getVal('l-email'),password:getVal('l-pwd')});
   if(error){err.textContent=error.message;err.style.display='block';return;}
-  closeMo('login');await loadUser();openDash();showToast('✓ Welcome back!');const ml=$('mob-login-li'),md=$('mob-dash-li');if(ml)ml.style.display='none';if(md)md.style.display='block';const fo=$('footer-out'),fi=$('footer-in');if(fo)fo.style.display='none';if(fi)fi.style.display='block';
+  
+  // FIX: Only check for EXPLICIT false. Null/Undefined shouldn't immediately lock out.
+  const {data:profile}=await db.from('profiles').select('approved,is_admin').eq('id',data.user.id).single();
+  if(profile && profile.approved===false){
+    await db.auth.signOut();
+    err.textContent='Your account is pending admin approval. Please contact the lab admin.';
+    err.style.display='block';
+    return;
+  }
+  closeMo('login');await loadUser();openDash();showToast('✓ Welcome back!');
 }
+
 async function signUp(){
   const err=$('s-err');err.style.display='none';
   const nm=getVal('s-name'),em=getVal('s-email'),pw=getVal('s-pwd');
@@ -752,33 +775,77 @@ async function signUp(){
   closeMo('signup');showToast('✓ Account created! Admin will approve your profile.');
   sendAdminNotification('Member Registration',nm,em);
 }
+
 async function signOut(){await db.auth.signOut();CU=null;CP=null;$('nav-in-logged').style.display='none';$('nav-out').style.display='flex';closeDash();const ml2=$('mob-login-li'),md2=$('mob-dash-li');if(ml2)ml2.style.display='block';if(md2)md2.style.display='none';const fo2=$('footer-out'),fi2=$('footer-in');if(fo2)fo2.style.display='block';if(fi2)fi2.style.display='none';}
+
 async function loadUser(){
   const {data:{user}}=await db.auth.getUser();if(!user)return;CU=user;
-  const {data:p}=await db.from('profiles').select('*').eq('id',user.id).single();CP=p;
-  $('nav-in-logged').style.display='flex';$('nav-out').style.display='none';const ml=$('mob-login-li'),md=$('mob-dash-li');if(ml)ml.style.display='none';if(md)md.style.display='block';const fo=$('footer-out'),fi=$('footer-in');if(fo)fo.style.display='none';if(fi)fi.style.display='block';
-  $('admin-nav').style.display=p?.is_admin?'block':'none';
-  // Also update mob-dash-nav admin options
-  const msel=document.querySelector('#mob-dash-nav select');
-  if(msel){Array.from(msel.options).forEach(o=>{if(['d-lab','d-hero','d-members','d-research','d-ongoing','d-news','d-gallery'].includes(o.value))o.style.display=p?.is_admin?'':'none';});}
+  const {data:p}=await db.from('profiles').select('*').eq('id',user.id).single();
+  CP=p; // Set globally
+
+  // FIX: Only logout if profile explicitly rejected (false)
+  if(p && p.approved===false){
+      await db.auth.signOut();CU=null;CP=null;
+      $('nav-in-logged').style.display='none';$('nav-out').style.display='flex';
+      return;
+  }
+
+  $('nav-in-logged').style.display='flex';$('nav-out').style.display='none';
+  const ml=$('mob-login-li'),md=$('mob-dash-li');
+  if(ml)ml.style.display='none';if(md)md.style.display='block';
+  const fo=$('footer-out'),fi=$('footer-in');
+  if(fo)fo.style.display='none';if(fi)fi.style.display='block';
+  
+  const allowedArr=p?.allowed_sections?p.allowed_sections.split(',').filter(Boolean):[];
+  const adminSecs=['d-lab','d-hero','d-members','d-allpubs','d-research','d-ongoing','d-news','d-gallery'];
+  const hasAnyAdmin=p?.is_admin||allowedArr.some(s=>adminSecs.includes(s));
+  
+  $('admin-nav').style.display=hasAnyAdmin?'block':'none';
+  
+  document.querySelectorAll('.dni').forEach(btn=>{
+    const sec=btn.dataset.sec;
+    const show=p?.is_admin||sec==='d-profile'||sec==='d-mypubs'||allowedArr.includes(sec);
+    btn.style.display=show?'flex':'none';
+  });
+  updateDashNav();
 }
 
 // ═══ DASHBOARD ═══
-function openDash(){$('dash').classList.add('open');document.body.style.overflow='hidden';
-  // Show mobile nav if small screen
+function updateDashNav(){
+  if(!CP)return;
   const mn=$('mob-dash-nav');
-  if(mn){
-    mn.style.display=window.innerWidth<=768?'block':'none';
-    // Show/hide admin options
-    const sel=mn.querySelector('select');
-    if(sel){
-      Array.from(sel.options).forEach(o=>{
-        if(['d-lab','d-hero','d-members','d-research','d-ongoing','d-news','d-gallery'].includes(o.value)){
-          o.style.display=CP?.is_admin?'':'none';
-        }
-      });
+  if(mn)mn.style.display=window.innerWidth<=768?'block':'none';
+  const sel=document.querySelector('#mob-dash-nav select');
+  if(!sel)return;
+  const allowedArr=CP.allowed_sections?CP.allowed_sections.split(',').filter(Boolean):[];
+  const adminOpts=[
+    {value:'d-allpubs',label:'📚 All Publications'},
+    {value:'d-lab',label:'⚙️ Settings & Logos'},
+    {value:'d-hero',label:'🖼️ Hero Slides'},
+    {value:'d-members',label:'👥 Members'},
+    {value:'d-research',label:'🔬 Research Areas'},
+    {value:'d-ongoing',label:'⚡ Projects'},
+    {value:'d-news',label:'📢 News'},
+    {value:'d-gallery',label:'🖼️ Gallery'}
+  ];
+  let html=`<option value="d-profile">👤 My Profile</option>
+    <option value="d-mypubs">📄 My Publications</option>`;
+  let hasAdmin=false;
+  adminOpts.forEach(o=>{
+    if(CP.is_admin||allowedArr.includes(o.value)){
+      if(!hasAdmin){html+=`<option value="" disabled style="color:var(--gray);font-size:.7rem">─── Admin ───</option>`;hasAdmin=true;}
+      html+=`<option value="${o.value}">${o.label}</option>`;
     }
-  }loadProfileForm();if(CP?.is_admin)loadLabForm();}
+  });
+  sel.innerHTML=html;
+}
+
+function openDash(){
+  $('dash').classList.add('open');document.body.style.overflow='hidden';
+  updateDashNav(); 
+  loadProfileForm();
+  if(CP?.is_admin||CP?.allowed_sections?.includes('d-lab'))loadLabForm();
+}
 function closeDash(){$('dash').classList.remove('open');document.body.style.overflow='';}
 document.querySelectorAll('.dni').forEach(btn=>{
   btn.addEventListener('click',()=>{
@@ -790,7 +857,7 @@ document.querySelectorAll('.dni').forEach(btn=>{
     else if(s==='d-lab')loadLabForm();else if(s==='d-members')loadMembersAdmin();
     else if(s==='d-hero')loadSlidesAdmin();else if(s==='d-research')loadResearchAdmin();
     else if(s==='d-ongoing')loadProjAdmin();else if(s==='d-news')loadNewsAdmin();
-    else if(s==='d-gallery')loadGalAdmin();
+    else if(s==='d-gallery')loadGalAdmin();else if(s==='d-allpubs')loadAllPubsAdmin();
   });
 });
 
@@ -820,6 +887,7 @@ async function saveProfile(){
 
 // Publications CRUD
 async function loadMyPubs(){
+  if(!globalMembers.length)await loadMemberSelect(); 
   const {data}=await db.from('publications').select('*').eq('user_id',CU.id).order('pub_date',{ascending:false,nullsFirst:false});
   fetchedData.pubs=data||[];
   const cont=$('my-pubs');
@@ -849,6 +917,8 @@ async function loadMyPubs(){
         </div>
       </div>
     </div>`).join('');
+    
+  if(globalMembers.length)buildAuthorReplaceUI();
 }
 
 function toggleAllPubs(checked){
@@ -874,10 +944,11 @@ async function deleteSelectedPubs(){
   loadMyPubs();loadCountsDisplay();
 }
 
-
 async function loadMemberSelect(){
   const {data}=await db.from('profiles').select('id,name').eq('approved',true);
-  $('np-auth-select').innerHTML='<option value="">+ Lab member...</option>'+(data||[]).map(m=>`<option value="${m.id}" data-name="${m.name}">${m.name}</option>`).join('');
+  globalMembers=data||[];
+  const opts='<option value="">+ Lab member...</option>'+(data||[]).map(m=>`<option value="${m.id}" data-name="${m.name}">${m.name}</option>`).join('');
+  $('np-auth-select').innerHTML=opts;
 }
 function addAuthorMember(){const sel=$('np-auth-select');const id=sel.value,name=sel.options[sel.selectedIndex]?.dataset?.name;if(id&&name){npAuthorsList.push({name,user_id:id});renderAuthChips();}sel.value='';}
 function addAuthorCustom(){const nm=getVal('np-auth-custom');if(nm){npAuthorsList.push({name:nm});renderAuthChips();}setVal('np-auth-custom','');}
@@ -887,7 +958,6 @@ function triggerEditPub(id){
   const p=fetchedData.pubs.find(x=>x.id===id);if(!p)return;editState.pub=id;
   setVal('np-t',p.title);setVal('np-date',p.pub_date);setVal('np-yr',p.year);
   setVal('np-type',p.type);setVal('np-status',p.status||'Published');setVal('np-venue',p.venue);setVal('np-abs',p.abstract);setVal('np-doi',p.doi);
-  // thumbnail removed
   npAuthorsList=[];
   if(p.authors_list)p.authors_list.split(',').forEach(a=>npAuthorsList.push({name:a.trim()}));
   renderAuthChips();
@@ -939,16 +1009,73 @@ async function saveLabSettings(){
 // Admin sections CRUD
 async function loadMembersAdmin(){
   const {data}=await db.from('profiles').select('*').order('created_at');
-  $('members-list').innerHTML=(data||[]).map(m=>`
-    <div class="aci"><div class="aci-h">
-      <div><span style="font-weight:700">${m.name||'—'}</span> <span style="font-size:.7rem;color:var(--muted)">(${m.role||'—'})</span></div>
-      <div style="display:flex;gap:.5rem;align-items:center">
-        <label style="font-size:.7rem"><input type="checkbox"${m.approved?' checked':''} onchange="updateMemberField('${m.id}','approved',this.checked)"> Public</label>
-        <label style="font-size:.7rem"><input type="checkbox"${m.is_admin?' checked':''} onchange="updateMemberField('${m.id}','is_admin',this.checked)"> Admin</label>
+  if(!data){$('members-list').innerHTML='<div class="empty">Error loading members.</div>';return;}
+  
+  const sections=[
+    {id:'d-profile',name:'Profile'},{id:'d-mypubs',name:'Publications'},
+    {id:'d-lab',name:'Lab Settings'},{id:'d-hero',name:'Slides'},
+    {id:'d-members',name:'Members'},{id:'d-research',name:'Research'},
+    {id:'d-ongoing',name:'Projects'},{id:'d-news',name:'News'},{id:'d-gallery',name:'Gallery'}
+  ];
+  
+  $('members-list').innerHTML=data.map(m=>{
+    if(!m.name&&!m.email)return ''; 
+    const isSelf=m.id===CU.id;
+    const allowed=m.allowed_sections?m.allowed_sections.split(',').filter(Boolean):[];
+    const checkboxes=sections.map(s=>`
+      <label style="font-size:.7rem;display:inline-flex;align-items:center;gap:3px;margin:.2rem .35rem .2rem 0;background:${m.is_admin||allowed.includes(s.id)?'rgba(74,123,200,.15)':'var(--silver)'};padding:2px 7px;border-radius:4px;cursor:${m.is_admin?'default':'pointer'}">
+        <input type="checkbox" ${m.is_admin||allowed.includes(s.id)?'checked':''} ${m.is_admin||isSelf?'disabled':''} onchange="toggleUserPermission('${m.id}','${s.id}',this.checked)"> ${s.name}
+      </label>`).join('');
+    
+    return `<div class="aci" style="margin-bottom:1.2rem">
+      <div class="aci-h" style="flex-wrap:wrap;gap:.8rem;align-items:flex-start">
+        <div style="flex:1;min-width:180px">
+          <div style="font-weight:800;font-size:.98rem;color:var(--navy)">${m.name||'—'} ${isSelf?'<span style="font-size:.65rem;background:var(--accent);color:#fff;padding:.1rem .4rem;border-radius:4px">You</span>':''}</div>
+          <div style="font-size:.74rem;color:var(--muted);margin:.1rem 0">${m.email||'—'}</div>
+          <div style="font-size:.74rem;color:var(--accent);font-weight:600">${m.role||'No role'} · ${m.approved?'<span style="color:#059669">Approved</span>':'<span style="color:#d97706">Pending</span>'}</div>
+        </div>
+        <div style="display:flex;gap:.45rem;align-items:center;flex-wrap:wrap">
+          <label style="font-size:.75rem;font-weight:700;cursor:pointer;white-space:nowrap">
+            <input type="checkbox"${m.approved?' checked':''} ${isSelf?'disabled':''} onchange="updateMemberField('${m.id}','approved',this.checked)"> ✓ Approved
+          </label>
+          <label style="font-size:.75rem;font-weight:700;cursor:pointer;white-space:nowrap">
+            <input type="checkbox"${m.is_admin?' checked':''} ${isSelf?'disabled':''} onchange="updateMemberField('${m.id}','is_admin',this.checked)"> 👑 Admin
+          </label>
+          ${!isSelf?`<button class="btn btn-d btn-sm" onclick="deleteUserProfile('${m.id}','${(m.name||'').replace(/'/g,'&#39;')}')">✕ Delete</button>`:''}
+        </div>
       </div>
-    </div></div>`).join('');
+      <div style="margin-top:.75rem;padding-top:.65rem;border-top:1px solid var(--border)">
+        <div style="font-size:.62rem;font-weight:800;text-transform:uppercase;color:var(--gray);letter-spacing:.1em;margin-bottom:.35rem">Section Access:</div>
+        <div style="display:flex;flex-wrap:wrap">${checkboxes}</div>
+      </div>
+    </div>`;
+  }).filter(Boolean).join('');
 }
-async function updateMemberField(id,field,val){const p={};p[field]=val;await db.from('profiles').update(p).eq('id',id);showToast('✓ Updated');initPublicData();}
+
+async function toggleUserPermission(userId,sectionId,isChecked){
+  const {data}=await db.from('profiles').select('allowed_sections').eq('id',userId).single();
+  let allowed=data?.allowed_sections?data.allowed_sections.split(',').filter(Boolean):[];
+  if(isChecked){if(!allowed.includes(sectionId))allowed.push(sectionId);}
+  else allowed=allowed.filter(x=>x!==sectionId);
+  const {error}=await db.from('profiles').update({allowed_sections:allowed.join(',')}).eq('id',userId);
+  if(error)showToast('❌ '+error.message);
+  else showToast('✓ Permissions updated');
+}
+
+async function deleteUserProfile(userId,userName){
+  if(!confirm(`Delete "${userName||'this member'}" from ILAMPS? This removes their profile data only.`))return;
+  const {error}=await db.from('profiles').delete().eq('id',userId);
+  if(error)showToast('❌ '+error.message);
+  else{showToast('✓ Profile removed.');loadMembersAdmin();}
+}
+
+async function updateMemberField(id,field,val){
+  const p={};p[field]=val;
+  const {error}=await db.from('profiles').update(p).eq('id',id);
+  if(error)showToast('❌ '+error.message);
+  else{showToast('✓ Updated');loadMembersAdmin();}
+}
+
 async function loadAllPubsAdmin(selectAll=false){
   const {data}=await db.from('publications').select('id,title,authors_list,authors,venue,pub_date,year,status,user_id').order('pub_date',{ascending:false,nullsFirst:false});
   const cont=$('all-pubs-admin');if(!cont)return;
@@ -1043,7 +1170,7 @@ async function addSlide(){
 }
 async function delRow(table,id,reload){if(confirm('Delete?')){await db.from(table).delete().eq('id',id);showToast('✓ Deleted.');reload();initPublicData();}}
 
-// ═══ COUNTS — INDEPENDENT (FIX: runs without waiting for lab_settings) ═══
+// ═══ COUNTS — INDEPENDENT ═══
 async function loadCountsDisplay(){
   if(!db)return;
   try{
@@ -1061,43 +1188,63 @@ async function loadCountsDisplay(){
 // ═══ PUBLIC RENDERING ═══
 async function initPublicData(){
   if(!db)return;
-  const {data:s}=await db.from('lab_settings').select('*');
-  const sArr=s||[];
-  const g=(k,f='')=>gS(sArr,k,f);
-  setText('h-name',g('lab_name','ILAMPS'));setText('nav-lab-name',g('lab_name','ILAMPS'));
-  setText('h-desc',g('about'));setText('hs-founded',g('founded','—'));
-  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · ${g('university','JUST')}`);
-  const logo=g('lab_logo');if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}">`;updateFavicon(logo);}
-  const jlogo=g('just_logo');
-  if(logo){$('f-logo-box-1').style.display='flex';$('f-logo-ilamps').src=logo;}
-  if(jlogo){$('f-logo-box-2').style.display='flex';$('f-logo-just').src=jlogo;}
-  const fe=$('f-email');if(fe){fe.textContent=g('contact_email');fe.href='mailto:'+g('contact_email');}
-  setText('f-addr',g('contact_address'));
+  try {
+    const resProfs = await db.from('profiles').select('id,name').eq('approved',true);
+    globalProfiles = resProfs.data || [];
 
-  // Fetch latest data for home page
-  const [{data:news},{data:pubsData},{data:memsData},{data:galData}]=await Promise.all([
-    db.from('news').select('*').order('created_at',{ascending:false}).limit(3),
-    db.from('publications').select('*').order('pub_date',{ascending:false,nullsFirst:false}).limit(4),
-    db.from('profiles').select('*').eq('approved',true),
-    db.from('gallery').select('*').order('created_at',{ascending:false}).limit(3)
-  ]);
-  const sortedMems=(memsData||[]).sort((a,b)=>getRank(a.role)-getRank(b.role));
-  $('home-team').innerHTML=sortedMems.slice(0,6).map(m=>memberCardHTML(m)).join('');
-  $('home-news').innerHTML=(news&&news.length)?news.map(n=>newsCard(n)).join(''):'<div class="empty">No news yet.</div>';
-  $('home-pubs').innerHTML=(pubsData&&pubsData.length)?pubsData.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications.</div>';
-  $('home-gallery').innerHTML=(galData&&galData.length)?galData.map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span></div></div>`).join(''):'<div class="empty">No gallery yet.</div>';
-  renderTeamPage(sortedMems);renderResearchPage();renderAllPubs();renderAllNews();renderGallery();renderContact(sArr);
+    const resSet = await db.from('lab_settings').select('*');
+    const sArr = resSet.data || [];
+    const g=(k,f='')=>gS(sArr,k,f);
+    
+    setText('h-name',g('lab_name','ILAMPS'));setText('nav-lab-name',g('lab_name','ILAMPS'));
+    setText('h-desc',g('about'));setText('hs-founded',g('founded','—'));
+    setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · Developed by Abdullah Shadek Fahim`);
+    const logo=g('lab_logo');if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}">`;updateFavicon(logo);}
+    const jlogo=g('just_logo');
+    if(logo){$('f-logo-box-1').style.display='flex';$('f-logo-ilamps').src=logo;}
+    if(jlogo){$('f-logo-box-2').style.display='flex';$('f-logo-just').src=jlogo;}
+    const fe=$('f-email');if(fe){fe.textContent=g('contact_email');fe.href='mailto:'+g('contact_email');}
+    setText('f-addr',g('contact_address'));
+
+    const resNews = await db.from('news').select('*').order('created_at',{ascending:false}).limit(3);
+    const resPubs = await db.from('publications').select('*').order('pub_date',{ascending:false,nullsFirst:false}).order('year',{ascending:false,nullsFirst:false}).limit(4);
+    const resAllMems = await db.from('profiles').select('*').eq('approved',true);
+    const resGal = await db.from('gallery').select('*').order('created_at',{ascending:false}).limit(3);
+
+    const news = resNews.data || [];
+    const pubsData = resPubs.data || [];
+    const memsData = resAllMems.data || [];
+    const galData = resGal.data || [];
+
+    const sortedMems=memsData.sort((a,b)=>getRank(a.role)-getRank(b.role));
+    $('home-team').innerHTML=sortedMems.slice(0,6).map(m=>memberCardHTML(m)).join('');
+    $('home-news').innerHTML=news.length?news.map(n=>newsCard(n)).join(''):'<div class="empty">No news yet.</div>';
+    $('home-pubs').innerHTML=pubsData.length?pubsData.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications.</div>';
+    $('home-gallery').innerHTML=galData.length?galData.map(g=>{
+      const dateStr = g.item_date ? new Date(g.item_date+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short'}) : '';
+      return `<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span>${dateStr?`<span class="gi-date">${dateStr}</span>`:''}</div></div>`;
+    }).join(''):'<div class="empty">No gallery yet.</div>';
+
+    renderTeamPage(sortedMems);
+    renderResearchPage();
+    renderAllPubs();
+    renderAllNews();
+    renderGallery();
+    renderContact(sArr);
+  } catch (e) {
+    console.error('initPublicData safely caught error:', e);
+  }
 }
 
 function pubCardHome(p){
   const shortAbs=p.abstract?(p.abstract.length>130?p.abstract.substring(0,130)+'...':p.abstract):'';
-  const authStr=p.authors_list||p.authors||'';
+  const authHtml=formatAuthors(p.authors_list||p.authors);
   const statusBadge=p.status?`<span style="font-size:.7rem;padding:.15rem .55rem;border-radius:4px;background:rgba(74,123,200,.12);color:var(--accent);font-weight:600">${p.status}</span>`:'';
   return `<div class="pubi-home" onclick="goPage('publication','${p.id}')">
     <div class="pubi-home-body">
       <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;flex-wrap:wrap"><span style="font-size:.72rem;background:var(--silver);color:var(--navy);padding:.12rem .5rem;border-radius:4px;font-weight:700">${p.type||'Publication'}</span>${statusBadge}<span style="font-size:.75rem;color:var(--gray)">${p.pub_date||p.year||''}</span></div>
       <div class="pub-title">${p.title}</div>
-      ${authStr?`<div class="pub-authors" style="margin-bottom:.25rem">${authStr}</div>`:''}
+      ${authHtml?`<div class="pub-authors" style="margin-bottom:.25rem">${authHtml}</div>`:''}
       <div class="pub-venue" style="font-size:.8rem;color:var(--gray);font-style:italic">${p.venue||''}</div>
       ${shortAbs?`<div style="font-size:.83rem;color:var(--muted);margin-top:.4rem;line-height:1.6">${shortAbs}</div>`:''}
     </div>
@@ -1113,7 +1260,7 @@ function newsCard(n){
     <div class="nc-body"><h3>${n.title}</h3><p>${(n.description||'').substring(0,120)}...</p></div>
   </div>`;
 }
-// FIX: memberCardHTML always uses m.id (not slug) for routing
+
 function memberCardHTML(m){
   const routeParam=m.id;
   let links='';
@@ -1129,7 +1276,6 @@ function memberCardHTML(m){
   </div>`;
 }
 
-// FIX: buildProfileDetail uses id only (no slug query)
 async function buildProfileDetail(id){
   const el=$('dp-profile-body');
   el.innerHTML='<div class="loading"><div class="spin-el"></div>Loading profile...</div>';
@@ -1162,14 +1308,13 @@ async function buildProfileDetail(id){
       ${userProjs.length?`<div class="dp-section"><span class="dp-slabel">Projects</span><div class="proj-list">${userProjs.map(p=>`<div class="pc" style="padding:1rem 1.5rem"><div><h3 style="font-size:.95rem">${p.title}</h3><p style="font-size:.85rem;margin-bottom:0">${p.description}</p></div></div>`).join('')}</div></div>`:''}
       <div class="dp-section"><span class="dp-slabel">Publications (${(pubs||[]).length})</span>
         <div class="pub-list">${(pubs||[]).map(p=>{
-          const boldName=new RegExp('('+((m.name||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&'))+')', 'gi');
-          const boldAuthors=(p.authors_list||p.authors||'').replace(boldName,'<strong style="color:var(--navy)">$1</strong>');
+          const authHtml = formatAuthors(p.authors_list || p.authors, m.name);
           const shortAbs=p.abstract?(p.abstract.length>120?p.abstract.substring(0,120)+'...':p.abstract):'';
           return `<div class="pubi-home" onclick="goPage('publication','${p.id}')">
             <div class="pubi-home-body">
               <div class="pubi-top"><span class="pub-type">${p.type}</span><span class="pub-yr">${p.pub_date||p.year||''}</span></div>
               <div class="pub-title">${p.title}</div>
-              <div class="pub-authors">${boldAuthors}</div>
+              <div class="pub-authors">${authHtml}</div>
               <div class="pub-venue">${p.venue||''}</div>
               ${shortAbs?`<div style="font-size:.82rem;color:var(--muted);margin-top:.35rem">${shortAbs}</div>`:''}
             </div>
@@ -1184,13 +1329,14 @@ async function buildPubDetail(id){
   el.innerHTML='<div class="loading"><div class="spin-el"></div>Loading...</div>';
   const {data:p}=await db.from('publications').select('*').eq('id',id).single();
   if(!p)return el.innerHTML='<button class="back-btn" onclick="history.back()">← Back</button><div class="empty">Publication not found.</div>';
+  const authHtml = formatAuthors(p.authors_list || p.authors);
   el.innerHTML=`
     <button class="back-btn" onclick="history.back()">← Back</button>
     <div class="dp-container">
       ${p.detail_image?`<img class="dp-img" src="${p.detail_image}">`:''}
       <div style="display:flex;gap:.5rem;margin-bottom:1rem;align-items:center;flex-wrap:wrap"><span class="tag-b">${p.type}</span>${p.status?`<span style="font-size:.75rem;padding:.2rem .6rem;border-radius:4px;background:var(--silver);color:var(--navy);font-weight:700">${p.status}</span>`:''}<span style="font-size:.85rem;color:var(--gray);font-weight:700">${p.pub_date||p.year||''}</span></div>
       <div class="dp-title">${p.title}</div>
-      <div style="font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1rem">${p.authors_list||p.authors||''}</div>
+      <div style="font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1rem">${authHtml}</div>
       <div style="font-size:1.05rem;color:var(--muted);font-style:italic;margin-bottom:2rem">${p.venue||''}</div>
       ${p.abstract?`<span class="dp-slabel">Abstract</span><p style="color:var(--muted);line-height:1.8;font-size:1rem;margin-bottom:2.5rem">${p.abstract}</p>`:''}
       ${p.doi?`<a href="${p.doi}" target="_blank" class="btn btn-p">🔗 View Full Paper</a>`:''}
@@ -1213,7 +1359,10 @@ async function buildNewsDetail(id){
 }
 
 async function renderTeamPage(sortedMems){
-  if(!sortedMems){const {data}=await db.from('profiles').select('*').eq('approved',true);sortedMems=(data||[]).sort((a,b)=>getRank(a.role)-getRank(b.role));}
+  if(!sortedMems){
+    const {data}=await db.from('profiles').select('*').eq('approved',true);
+    sortedMems=(data||[]).sort((a,b)=>getRank(a.role)-getRank(b.role));
+  }
   const groups={'Principal Investigator':sortedMems.filter(m=>m.role==='Principal Investigator'),'Assistant Investigator':sortedMems.filter(m=>m.role==='Assistant Investigator'),'Research Assistants':sortedMems.filter(m=>m.role==='Research Assistant'),'PhD. Students':sortedMems.filter(m=>m.role==='PhD. Student'),'MSc. Students':sortedMems.filter(m=>m.role==='MSc. Student'),'Graduate Researchers':sortedMems.filter(m=>m.role==='Graduate Research Student'),'Undergraduate Researchers':sortedMems.filter(m=>m.role==='Undergraduate Student'),'Alumni':sortedMems.filter(m=>m.role==='Alumni'),'Others':sortedMems.filter(m=>getRank(m.role)>9)};
   let html='';
   for(const [title,mems] of Object.entries(groups)){
@@ -1230,24 +1379,34 @@ async function renderTeamPage(sortedMems){
   $('team-content').innerHTML=html||'<div class="empty">No approved members yet.</div>';
   $('team-load').style.display='none';
 }
+
 async function renderResearchPage(){
   const [{data:areas},{data:projs}]=await Promise.all([db.from('research_areas').select('*').order('sort_order'),db.from('ongoing_projects').select('*').order('sort_order')]);
   $('research-grid').innerHTML=(areas||[]).map(a=>`<div class="rc"><span class="rc-icon">${a.icon}</span><h3>${a.title}</h3><p>${a.description}</p></div>`).join('')||'<div class="empty">No research areas yet.</div>';
   $('proj-list').innerHTML=(projs||[]).map(p=>`<div class="pc"><div><h3>${p.title}</h3><p>${p.description}</p><div class="pc-mems">${(p.members||[]).map(m=>`<span class="pc-mem">${m}</span>`).join('')}</div></div><span class="badge badge-${p.status||'active'}">${p.status||'active'}</span></div>`).join('')||'<div class="empty">No projects yet.</div>';
 }
+
 async function renderAllPubs(){
-  const {data}=await db.from('publications').select('*').order('pub_date',{ascending:false,nullsFirst:false});
+  const {data}=await db.from('publications').select('*')
+    .order('pub_date',{ascending:false, nullsFirst:false})
+    .order('year',{ascending:false, nullsFirst:false});
   setText('pub-total-count',`(${(data||[]).length})`);
   $('all-pubs').innerHTML=(data||[]).map(p=>pubCardHome(p)).join('')||'<div class="empty">No publications yet.</div>';
 }
+
 async function renderAllNews(){
   const {data}=await db.from('news').select('*').order('created_at',{ascending:false});
   $('all-news').innerHTML=(data||[]).map(n=>newsCard(n)).join('')||'<div class="empty">No news yet.</div>';
 }
+
 async function renderGallery(){
   const {data}=await db.from('gallery').select('*').order('created_at',{ascending:false});
-  $('gal-grid').innerHTML=(data||[]).map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span><span class="gi-date">${g.item_date||''}</span></div></div>`).join('')||'<div class="empty">No photos yet.</div>';
+  $('gal-grid').innerHTML=(data||[]).map(g=>{
+    const dateStr = g.item_date ? new Date(g.item_date+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) : '';
+    return `<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span>${dateStr?`<span class="gi-date">${dateStr}</span>`:''}</div></div>`;
+  }).join('')||'<div class="empty">No photos yet.</div>';
 }
+
 async function renderContact(sArr){
   const settings=sArr||(await db.from('lab_settings').select('*')).data||[];
   const g=(k,f='')=>gS(settings,k,f);
@@ -1258,9 +1417,7 @@ async function renderContact(sArr){
   const ca=$('c-apply');if(ca)ca.href='mailto:'+g('contact_email')+'?subject=ILAMPS Application';
 }
 
-// ═══ NAV & INIT ═══
-
-// ── ORCID INTEGRATION ──
+// ── ORCID INTEGRATION WITH BULK UPLOAD & AUTHORS ──
 async function fetchFromOrcid(){
   if(!CP||!CP.orcid)return showToast('❌ Set your ORCID link in My Profile first!');
   const match=(CP.orcid||'').match(/\d{4}-\d{4}-\d{4}-\d{3}[0-9X]/i);
@@ -1289,7 +1446,7 @@ async function fetchFromOrcid(){
       const contribs=w.contributors?.contributor||[];
       let authors='';
       if(contribs.length){
-        authors=contribs.map(c=>c['credit-name']?.value||'').filter(Boolean).join(', ');
+        authors=contribs.map(c=>swapOrcidName(c['credit-name']?.value||'')).filter(Boolean).join(', ');
       }
       if(!authors)authors=CP.name||'';
       const itemData={title,year,type:t,journal,doi,authors};
@@ -1310,30 +1467,9 @@ async function fetchFromOrcid(){
   }catch(e){console.error(e);showToast('❌ ORCID failed: '+e.message);}
 }
 
-function fillPubFromOrcid(d){
-  setVal('np-t',d.title); setVal('np-yr',d.year); setVal('np-venue',d.journal); setVal('np-doi',d.doi);
-  let t='Journal Paper';
-  if((d.type||'').toLowerCase().includes('conference'))t='Conference Paper';
-  if((d.type||'').toLowerCase().includes('book'))t='Book Chapter';
-  setVal('np-type',t);
-  showToast('✓ Form filled from ORCID. Review and save.');
-}
-
-function switchDashSection(sec){
-  document.querySelectorAll('.dni').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.dsec').forEach(s=>s.classList.remove('active'));
-  const btn=document.querySelector(`.dni[data-sec="${sec}"]`);
-  if(btn)btn.classList.add('active');
-  const el=$(sec);if(el)el.classList.add('active');
-  // Load data for section
-  const secMap={'d-profile':loadProfileForm,'d-mypubs':loadMyPubs,'d-lab':loadLabForm,'d-members':loadMembersAdmin,'d-hero':loadSlidesAdmin,'d-research':loadResearchAdmin,'d-ongoing':loadProjAdmin,'d-news':loadNewsAdmin,'d-gallery':loadGalAdmin,'d-allpubs':loadAllPubsAdmin};
-  if(secMap[sec])secMap[sec]();
-}
-
-
 // ═══ ADMIN EMAIL NOTIFICATION ═══
 async function sendAdminNotification(eventType, userName, userEmail){
-  if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY')return; // Not configured yet
+  if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY')return; 
   try{
     emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
@@ -1351,14 +1487,90 @@ Time: ${new Date().toLocaleString('en-US',{timeZone:'Asia/Dhaka'})} (BST)`,
   }catch(e){console.warn('EmailJS notification failed:',e);}
 }
 
+async function importAllOrcid(){
+  if(!orcidCachedWorks||!orcidCachedWorks.length)return showToast('⚠️ Fetch ORCID publications first.');
+  if(!confirm(`Import all ${orcidCachedWorks.length} publications from ORCID?`))return;
+  showToast('⏳ Importing...');
+  let ok=0,fail=0,errs=[];
+  for(const w of orcidCachedWorks){
+    const authStr=w.authors||CP.name||'';
+    const payload={
+      title:w.title||'Untitled',
+      authors:authStr,
+      authors_list:authStr,
+      year:String(w.year||''),
+      venue:w.journal||'',
+      type:w.type||'Journal Paper',
+      status:'Published',
+      doi:w.doi||'',
+      user_id:CU.id,
+    };
+    const {error}=await db.from('publications').insert(payload);
+    if(error){fail++;errs.push(error.message);}else ok++;
+  }
+  closeMo('orcid');
+  if(fail)console.error('Import errors:',errs);
+  showToast(`✓ Imported ${ok}${fail?' (❌ '+fail+' failed)':''}`);
+  loadMyPubs();loadCountsDisplay();
+}
+
+// ═══ ORCID NAME FORMAT & AUTHOR REPLACE ═══
+function swapOrcidName(name){
+  if(!name)return '';
+  const commaIdx=name.indexOf(',');
+  if(commaIdx<0)return name;
+  const last=name.substring(0,commaIdx).trim();
+  const first=name.substring(commaIdx+1).trim();
+  return first?`${first} ${last}`:last;
+}
+
+function buildAuthorReplaceUI(){
+  const allAuthors=new Set();
+  fetchedData.pubs.forEach(p=>{
+    (p.authors_list||p.authors||'').split(',').map(n=>n.trim()).filter(Boolean).forEach(n=>allAuthors.add(n));
+  });
+  authorReplaceCache=[...allAuthors];
+  const el=$('author-replace-list');if(!el)return;
+  if(!authorReplaceCache.length){el.innerHTML='<div class="empty" style="padding:1rem">No author names found. Add publications first.</div>';return;}
+  const memberOpts=globalMembers.map(m=>`<option value="${m.id}" data-name="${m.name}">${m.name}</option>`).join('');
+  el.innerHTML=authorReplaceCache.map((author,i)=>`
+    <div style="display:flex;align-items:center;gap:.6rem;padding:.65rem 0;border-bottom:1px solid var(--border);flex-wrap:wrap">
+      <span style="flex:1;min-width:120px;font-size:.85rem;font-weight:600;color:var(--navy)">${author}</span>
+      <select id="ar-sel-${i}" style="flex:1;min-width:150px;padding:.38rem .7rem;border:1.5px solid var(--border);border-radius:8px;font-size:.8rem;font-family:var(--f)">
+        <option value="">Select lab member...</option>
+        ${memberOpts}
+      </select>
+      <button class="btn btn-p btn-sm" onclick="applyAuthorReplace(${i})">Apply</button>
+    </div>`).join('');
+}
+
+async function applyAuthorReplace(idx){
+  const oldName=authorReplaceCache[idx];if(!oldName)return;
+  const sel=$(`ar-sel-${idx}`);if(!sel||!sel.value)return showToast('⚠️ Select a lab member first');
+  const memberId=sel.value;
+  const memberName=sel.options[sel.selectedIndex]?.dataset?.name||'';
+  if(!memberName)return;
+  let count=0;
+  for(const p of fetchedData.pubs){
+    const names=(p.authors_list||p.authors||'').split(',').map(n=>n.trim());
+    if(!names.includes(oldName))continue;
+    const newAuthStr=names.map(n=>n===oldName?memberName:n).join(', ');
+    const linked=Array.isArray(p.linked_users)?[...new Set([...p.linked_users,memberId])]:[memberId];
+    const {error}=await db.from('publications').update({authors:newAuthStr,authors_list:newAuthStr,linked_users:linked}).eq('id',p.id);
+    if(!error)count++;
+  }
+  if(count)showToast(`✓ Replaced "${oldName}" → "${memberName}" in ${count} pub(s)`);
+  else showToast(`⚠️ No matching publications found`);
+  loadMyPubs();
+}
+
 $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
 
 async function init(){
-  // Show mobile login button by default (will be hidden if logged in)
   const ml=$('mob-login-li');if(ml)ml.style.display='block';
   if(!db)return showToast('⚙️ Configure Supabase credentials in index.html',5000);
   await loadUser();
-  loadCountsDisplay(); // FIX: runs independently, does not depend on lab_settings
+  loadCountsDisplay(); 
   await initPublicData();
   await loadSlides();
   handleRoute();
