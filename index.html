@@ -901,8 +901,8 @@ async function loadMyPubs(){
         </div>
       </div>
     </div>`).join('');
+  await buildAuthorReplaceUI();
 }
-  await buildAuthorReplaceUI(); // await ensures DOM update completes
 
 function toggleAllPubs(checked){
   document.querySelectorAll('.pub-chk').forEach(c=>c.checked=checked);
