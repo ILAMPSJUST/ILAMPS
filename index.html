@@ -227,9 +227,9 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
 // ── EmailJS Config (for admin notifications) ──
 // Setup: emailjs.com → free account → Gmail service → template with {from_name}, {from_email}, {message} vars
-const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_abc123'
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xyz789'
-const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'user_ABCDEF123'
+const EMAILJS_SERVICE_ID  = 'service_mh86scj';   // e.g. 'service_abc123'
+const EMAILJS_TEMPLATE_ID = 'template_g8i9owl';  // e.g. 'template_xyz789'
+const EMAILJS_PUBLIC_KEY  = 'dl0NwGrQSXRyfGvV-';   // e.g. 'user_ABCDEF123'
 const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
 </script>
 <div class="toast" id="toast"></div>
@@ -1071,13 +1071,16 @@ async function sendApprovalEmail(userName,userEmail){
   if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY')return;
   try{
     emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});
-    await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{
+    const res2=await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{
       to_email:userEmail,
+      subject:`ILAMPS: Your account has been approved ✓`,
+      message:`Dear ${userName},\n\nYour ILAMPS account has been approved! You can now log in to the dashboard at:\nhttps://ilamps.pages.dev\n\nWelcome to the lab!\n\nILAMPS Team`,
       from_name:'ILAMPS Lab',
       from_email:ADMIN_EMAIL,
-      message:`Dear ${userName},\n\nYour ILAMPS account has been approved! You can now log in to the dashboard at ilamps.pages.dev.\n\nWelcome to the lab!\n\nILAMPS Team`,
-      subject:`ILAMPS: Your account has been approved ✓`
+      name:userName,
+      email:userEmail
     });
+    console.log('Approval email sent:',res2.status,res2.text);
     showToast('✓ Approval email sent to '+userEmail);
   }catch(e){console.warn('Approval email failed:',e);}
 }
@@ -1473,23 +1476,22 @@ function switchDashSection(sec){
 
 
 // ═══ ADMIN EMAIL NOTIFICATION ═══
-async function sendAdminNotification(eventType, userName, userEmail){
-  if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY')return; // Not configured yet
+async function sendAdminNotification(eventType,userName,userEmail){
+  if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY')return;
   try{
     emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-      to_email: ADMIN_EMAIL,
-      from_name: userName,
-      from_email: userEmail,
-      message: `New ${eventType} on ILAMPS!
-
-Name: ${userName}
-Email: ${userEmail}
-Time: ${new Date().toLocaleString('en-US',{timeZone:'Asia/Dhaka'})} (BST)`,
-      subject: `ILAMPS: New ${eventType} — ${userName}`
+    const timeStr=new Date().toLocaleString('en-US',{timeZone:'Asia/Dhaka'});
+    const res=await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{
+      to_email:ADMIN_EMAIL,
+      subject:`ILAMPS: New ${eventType} — ${userName}`,
+      message:`New ${eventType} on ILAMPS!\nName: ${userName}\nEmail: ${userEmail}\nTime: ${timeStr} (BST)`,
+      from_name:userName,
+      from_email:userEmail,
+      name:userName,
+      email:userEmail
     });
-    console.log('Admin notified via email.');
-  }catch(e){console.warn('EmailJS notification failed:',e);}
+    console.log('Admin email sent:',res.status,res.text);
+  }catch(e){console.error('EmailJS failed:',e);}
 }
 
 async function importAllOrcid(){
