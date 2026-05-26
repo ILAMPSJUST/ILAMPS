@@ -227,9 +227,9 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
 // ── EmailJS Config (for admin notifications) ──
 // Setup: emailjs.com → free account → Gmail service → template with {from_name}, {from_email}, {message} vars
-const EMAILJS_SERVICE_ID  = 'service_mh86scj';   // e.g. 'service_abc123'
-const EMAILJS_TEMPLATE_ID = 'template_g8i9owl';  // e.g. 'template_xyz789'
-const EMAILJS_PUBLIC_KEY  = 'dl0NwGrQSXRyfGvV-';   // e.g. 'user_ABCDEF123'
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_abc123'
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xyz789'
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'user_ABCDEF123'
 const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
 </script>
 <div class="toast" id="toast"></div>
@@ -346,7 +346,7 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
     <div><div class="f-title">Contact</div><div style="display:flex;gap:10px;margin-bottom:.8rem;align-items:flex-start"><span>📍</span><p id="f-addr"></p></div><div style="display:flex;gap:10px;align-items:center"><span>✉️</span><a id="f-email" class="f-link" style="margin:0"></a></div></div>
     <div><div class="f-title">Quick Links</div><a onclick="goPage('team')" class="f-link">Team</a><a onclick="goPage('publications')" class="f-link">Publications</a><a onclick="goPage('contact')" class="f-link">Contact Us</a></div>
   </div>
-  <div class="f-bottom"><p id="footer-copy">© ILAMPS</p>
+  <div class="f-bottom"><p id="footer-copy">© ILAMPS.</p>
       <div style="display:flex;gap:.6rem;align-items:center">
         <div id="footer-out"><button class="btn btn-g btn-sm" onclick="openMo('login')" style="font-size:.72rem;padding:.3rem .75rem">🔐 Login</button></div>
         <div id="footer-in" style="display:none"><button class="btn btn-p btn-sm" onclick="openDash()" style="font-size:.72rem;padding:.3rem .75rem">📊 Dashboard</button></div>
@@ -657,6 +657,7 @@ let npAuthorsList=[];
 let cropCb=null,cropper=null,cropFolder='',targetRatio=NaN;
 let editState={pub:null,news:null,gal:null,proj:null,res:null};
 let authorReplaceCache=[];
+let globalProfiles=[];
 let globalMembers=[];
 let fetchedData={pubs:[],news:[],gal:[],proj:[],res:[]};
 const roleRanks={'Principal Investigator':1,'Assistant Investigator':2,'Research Assistant':3,'PhD. Student':4,'MSc. Student':5,'Graduate Research Student':6,'Undergraduate Student':7,'Lab Technician':8,'Alumni':9};
@@ -1198,12 +1199,15 @@ async function loadCountsDisplay(){
 // ═══ PUBLIC RENDERING ═══
 async function initPublicData(){
   if(!db)return;
+  // Cache profiles for author linking
+  const {data:profs}=await db.from('profiles').select('id,name').eq('approved',true);
+  globalProfiles=profs||[];
   const {data:s}=await db.from('lab_settings').select('*');
   const sArr=s||[];
   const g=(k,f='')=>gS(sArr,k,f);
   setText('h-name',g('lab_name','ILAMPS'));setText('nav-lab-name',g('lab_name','ILAMPS'));
   setText('h-desc',g('about'));setText('hs-founded',g('founded','—'));
-  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · ${g('university','JUST')}`);
+  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · 'Developed by Abdullah Shadek Fahim`);
   const logo=g('lab_logo');if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}">`;updateFavicon(logo);}
   const jlogo=g('just_logo');
   if(logo){$('f-logo-box-1').style.display='flex';$('f-logo-ilamps').src=logo;}
@@ -1227,6 +1231,24 @@ async function initPublicData(){
   renderTeamPage(sortedMems);renderResearchPage();renderAllPubs();renderAllNews();renderGallery();renderContact(sArr);
 }
 
+function renderAuthors(p){
+  // Build a map: memberName → profileId from linked_users
+  const linked=Array.isArray(p.linked_users)?p.linked_users:[];
+  const nameToId={};
+  linked.forEach(uid=>{
+    const m=globalProfiles.find(x=>x.id===uid);
+    if(m&&m.name)nameToId[m.name]=uid;
+  });
+  const authStr=p.authors_list||p.authors||'';
+  if(!authStr)return '';
+  return authStr.split(',').map(n=>{
+    const name=n.trim();
+    const uid=nameToId[name];
+    if(uid)return `<a onclick="event.stopPropagation();goPage('profile','${uid}')" style="color:var(--accent);cursor:pointer;font-weight:600;text-decoration:none" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${name}</a>`;
+    return `<span>${name}</span>`;
+  }).join(', ');
+}
+
 function pubCardHome(p){
   const shortAbs=p.abstract?(p.abstract.length>130?p.abstract.substring(0,130)+'...':p.abstract):'';
   const authStr=p.authors_list||p.authors||'';
@@ -1235,7 +1257,7 @@ function pubCardHome(p){
     <div class="pubi-home-body">
       <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;flex-wrap:wrap"><span style="font-size:.72rem;background:var(--silver);color:var(--navy);padding:.12rem .5rem;border-radius:4px;font-weight:700">${p.type||'Publication'}</span>${statusBadge}<span style="font-size:.75rem;color:var(--gray)">${p.pub_date||p.year||''}</span></div>
       <div class="pub-title">${p.title}</div>
-      ${authStr?`<div class="pub-authors" style="margin-bottom:.25rem">${authStr}</div>`:''}
+      ${authStr?`<div class="pub-authors" style="margin-bottom:.25rem">${renderAuthors(p)}</div>`:''}
       <div class="pub-venue" style="font-size:.8rem;color:var(--gray);font-style:italic">${p.venue||''}</div>
       ${shortAbs?`<div style="font-size:.83rem;color:var(--muted);margin-top:.4rem;line-height:1.6">${shortAbs}</div>`:''}
     </div>
@@ -1308,7 +1330,7 @@ async function buildProfileDetail(id){
             <div class="pubi-home-body">
               <div class="pubi-top"><span class="pub-type">${p.type}</span><span class="pub-yr">${p.pub_date||p.year||''}</span></div>
               <div class="pub-title">${p.title}</div>
-              <div class="pub-authors">${boldAuthors}</div>
+              <div class="pub-authors">${renderAuthors(p)}</div>
               <div class="pub-venue">${p.venue||''}</div>
               ${shortAbs?`<div style="font-size:.82rem;color:var(--muted);margin-top:.35rem">${shortAbs}</div>`:''}
             </div>
@@ -1329,7 +1351,7 @@ async function buildPubDetail(id){
       ${p.detail_image?`<img class="dp-img" src="${p.detail_image}">`:''}
       <div style="display:flex;gap:.5rem;margin-bottom:1rem;align-items:center;flex-wrap:wrap"><span class="tag-b">${p.type}</span>${p.status?`<span style="font-size:.75rem;padding:.2rem .6rem;border-radius:4px;background:var(--silver);color:var(--navy);font-weight:700">${p.status}</span>`:''}<span style="font-size:.85rem;color:var(--gray);font-weight:700">${p.pub_date||p.year||''}</span></div>
       <div class="dp-title">${p.title}</div>
-      <div style="font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1rem">${p.authors_list||p.authors||''}</div>
+      <div style="font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1rem">${renderAuthors(p)}</div>
       <div style="font-size:1.05rem;color:var(--muted);font-style:italic;margin-bottom:2rem">${p.venue||''}</div>
       ${p.abstract?`<span class="dp-slabel">Abstract</span><p style="color:var(--muted);line-height:1.8;font-size:1rem;margin-bottom:2.5rem">${p.abstract}</p>`:''}
       ${p.doi?`<a href="${p.doi}" target="_blank" class="btn btn-p">🔗 View Full Paper</a>`:''}
