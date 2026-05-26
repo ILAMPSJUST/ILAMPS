@@ -3,32 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ILAMPS – Interdisciplinary Laboratory for Advanced Materials Processing and Simulations</title>
+<title>ILAMPS</title>
 <meta name="description" content="ILAMPS – Computational materials science research at JUST, Bangladesh.">
-<link rel="icon" type="image/png" id="favicon-link" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚛️</text></svg>">
+<link rel="icon" type="image/png" id="favicon-link" href="">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
 <style>
-/* ── FONT & VARS ── */
-:root{
-  --f: 'Helvetica Neue',Helvetica,Arial,sans-serif;
-  --navy:#0d1f42;--navy-mid:#1a3566;--navy-light:#2a4a8a;
-  --gray:#6b7a8d;--gray-light:#a8b5c2;--silver:#e8edf2;
-  --accent:#4a7bc8;--accent-light:#7aa5d9;
-  --white:#fff;--off:#f5f7fa;--text:#1a2332;--muted:#556070;--border:#dde3ea;
-  --shadow:0 8px 30px rgba(13,31,66,.08);--shadow-lg:0 15px 40px rgba(13,31,66,.15);
-  --r:14px;--rl:20px;--tr:0.3s cubic-bezier(.4,0,.2,1)
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0; overflow-wrap: break-word; word-wrap: break-word;}
+:root{--f:'Helvetica Neue',Helvetica,Arial,sans-serif;--navy:#0d1f42;--navy-mid:#1a3566;--navy-light:#2a4a8a;--gray:#6b7a8d;--gray-light:#a8b5c2;--silver:#e8edf2;--accent:#4a7bc8;--accent-light:#7aa5d9;--white:#fff;--off:#f5f7fa;--text:#1a2332;--muted:#556070;--border:#dde3ea;--shadow:0 8px 30px rgba(13,31,66,.08);--shadow-lg:0 15px 40px rgba(13,31,66,.15);--r:14px;--rl:20px;--tr:0.3s cubic-bezier(.4,0,.2,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:var(--f);color:var(--text);background:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 h1,h2,h3,h4,h5{font-family:var(--f);font-weight:700;line-height:1.2;letter-spacing:-.02em}
-a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
-button{font-family:var(--f);cursor:pointer}
-
-/* UTILS */
+a{color:inherit;text-decoration:none}img{max-width:100%;display:block}button{font-family:var(--f);cursor:pointer}
 .con{max-width:1200px;margin:0 auto;padding:0 1.5rem}
 .slabel{font-size:.7rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:.6rem}
 .stitle{font-size:clamp(1.8rem,3.5vw,2.5rem);color:var(--navy);margin-bottom:.9rem}
@@ -38,328 +25,237 @@ button{font-family:var(--f);cursor:pointer}
 .spin-el{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .65s linear infinite;display:inline-block;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading{display:flex;align-items:center;justify-content:center;padding:3rem;gap:.6rem;color:var(--muted);font-size:.9rem}
-
-/* BUTTONS */
 .btn{display:inline-flex;align-items:center;gap:.4rem;padding:.65rem 1.5rem;border-radius:10px;font-size:.85rem;font-weight:600;transition:var(--tr);border:none;white-space:nowrap;cursor:pointer;font-family:var(--f)}
-.btn-p{background:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(74,123,200,.25)}.btn-p:hover{background:#3a6ab3;transform:translateY(-2px);box-shadow:0 6px 18px rgba(74,123,200,.35)}
+.btn-p{background:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(74,123,200,.25)}.btn-p:hover{background:#3a6ab3;transform:translateY(-2px)}
 .btn-g{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}.btn-g:hover{background:rgba(255,255,255,.2)}
-.btn-o{background:transparent;color:var(--navy);border:1.5px solid var(--border)}.btn-o:hover{border-color:var(--accent);color:var(--accent);background:var(--off)}
+.btn-o{background:transparent;color:var(--navy);border:1.5px solid var(--border)}.btn-o:hover{border-color:var(--accent);color:var(--accent)}
 .btn-d{background:rgba(239,68,68,.1);color:#dc2626;border:1px solid rgba(239,68,68,.2)}.btn-d:hover{background:rgba(239,68,68,.2)}
-.btn-sm{padding:.4rem .85rem;font-size:.75rem;border-radius:8px;}
-.btn-edit{background:var(--silver);color:#000;border:1px solid #ccc;}.btn-edit:hover{background:#e0e0e0;}
-
+.btn-sm{padding:.4rem .85rem;font-size:.75rem;border-radius:8px}
+.btn-edit{background:var(--silver);color:#000;border:1px solid #ccc}.btn-edit:hover{background:#e0e0e0}
 .tag-b{background:rgba(74,123,200,.1);color:var(--accent);border:1px solid rgba(74,123,200,.2);padding:.3rem .8rem;border-radius:50px;font-size:.72rem;font-weight:600;display:inline-block}
-
-/* PAGE SYSTEM */
-.page{display:none;min-height:100vh;padding-top:100px}
-.page.active{display:block}
+.badge{display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .6rem;border-radius:50px;font-size:.7rem;font-weight:700}
+.badge::before{content:"";width:5px;height:5px;background:currentColor;border-radius:50%;flex-shrink:0}
+.badge-active{background:rgba(16,185,129,.1);color:#059669}.badge-completed{background:rgba(99,102,241,.1);color:#6366f1}.badge-planned{background:rgba(245,158,11,.1);color:#d97706}
+.page{display:none;min-height:100vh;padding-top:100px}.page.active{display:block}
 #page-home{padding-top:0}
-
-/* SCROLL TO TOP */
 #scroll-top{position:fixed;bottom:2rem;right:2rem;width:45px;height:45px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:1.2rem;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(74,123,200,.4);opacity:0;transform:translateY(10px);transition:var(--tr);z-index:800}
-#scroll-top.show{opacity:1;transform:none}
-#scroll-top:hover{background:#3a6ab3;transform:translateY(-3px)}
-
-/* TOAST */
+#scroll-top.show{opacity:1;transform:none}#scroll-top:hover{background:#3a6ab3;transform:translateY(-3px)}
 .toast{position:fixed;bottom:5rem;right:2rem;background:var(--navy);color:#fff;padding:.8rem 1.2rem;border-radius:12px;font-size:.85rem;font-weight:500;z-index:9999;opacity:0;transform:translateY(10px);transition:all .3s;pointer-events:none;box-shadow:var(--shadow-lg)}
 .toast.show{opacity:1;transform:none}
-
-/* ═══ NAV ═══ */
-#navbar{position:fixed;top:0;left:0;right:0;z-index:900;background:rgba(10,20,55,.98);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06);transition:var(--tr)}
+/* BACK BUTTON */
+.back-btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.85rem;font-weight:600;color:var(--muted);cursor:pointer;margin-bottom:1.5rem;transition:var(--tr);padding:.4rem .8rem;border-radius:8px;border:1px solid var(--border);background:var(--off)}
+.back-btn:hover{color:var(--navy);border-color:var(--accent)}
+/* NAV */
+#navbar{position:fixed;top:0;left:0;right:0;z-index:900;background:rgba(10,20,55,.98);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06)}
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:80px;gap:1rem}
 .nav-logo{display:flex;align-items:center;gap:.7rem;cursor:pointer;flex-shrink:0}
 .nav-logo-box{width:65px;height:65px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;box-shadow:0 4px 12px rgba(0,0,0,.2)}
 .nav-logo-box img{width:100%;height:100%;object-fit:contain}
 .nav-logo-box-text{background:linear-gradient(135deg,var(--accent),var(--navy-mid));font-size:.85rem;font-weight:800;color:#fff;line-height:1.1;text-align:center;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
-.nav-logo-nm{font-size:1.6rem;font-weight:900;color:#fff;letter-spacing:-.02em;line-height:1;}
+.nav-logo-nm{font-size:1.6rem;font-weight:900;color:#fff;letter-spacing:-.02em}
 .nav-links{display:flex;align-items:center;gap:.3rem;list-style:none}
 .nav-links a{display:block;padding:.4rem .85rem;font-size:.85rem;font-weight:600;color:rgba(255,255,255,.65);border-radius:8px;transition:var(--tr);cursor:pointer}
 .nav-links a:hover,.nav-links a.active{color:#fff;background:rgba(255,255,255,.12)}
 .nav-auth{display:flex;align-items:center;gap:.6rem;flex-shrink:0}
 .nav-ham{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:10px;flex-shrink:0}
-.nav-ham span{display:block;width:24px;height:2.5px;background:#fff;border-radius:3px;transition:var(--tr)}
-@media(max-width:900px){
-  .nav-ham{display:flex}
-  .nav-links{display:none;position:absolute;top:70px;left:0;right:0;flex-direction:column;background:rgba(10,20,55,.99);padding:1rem;border-top:1px solid rgba(255,255,255,.06);gap:.3rem;backdrop-filter:blur(20px)}
-  .nav-links.open{display:flex}
-  .nav-links a{width:100%;padding:.8rem 1rem;font-size:.95rem;}
-  .nav-auth .btn-sm:first-child{display:none}
-  .nav-in { height: 70px; }
-  .nav-logo-box { width: 50px; height: 50px; }
-  .nav-logo-nm { font-size: 1.3rem; }
-}
-
-/* ═══ HERO ═══ */
-#hero { position: relative; height: 100vh; min-height: 650px; background: var(--navy); display: flex; align-items: center; overflow: hidden;}
-.hero-bg-grid { position: absolute; inset: 0; z-index: 1; background-image: linear-gradient(rgba(74,123,200,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(74,123,200,.05) 1px, transparent 1px); background-size: 50px 50px; pointer-events: none; }
-.hero-split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 4rem; align-items: center; width: 100%; position: relative; z-index: 3; padding-top: 80px; }
-.hero-content { padding: 2rem 0; display:flex; flex-direction:column; align-items:flex-start;}
-.hero-slides-container { position: relative; width: 100%; aspect-ratio: 4/3; height: auto; border-radius: var(--rl); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid rgba(255,255,255,0.1); }
-.slides-wrap { position: absolute; inset: 0; z-index: 1; background:var(--navy-mid)}
-.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}
-.slide.active{opacity:1}
+.nav-ham span{display:block;width:24px;height:2.5px;background:#fff;border-radius:3px}
+@media(max-width:900px){.nav-ham{display:flex}.nav-links{display:none;position:absolute;top:80px;left:0;right:0;flex-direction:column;background:rgba(10,20,55,.99);padding:1rem;border-top:1px solid rgba(255,255,255,.06);gap:.3rem;backdrop-filter:blur(20px)}.nav-links.open{display:flex}.nav-links a{width:100%;padding:.8rem 1rem;font-size:.95rem}.nav-auth .btn-sm:first-child{display:none}}
+/* HERO */
+#hero{position:relative;height:100vh;min-height:650px;background:var(--navy);display:flex;align-items:center;overflow:hidden}
+.hero-bg-grid{position:absolute;inset:0;z-index:1;background-image:linear-gradient(rgba(74,123,200,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(74,123,200,.05) 1px,transparent 1px);background-size:50px 50px;pointer-events:none}
+.hero-split{display:grid;grid-template-columns:1.1fr 0.9fr;gap:4rem;align-items:center;width:100%;position:relative;z-index:3;padding-top:80px}
+.hero-content{padding:2rem 0;display:flex;flex-direction:column;align-items:flex-start}
+.hero-slides-container{position:relative;width:100%;aspect-ratio:4/3;height:auto;border-radius:var(--rl);overflow:hidden;box-shadow:var(--shadow-lg);border:1px solid rgba(255,255,255,.1)}
+.slides-wrap{position:absolute;inset:0;z-index:1;background:var(--navy-mid)}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}.slide.active{opacity:1}
 .slide img{width:100%;height:100%;object-fit:cover}
 .slide-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(8,18,48,.4) 0%,transparent 100%)}
 .slide-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:4;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;width:45px;height:45px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:none;align-items:center;justify-content:center;transition:var(--tr);backdrop-filter:blur(8px)}
-.slide-arrow:hover{background:rgba(255,255,255,.3)}
-.slide-arrow.prev{left:1.5rem}.slide-arrow.next{right:1.5rem}
+.slide-arrow:hover{background:rgba(255,255,255,.3)}.slide-arrow.prev{left:1.5rem}.slide-arrow.next{right:1.5rem}
 .slide-dots{position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:4;display:flex;gap:.5rem}
 .slide-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);cursor:pointer;transition:var(--tr);border:none}
 .slide-dot.active{background:#fff;width:24px;border-radius:4px}
-
 .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(74,123,200,.15);border:1px solid rgba(74,123,200,.25);border-radius:50px;padding:.35rem 1rem;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-light);margin-bottom:1.5rem;font-weight:700}
-.hero-badge::before{content:'';width:6px;height:6px;background:var(--accent-light);border-radius:50%;animation:blink 2s infinite}
+.hero-badge::before{content:"";width:6px;height:6px;background:var(--accent-light);border-radius:50%;animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 .hero-title{font-size:clamp(2rem,4vw,3.5rem);font-weight:900;color:#fff;line-height:1.15;margin-bottom:1rem;letter-spacing:-.02em}
 .hero-desc{font-size:1.05rem;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:2.5rem;max-width:540px}
-.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3rem; width:100%}
-.hero-stats{display:flex;gap:2.5rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1);flex-wrap:wrap; width:100%}
-.hs-num{font-size:2rem;font-weight:800;color:#fff;line-height:1;cursor:pointer;transition:var(--tr)}
-.hs-num:hover{color:var(--accent-light)}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3rem;width:100%}
+.hero-stats{display:flex;gap:2.5rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1);flex-wrap:wrap;width:100%}
+.hs-num{font-size:2rem;font-weight:800;color:#fff;line-height:1;cursor:pointer;transition:var(--tr)}.hs-num:hover{color:var(--accent-light)}
 .hs-lbl{font-size:.65rem;color:var(--gray-light);letter-spacing:.1em;text-transform:uppercase;margin-top:.4rem;font-weight:600}
-
-/* Mobile Hero Fixes */
-@media(max-width:900px){
-  .hero-split { display:flex; flex-direction:column; padding-top:90px; gap:1.5rem; text-align:left;}
-  .hero-content { display: flex; flex-direction: column; align-items: flex-start;}
-  .hero-title { order: 1; font-size:clamp(1.7rem, 5vw, 2.2rem); line-height:1.3; margin-bottom:0.8rem;}
-  .hero-badge { order: 2; margin-bottom:1.5rem;}
-  .hero-slides-container { order: 3; width: 100%; aspect-ratio:4/3; height:auto; margin: 0 0 1.5rem 0; }
-  .hero-desc { order: 4; font-size:.95rem; margin-bottom:1.5rem;}
-  .hero-actions { order: 5; margin-bottom:0; width:100%; justify-content:flex-start;}
-  .hero-stats { order: 6; border-top:none; padding-top:1.5rem; gap:1.5rem; justify-content:flex-start;}
-}
-
-/* ═══ HOME SECTIONS ═══ */
-.home-sec{padding:5.5rem 0}
-.home-sec.gray{background:var(--off)}
-.view-all{display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;font-weight:700;color:var(--accent);cursor:pointer;margin-top:2.5rem;transition:var(--tr);letter-spacing:.01em}
-.view-all:hover{gap:.7rem; color:var(--navy)}
-
-/* ABOUT & BADGES SYSTEM */
-.about-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:4rem;align-items:center}
-.about-big{background:var(--navy);border-radius:var(--rl);padding:1.75rem;position:relative;overflow:hidden;margin-bottom:.875rem; cursor:pointer;}
-.about-big::after{content:'';position:absolute;top:-25px;right:-25px;width:90px;height:90px;background:rgba(74,123,200,.12);border-radius:50%}
-.about-big-num{font-size:2.75rem;font-weight:900;color:var(--accent-light);line-height:1;}
-.about-big:hover .about-big-num{color:#fff}
-.about-big-lbl{font-size:.78rem;color:rgba(255,255,255,.58);margin-top:.28rem}
-.about-sm-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
-.about-sm{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center;box-shadow:var(--shadow);cursor:pointer;transition:var(--tr)}
-.about-sm:hover{border-color:var(--accent);transform:translateY(-2px)}
-.about-sm .num{font-size:1.6rem;font-weight:800;color:var(--navy)}
-.about-sm .lbl{font-size:.63rem;color:var(--muted);margin-top:.18rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
-@media(max-width:768px){.about-grid{grid-template-columns:1fr;gap:2rem}.about-sm-row{grid-template-columns:1fr 1fr}}
-
-/* PI CONTAINER */
-.pi-card{display:grid;grid-template-columns:260px 1fr;gap:3rem;align-items:start;background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:2.5rem;box-shadow:var(--shadow);transition:var(--tr)}
-.pi-card:hover{box-shadow:var(--shadow-lg)}
-.pi-photo,.pi-photo-ph{width:180px;height:180px;border-radius:50%;margin:0 auto 1.2rem;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(74,123,200,.15)}
-.pi-photo{object-fit:cover;border:4px solid var(--accent);display:block}
-.pi-photo-ph{background:rgba(74,123,200,.1);border:4px solid rgba(74,123,200,.2);font-size:3.5rem}
-.pi-name{font-size:1.4rem;font-weight:800;color:var(--navy);text-align:center;margin-bottom:.2rem;letter-spacing:-.02em}
+@media(max-width:900px){#hero{height:auto;min-height:0;padding-bottom:2rem}.hero-split{display:flex;flex-direction:column;padding-top:80px;gap:1rem;text-align:left}.hero-content{display:contents}.hero-title{order:1;font-size:1.45rem;line-height:1.25;margin-bottom:0}.hero-badge{order:2;margin-bottom:0}.hero-slides-container{order:3;width:100%;aspect-ratio:4/3;height:auto;margin:.5rem 0;border-radius:var(--r)}.hero-desc{order:4;font-size:.86rem;margin-bottom:0}.hero-actions{order:5;margin-bottom:0;width:100%;gap:.6rem}.hero-stats{order:6;border-top:1px solid rgba(255,255,255,.1);padding-top:.9rem;gap:.7rem;justify-content:flex-start;flex-wrap:wrap}.hs-num{font-size:1.25rem}.hs-lbl{font-size:.52rem}}
+/* HOME SECTIONS */
+.home-sec{padding:5.5rem 0}.home-sec.gray{background:var(--off)}
+.view-all{display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;font-weight:700;color:var(--accent);cursor:pointer;margin-top:2.5rem;transition:var(--tr)}.view-all:hover{gap:.7rem;color:var(--navy)}
+/* PI */
+.pi-card{display:grid;grid-template-columns:260px 1fr;gap:3rem;align-items:start;background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:2.5rem;box-shadow:var(--shadow)}
+.pi-photo,.pi-photo-ph{width:180px;height:180px;border-radius:50%;margin:0 auto 1.2rem;display:flex;align-items:center;justify-content:center}
+.pi-photo{object-fit:cover;border:4px solid var(--accent);display:block}.pi-photo-ph{background:rgba(74,123,200,.1);border:4px solid rgba(74,123,200,.2);font-size:3.5rem}
+.pi-name{font-size:1.4rem;font-weight:800;color:var(--navy);text-align:center;margin-bottom:.2rem}
 .pi-desig{font-size:.85rem;color:var(--accent);font-weight:700;text-align:center;margin-bottom:.3rem}
 .pi-dept{font-size:.8rem;color:var(--muted);text-align:center;line-height:1.5}
-.pi-sl{font-size:.7rem;color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;margin-top:1.5rem;display:block}
-.pi-sl:first-child{margin-top:0}
+.pi-sl{font-size:.7rem;color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;margin-top:1.5rem;display:block}.pi-sl:first-child{margin-top:0}
 .pi-bio{color:var(--muted);font-size:.95rem;line-height:1.8}
 @media(max-width:768px){.pi-card{grid-template-columns:1fr;gap:2rem;padding:2rem}}
-
-/* TEAM CARDS */
+/* TEAM */
 .team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.5rem}
 .tc{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:2rem 1.2rem;text-align:center;transition:var(--tr);cursor:pointer;position:relative;overflow:hidden;box-shadow:var(--shadow)}
-.tc::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--navy-light));opacity:0;transition:var(--tr)}
+.tc::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--navy-light));opacity:0;transition:var(--tr)}
 .tc:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:rgba(74,123,200,.3)}.tc:hover::before{opacity:1}
 .tc-av{width:90px;height:90px;border-radius:50%;object-fit:cover;margin:0 auto 1rem;display:block;border:3px solid var(--silver);box-shadow:0 4px 12px rgba(0,0,0,.08)}
 .tc-av-ph{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--silver),var(--border));margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:var(--gray)}
-.tc-name{font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:.2rem;letter-spacing:-.01em}
-.tc-role{font-size:.8rem;color:var(--accent);font-weight:700;margin-bottom:.5rem}
-.tc-links a{color:var(--gray);text-decoration:none;transition:var(--tr);display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;background:var(--off)}
-.tc-links a:hover{color:#fff;background:var(--accent)}
-@media(max-width:480px){.team-grid{grid-template-columns:1fr 1fr;gap:1rem}.tc{padding:1.5rem 1rem;}}
-
-/* PUBLICATION CARDS */
+.tc-name{font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:.2rem}.tc-role{font-size:.8rem;color:var(--accent);font-weight:700;margin-bottom:.5rem}
+.tc-links a{color:var(--gray);text-decoration:none;transition:var(--tr);display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;background:var(--off)}.tc-links a:hover{color:#fff;background:var(--accent)}
+@media(max-width:480px){.team-grid{grid-template-columns:1fr 1fr;gap:1rem}.tc{padding:1.5rem 1rem}}
+/* PUBS */
 .pub-list{display:flex;flex-direction:column;gap:1.2rem}
-.pubi{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:var(--tr);cursor:pointer; padding: 1.5rem; box-shadow:var(--shadow)}
+.pubi{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:var(--tr);cursor:pointer;padding:1.5rem;box-shadow:var(--shadow)}
 .pubi:hover{box-shadow:var(--shadow-lg);border-color:rgba(74,123,200,.3);transform:translateY(-3px)}
 .pubi-top{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem;flex-wrap:wrap}
+.pub-type{background:rgba(74,123,200,.1);color:var(--accent);padding:.15rem .55rem;border-radius:4px;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
 .pub-yr{font-size:.8rem;color:var(--gray);font-weight:700}
-.pub-title{font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:.4rem;line-height:1.4;letter-spacing:-.01em}
+.pub-title{font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:.4rem;line-height:1.4}
 .pub-authors{font-size:.85rem;color:var(--muted);margin-bottom:.3rem}
-.pub-venue{font-size:.85rem;color:var(--gray);font-style:italic;display:flex;align-items:center;gap:.5rem}
-
-/* HOME PUB CARD (NO THUMBNAIL) */
-.pubi-home { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--border); border-radius: var(--rl); padding: 1.5rem; transition: var(--tr); cursor: pointer; box-shadow:var(--shadow) }
-.pubi-home:hover { box-shadow: var(--shadow-lg); border-color: rgba(74,123,200,.3); transform: translateY(-3px); }
-.pubi-home-body { flex: 1; }
-.pubi-home-more { color: var(--accent); font-weight: 700; font-size: .8rem; cursor: pointer; display: inline-block; margin-left: 5px; text-decoration: underline; }
-
-/* NEWS CARD */
+.pub-venue{font-size:.85rem;color:var(--gray);font-style:italic}
+.pubi-home{display:flex;gap:1.5rem;background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:1.5rem;transition:var(--tr);cursor:pointer;align-items:flex-start;box-shadow:var(--shadow)}
+.pubi-home:hover{box-shadow:var(--shadow-lg);border-color:rgba(74,123,200,.3);transform:translateY(-3px)}
+.pubi-home-img{width:120px;height:120px;object-fit:cover;border-radius:10px;flex-shrink:0;border:1px solid var(--border)}
+.pubi-home-body{flex:1}
+.pubi-home-more{color:var(--accent);font-weight:700;font-size:.8rem;cursor:pointer;display:inline;margin-left:5px;text-decoration:underline}
+@media(max-width:600px){.pubi-home{flex-direction:column;gap:1.2rem}.pubi-home-img{width:100%;height:200px}}
+/* NEWS */
 .news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem}
 .nc{background:#fff;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;transition:var(--tr);cursor:pointer;box-shadow:var(--shadow)}
-.nc:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg);border-color:rgba(74,123,200,.2)}
+.nc:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg)}
 .nc-img{width:100%;height:180px;object-fit:cover;display:block}
 .nc-img-ph{width:100%;height:180px;background:linear-gradient(135deg,var(--silver),#ccd5e0);display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--gray-light)}
 .nc-dbar{background:var(--navy);color:var(--accent-light);padding:.6rem 1.2rem;font-size:.7rem;letter-spacing:.1em;font-weight:700;display:flex;align-items:center;justify-content:space-between}
 .nc-cat{font-size:.6rem;background:rgba(74,123,200,.3);padding:.1rem .45rem;border-radius:3px;text-transform:uppercase;letter-spacing:.06em}
-.nc-body{padding:1.5rem}
-.nc-body h3{font-size:1.05rem;font-weight:800;color:var(--navy);margin-bottom:.6rem;line-height:1.4}
-.nc-body p{font-size:.85rem;color:var(--muted);line-height:1.7}
-
+.nc-body{padding:1.5rem}.nc-body h3{font-size:1.05rem;font-weight:800;color:var(--navy);margin-bottom:.6rem;line-height:1.4}.nc-body p{font-size:.85rem;color:var(--muted);line-height:1.7}
 /* RESEARCH & PROJ */
 .res-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.5rem}
-.rc{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:2rem;transition:var(--tr);box-shadow:var(--shadow)}
-.rc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:rgba(74,123,200,.3)}
-.rc-icon{font-size:2.2rem;margin-bottom:1rem;display:block}
-.rc h3{font-size:1.1rem;color:var(--navy);margin-bottom:.6rem;font-weight:800}
-.rc p{font-size:.9rem;color:var(--muted);line-height:1.7}
-
+.rc{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:2rem;transition:var(--tr);box-shadow:var(--shadow)}.rc:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.rc-icon{font-size:2.2rem;margin-bottom:1rem;display:block}.rc h3{font-size:1.1rem;color:var(--navy);margin-bottom:.6rem;font-weight:800}.rc p{font-size:.9rem;color:var(--muted);line-height:1.7}
 .proj-list{display:flex;flex-direction:column;gap:1.2rem}
 .pc{background:#fff;border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:0 var(--r) var(--r) 0;padding:1.5rem 2rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:start;transition:var(--tr);box-shadow:var(--shadow)}
-.pc:hover{box-shadow:var(--shadow-lg); transform:translateX(4px)}
-.pc h3{font-size:1.05rem;color:var(--navy);margin-bottom:.4rem;font-weight:800}
+.pc:hover{box-shadow:var(--shadow-lg)}.pc h3{font-size:1.05rem;color:var(--navy);margin-bottom:.4rem;font-weight:800}
 .pc p{font-size:.9rem;color:var(--muted);line-height:1.6;margin-bottom:.8rem}
-.pc-mems{display:flex;flex-wrap:wrap;gap:.4rem}
-.pc-mem{font-size:.7rem;background:var(--silver);color:var(--navy-mid);padding:.2rem .6rem;border-radius:50px;font-weight:600}
-
+.pc-mems{display:flex;flex-wrap:wrap;gap:.4rem}.pc-mem{font-size:.7rem;background:var(--silver);color:var(--navy-mid);padding:.2rem .6rem;border-radius:50px;font-weight:600}
 /* GALLERY */
 .gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
 .gi{border-radius:var(--rl);overflow:hidden;aspect-ratio:4/3;position:relative;background:var(--silver);border:1px solid var(--border);box-shadow:var(--shadow)}
-.gi img{width:100%;height:100%;object-fit:cover;transition:transform .5s;display:block}
-.gi:hover img{transform:scale(1.08)}
-.gi-cap{position:absolute;bottom:0;left:0;right:0;background:#fff;padding:1rem;font-size:.85rem;color:var(--navy);font-weight:700; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border)}
-.gi-date{font-size:.75rem; color:var(--muted); font-weight:600;}
-
+.gi img{width:100%;height:100%;object-fit:cover;transition:transform .5s;display:block}.gi:hover img{transform:scale(1.08)}
+.gi-cap{position:absolute;bottom:0;left:0;right:0;background:#fff;padding:1rem;font-size:.85rem;color:var(--navy);font-weight:700;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border)}
+.gi-date{font-size:.75rem;color:var(--muted);font-weight:600}
 /* FOOTER */
-footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem; font-size:.85rem;}
-.footer-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4rem; margin-bottom:3rem; align-items:start;}
-.f-logos{display:flex; gap:1.5rem; align-items:center; flex-wrap:wrap;}
-.f-logo-box{background:#fff; padding:.6rem; border-radius:10px; height:70px; display:flex; align-items:center; justify-content:center;}
-.f-logo-box img{max-height:100%; max-width:140px; object-fit:contain;}
-.f-title{color:#fff; font-size:1.1rem; font-weight:800; margin-bottom:1.2rem; line-height:1.4}
-.f-link{display:flex; align-items:center; gap:8px; color:rgba(255,255,255,.6); margin-bottom:.8rem; transition:var(--tr); cursor:pointer;}
-.f-link:hover{color:var(--accent-light);}
-.f-bottom{border-top:1px solid rgba(255,255,255,.1); padding-top:2rem; display:flex; justify-content:space-between; flex-wrap:wrap; font-size:.8rem;}
-@media(max-width:768px){.footer-grid{grid-template-columns:1fr; gap:2.5rem;}}
-
+footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem;font-size:.85rem}
+.footer-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4rem;margin-bottom:3rem;align-items:start}
+.f-logos{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap}
+.f-logo-box{background:#fff;padding:.6rem;border-radius:10px;height:70px;display:flex;align-items:center;justify-content:center}
+.f-logo-box img{max-height:100%;max-width:140px;object-fit:contain}
+.f-title{color:#fff;font-size:1.2rem;font-weight:800;margin-bottom:1.2rem}
+.f-link{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.6);margin-bottom:.8rem;transition:var(--tr);cursor:pointer}.f-link:hover{color:var(--accent-light)}
+.f-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:2rem;display:flex;justify-content:space-between;flex-wrap:wrap;font-size:.8rem}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr;gap:2.5rem}}
 /* MODALS */
 .mo{display:none;position:fixed;inset:0;z-index:9990;background:rgba(5,12,30,.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:1rem}
 .mo.open{display:flex}
 .mb{background:#fff;border-radius:var(--rl);width:100%;overflow:hidden;box-shadow:0 32px 80px rgba(0,0,0,.3);max-height:90vh;display:flex;flex-direction:column}
 .mh{padding:1.5rem 1.8rem 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.mc{background:var(--silver);border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1.1rem;color:var(--gray);display:flex;align-items:center;justify-content:center;transition:var(--tr);flex-shrink:0}
-.mc:hover{background:var(--border); color:var(--navy)}
+.mc{background:var(--silver);border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:1.1rem;color:var(--gray);display:flex;align-items:center;justify-content:center;transition:var(--tr);flex-shrink:0}.mc:hover{background:var(--border);color:var(--navy)}
 .mbody{padding:1.5rem 1.8rem 1.8rem;overflow-y:auto}
 .ff{margin-bottom:1rem}
 .ff label{display:block;font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--navy-mid);margin-bottom:.4rem}
 .ff input,.ff textarea,.ff select{width:100%;padding:.7rem 1rem;background:var(--off);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--f);font-size:.9rem;transition:var(--tr)}
 .ff input:focus,.ff textarea:focus{outline:none;border-color:var(--accent);background:#fff;box-shadow:0 0 0 4px rgba(74,123,200,.1)}
-
-/* DASHBOARD & ADMIN */
-#dash{display:none;position:fixed;inset:0;z-index:9900;flex-direction:column;background:#eef1f7}
-#dash.open{display:flex}
-.dn{background:var(--navy);height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;border-bottom:1px solid rgba(255,255,255,.07);box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:10;}
-.dn-brand{font-size:1.2rem;font-weight:900;color:#fff;}
+.ff textarea{min-height:80px;resize:vertical}
+.ferr{color:#dc2626;font-size:.78rem;margin-top:.4rem;display:block}
+.mft{padding:1rem 1.8rem;background:var(--off);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:.8rem;color:var(--muted);flex-shrink:0}
+.mft a{color:var(--accent);cursor:pointer;text-decoration:none}.mft a:hover{text-decoration:underline}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
+@media(max-width:600px){.g2,.g3{grid-template-columns:1fr}}
+/* DEDICATED PAGES */
+.dp-container{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:3rem;margin-top:2rem;box-shadow:var(--shadow-lg)}
+.dp-hero{display:flex;gap:2.5rem;align-items:center;border-bottom:1px solid var(--border);padding-bottom:2.5rem;margin-bottom:2.5rem}
+.dp-photo{width:150px;height:150px;border-radius:50%;object-fit:cover;border:4px solid var(--accent);flex-shrink:0;box-shadow:0 8px 24px rgba(74,123,200,.2)}
+.dp-photo-ph{width:150px;height:150px;border-radius:50%;background:rgba(74,123,200,.1);border:4px solid rgba(74,123,200,.3);display:flex;align-items:center;justify-content:center;font-size:3.5rem;color:var(--accent);flex-shrink:0}
+.dp-name{font-size:2.2rem;font-weight:900;color:var(--navy);margin-bottom:.4rem}.dp-role{font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:.4rem}.dp-dept{font-size:.95rem;color:var(--muted);line-height:1.6}
+.dp-section{margin-bottom:2.5rem}
+.dp-slabel{font-size:.8rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem;display:block;border-bottom:1px solid var(--border);padding-bottom:.5rem}
+.dp-img{width:100%;max-height:450px;object-fit:cover;border-radius:var(--rl);margin-bottom:2.5rem;box-shadow:var(--shadow)}
+.dp-title{font-size:1.8rem;font-weight:900;color:var(--navy);margin-bottom:1rem;line-height:1.3}
+@media(max-width:600px){.dp-container{padding:1.5rem}.dp-hero{flex-direction:column;text-align:center}.dp-photo,.dp-photo-ph{width:120px;height:120px}}
+/* DASHBOARD */
+#dash{display:none;position:fixed;inset:0;z-index:9900;flex-direction:column;background:#eef1f7}#dash.open{display:flex}
+.dn{background:var(--navy);height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;border-bottom:1px solid rgba(255,255,255,.07);box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:10}
+.dn-brand{font-size:1.2rem;font-weight:900;color:#fff}
 .dl{display:grid;grid-template-columns:240px 1fr;flex:1;overflow:hidden}
-.ds{background:#fff;border-right:1px solid var(--border);padding:1.5rem 1rem;overflow-y:auto;box-shadow:4px 0 15px rgba(0,0,0,.02);z-index:5;}
+.ds{background:#fff;border-right:1px solid var(--border);padding:1.5rem 1rem;overflow-y:auto;z-index:5}
 .dc{padding:2rem;overflow-y:auto;flex:1}
 .dsec{display:none}.dsec.active{display:block}
-.dpt{font-size:1.6rem;font-weight:800;color:var(--navy);margin-bottom:.5rem;letter-spacing:-.02em}
-.dps{font-size:.9rem;color:var(--muted);margin-bottom:2rem}
+.dpt{font-size:1.6rem;font-weight:800;color:var(--navy);margin-bottom:.5rem}.dps{font-size:.9rem;color:var(--muted);margin-bottom:2rem}
 .dcard{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:2rem;margin-bottom:1.5rem;box-shadow:var(--shadow)}
 .dcard h3{font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:1.2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border)}
 .aci-list{display:flex;flex-direction:column;gap:.8rem;margin-bottom:1rem}
-.aci{background:var(--off);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;transition:var(--tr)}
-.aci:hover{border-color:var(--accent);background:#fff;box-shadow:var(--shadow)}
+.aci{background:var(--off);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;transition:var(--tr)}.aci:hover{border-color:var(--accent);background:#fff}
 .aci-h{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
 .dni{width:100%;text-align:left;padding:.6rem 1rem;border-radius:8px;border:none;background:transparent;color:var(--muted);font-size:.9rem;cursor:pointer;transition:var(--tr);font-family:var(--f);margin-bottom:.2rem;display:flex;align-items:center;gap:.6rem;font-weight:600}
-.dni:hover{background:var(--off);color:var(--navy)}
-.dni.active{background:rgba(74,123,200,.1);color:var(--accent);font-weight:700}
+.dni:hover{background:var(--off);color:var(--navy)}.dni.active{background:rgba(74,123,200,.1);color:var(--accent);font-weight:700}
 .dnsep{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gray-light);padding:.5rem 1rem .3rem;margin-top:1rem}
-
-/* UPLOAD COMPONENT */
 .up-wrap{border:2px dashed var(--border);border-radius:var(--r);padding:1.5rem;text-align:center;transition:var(--tr);cursor:pointer;position:relative;overflow:hidden;background:var(--off)}
-.up-wrap:hover, .up-wrap.active-drop{border-color:var(--accent);background:rgba(74,123,200,.04)}
-.up-preview{width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:.8rem;display:none;box-shadow:var(--shadow)}
-.up-preview.show{display:block}
-.up-ph{font-size:2rem;display:block;margin-bottom:.5rem;opacity:.5}
-.up-label{font-size:.85rem;font-weight:600;color:var(--navy)}
-.up-hint{font-size:.7rem;color:var(--muted);margin-top:.4rem;display:block}
-.up-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2;}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem}
-@media(max-width:768px){.dl{grid-template-columns:1fr}.ds{display:none}.g2,.g3{grid-template-columns:1fr}.dc{padding:1rem;}}
-
-/* DEDICATED PAGES (Details) */
-.dp-container{background:#fff; border:1px solid var(--border); border-radius:var(--rl); padding:3rem; margin-top:2rem; box-shadow:var(--shadow-lg);}
-.dp-hero{display:flex; gap:2.5rem; align-items:center; border-bottom:1px solid var(--border); padding-bottom:2.5rem; margin-bottom:2.5rem;}
-.dp-photo{width:150px; height:150px; border-radius:50%; object-fit:cover; border:4px solid var(--accent); flex-shrink:0; box-shadow:0 8px 24px rgba(74,123,200,.2)}
-.dp-photo-ph{width:150px; height:150px; border-radius:50%; background:rgba(74,123,200,.1); border:4px solid rgba(74,123,200,.3); display:flex; align-items:center; justify-content:center; font-size:3.5rem; color:var(--accent); flex-shrink:0;}
-.dp-name{font-size:2.2rem; font-weight:900; color:var(--navy); margin-bottom:.4rem; letter-spacing:-.02em;}
-.dp-role{font-size:1.1rem; color:var(--accent); font-weight:700; margin-bottom:.4rem;}
-.dp-dept{font-size:.95rem; color:var(--muted); line-height:1.6;}
-.dp-section{margin-bottom:2.5rem;}
-.dp-slabel{font-size:.8rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:1.2rem; display:block; border-bottom:1px solid var(--border); padding-bottom:.5rem}
-.dp-img{width:100%; max-height:450px; object-fit:cover; border-radius:var(--rl); margin-bottom:2.5rem; box-shadow:var(--shadow)}
-.dp-title{font-size:1.8rem; font-weight:900; color:var(--navy); margin-bottom:1rem; line-height:1.3;}
-@media(max-width:600px){.dp-container{padding:1.5rem;} .dp-hero{flex-direction:column; text-align:center;} .dp-photo, .dp-photo-ph{width:120px; height:120px;}}
+.up-wrap:hover,.up-wrap.active-drop{border-color:var(--accent);background:rgba(74,123,200,.04)}
+.up-preview{width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:.8rem;display:none;box-shadow:var(--shadow)}.up-preview.show{display:block}
+.up-ph{font-size:2rem;display:block;margin-bottom:.5rem;opacity:.5}.up-label{font-size:.85rem;font-weight:600;color:var(--navy)}.up-hint{font-size:.7rem;color:var(--muted);margin-top:.4rem;display:block}
+.up-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2}
+@media(max-width:768px){.dl{grid-template-columns:1fr}.ds{display:none}.g2,.g3{grid-template-columns:1fr}.dc{padding:1rem}}
 </style>
 </head>
 <body>
-
 <script>
 const SUPABASE_URL  = 'https://rqviytqzrbsmdppcxzwr.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxdml5dHF6cmJzbWRwcGN4endyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2OTYxMzcsImV4cCI6MjA5NTI3MjEzN30.876Ml_UovPdcGqRxmnRwp5Iw0Z4-nR6vdIh1ZnEggio';
 </script>
-
 <div class="toast" id="toast"></div>
 <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<nav id="navbar">
-  <div class="con">
-    <div class="nav-in">
-      <div class="nav-logo" onclick="goPage('home')">
-        <div class="nav-logo-box" id="nav-logo-box"><div class="nav-logo-box-text">ILA<br>MPS</div></div>
-        <div class="nav-logo-nm" id="nav-lab-name">ILAMPS</div>
-      </div>
-      <ul class="nav-links" id="nav-links">
-        <li><a onclick="goPage('home')">Home</a></li>
-        <li><a onclick="goPage('team')">Team</a></li>
-        <li><a onclick="goPage('research')">Research</a></li>
-        <li><a onclick="goPage('publications')">Publications</a></li>
-        <li><a onclick="goPage('news')">News</a></li>
-        <li><a onclick="goPage('gallery')">Gallery</a></li>
-        <li><a onclick="goPage('contact')">Contact</a></li>
-      </ul>
-      <div class="nav-auth">
-        <div id="nav-out" style="display:flex;gap:.5rem">
-          <button class="btn btn-g btn-sm" onclick="openMo('login')">Login</button>
-        </div>
-        <div id="nav-in-logged" style="display:none;gap:.5rem;align-items:center">
-          <button class="btn btn-p btn-sm" onclick="openDash()">Dashboard</button>
-        </div>
-      </div>
-      <div class="nav-ham" id="nav-ham"><span></span><span></span><span></span></div>
+<nav id="navbar"><div class="con"><div class="nav-in">
+  <div class="nav-logo" onclick="goPage('home')">
+    <div class="nav-logo-box" id="nav-logo-box"><div class="nav-logo-box-text">ILA<br>MPS</div></div>
+    <div class="nav-logo-nm" id="nav-lab-name">ILAMPS</div>
+  </div>
+  <ul class="nav-links" id="nav-links">
+    <li><a onclick="goPage('home')">Home</a></li><li><a onclick="goPage('team')">Team</a></li>
+    <li><a onclick="goPage('research')">Research</a></li><li><a onclick="goPage('publications')">Publications</a></li>
+    <li><a onclick="goPage('news')">News</a></li><li><a onclick="goPage('gallery')">Gallery</a></li>
+    <li><a onclick="goPage('contact')">Contact</a></li>
+  </ul>
+  <div class="nav-auth">
+    <div id="nav-out" style="display:flex;gap:.5rem"><button class="btn btn-g btn-sm" onclick="openMo('login')">Login</button></div>
+    <div id="nav-in-logged" style="display:none;gap:.5rem;align-items:center">
+      <button class="btn btn-p btn-sm" onclick="openDash()">Dashboard</button>
     </div>
   </div>
-</nav>
+  <div class="nav-ham" id="nav-ham"><span></span><span></span><span></span></div>
+</div></div></nav>
 
 <div class="page active" id="page-home">
   <section id="hero">
     <div class="hero-bg-grid"></div>
-    <div class="con" style="width: 100%; z-index: 3;">
+    <div class="con" style="width:100%;z-index:3">
       <div class="hero-split">
         <div class="hero-content">
-          <h1 class="hero-title" id="h-name">Interdisciplinary Laboratory for Advanced Material Processing and Simulation (ILAMPS)</h1>
+          <h1 class="hero-title" id="h-name">ILAMPS</h1>
           <div class="hero-badge">Active Research Group</div>
-          <p class="hero-desc" id="h-desc"></p>
+          <p class="hero-desc" id="h-desc">Loading...</p>
           <div class="hero-actions">
             <button class="btn btn-p" onclick="goPage('research')">Explore Research</button>
             <button class="btn btn-g" onclick="goPage('contact')">Join the Lab</button>
           </div>
           <div class="hero-stats">
-            <div onclick="goPage('publications')"><div class="hs-num" id="hs-pubs">—</div><div class="hs-lbl">Publications</div></div>
-            <div onclick="goPage('research')"><div class="hs-num" id="hs-projs">—</div><div class="hs-lbl">Projects</div></div>
-            <div onclick="goPage('team')"><div class="hs-num" id="hs-mems">—</div><div class="hs-lbl">Members</div></div>
+            <div onclick="goPage('publications')" style="cursor:pointer"><div class="hs-num" id="hs-pubs">—</div><div class="hs-lbl">Publications</div></div>
+            <div onclick="goPage('research')" style="cursor:pointer"><div class="hs-num" id="hs-projs">—</div><div class="hs-lbl">Projects</div></div>
+            <div onclick="goPage('team')" style="cursor:pointer"><div class="hs-num" id="hs-mems">—</div><div class="hs-lbl">Members</div></div>
             <div><div class="hs-num" id="hs-founded">—</div><div class="hs-lbl">Founded</div></div>
           </div>
         </div>
@@ -372,195 +268,114 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
       </div>
     </div>
   </section>
-
-  <div class="home-sec gray">
-    <div class="con">
-      <div class="shdr"><span class="slabel">Researchers</span><h2 class="stitle">Meet the Team</h2></div>
-      <div class="team-grid" id="home-team"></div>
-      <a class="view-all" onclick="goPage('team')">View All Members →</a>
-    </div>
-  </div>
-  
-  <div class="home-sec">
-    <div class="con">
-      <div class="shdr"><span class="slabel">Latest Updates</span><h2 class="stitle">News &amp; Announcements</h2></div>
-      <div class="news-grid" id="home-news"></div>
-      <a class="view-all" onclick="goPage('news')">View all news →</a>
-    </div>
-  </div>
-  
-  <div class="home-sec gray">
-    <div class="con">
-      <div class="shdr"><span class="slabel">Recent Work</span><h2 class="stitle">Recent Publications</h2></div>
-      <div class="pub-list" id="home-pubs"></div>
-      <a class="view-all" onclick="goPage('publications')">View all publications →</a>
-    </div>
-  </div>
-
-  <div class="home-sec">
-    <div class="con">
-      <div class="shdr"><span class="slabel">Visuals</span><h2 class="stitle">Recent Gallery</h2></div>
-      <div class="gal-grid" id="home-gallery"></div>
-      <a class="view-all" onclick="goPage('gallery')">Load More Gallery →</a>
-    </div>
-  </div>
+  <div class="home-sec gray"><div class="con"><div class="shdr"><span class="slabel">Researchers</span><h2 class="stitle">Meet the Team</h2></div><div class="team-grid" id="home-team"></div><a class="view-all" onclick="goPage('team')">View All Members →</a></div></div>
+  <div class="home-sec"><div class="con"><div class="shdr"><span class="slabel">Latest Updates</span><h2 class="stitle">News &amp; Announcements</h2></div><div class="news-grid" id="home-news"></div><a class="view-all" onclick="goPage('news')">View all news →</a></div></div>
+  <div class="home-sec gray"><div class="con"><div class="shdr"><span class="slabel">Recent Work</span><h2 class="stitle">Recent Publications</h2></div><div class="pub-list" id="home-pubs"></div><a class="view-all" onclick="goPage('publications')">View all publications →</a></div></div>
+  <div class="home-sec"><div class="con"><div class="shdr"><span class="slabel">Visuals</span><h2 class="stitle">Recent Gallery</h2></div><div class="gal-grid" id="home-gallery"></div><a class="view-all" onclick="goPage('gallery')">Load More →</a></div></div>
 </div>
 
-<div class="page" id="page-team">
-  <div style="padding:4.5rem 0">
-    <div class="con">
-      <div class="shdr"><span class="slabel">Research Group</span><h2 class="stitle">Our Team</h2></div>
-      <div id="team-content"></div>
-      <div id="team-load" class="loading"><div class="spin-el"></div>Loading...</div>
-    </div>
-  </div>
-</div>
+<div class="page" id="page-team"><div style="padding:4.5rem 0"><div class="con">
+  <div class="shdr"><span class="slabel">Research Group</span><h2 class="stitle">Our Team</h2></div>
+  <div id="team-content"></div><div id="team-load" class="loading"><div class="spin-el"></div>Loading...</div>
+</div></div></div>
 
-<div class="page" id="page-research">
-  <div style="padding:4.5rem 0">
-    <div class="con">
-      <div class="shdr"><span class="slabel">Our Focus</span><h2 class="stitle">Research Areas</h2></div>
-      <div class="res-grid" id="research-grid"></div>
-      <div style="margin-top:4rem"><div class="shdr"><span class="slabel">Active Work</span><h2 class="stitle">Ongoing Projects</h2></div><div class="proj-list" id="proj-list"></div></div>
-    </div>
-  </div>
-</div>
+<div class="page" id="page-research"><div style="padding:4.5rem 0"><div class="con">
+  <div class="shdr"><span class="slabel">Our Focus</span><h2 class="stitle">Research Areas</h2></div>
+  <div class="res-grid" id="research-grid"></div>
+  <div style="margin-top:4rem"><div class="shdr"><span class="slabel">Active Work</span><h2 class="stitle">Ongoing Projects</h2></div><div class="proj-list" id="proj-list"></div></div>
+</div></div></div>
 
-<div class="page" id="page-publications">
-  <div style="padding:4.5rem 0">
-    <div class="con">
-      <div class="shdr"><span class="slabel">Scholarly Output</span><h2 class="stitle">All Publications <span id="pub-total-count" style="font-size:1.2rem;color:var(--accent);font-weight:800"></span></h2></div>
-      <div class="pub-list" id="all-pubs"></div>
-    </div>
-  </div>
-</div>
+<div class="page" id="page-publications"><div style="padding:4.5rem 0"><div class="con">
+  <div class="shdr"><span class="slabel">Scholarly Output</span><h2 class="stitle">All Publications <span id="pub-total-count" style="font-size:1.2rem;color:var(--accent);font-weight:800"></span></h2></div>
+  <div class="pub-list" id="all-pubs"></div>
+</div></div></div>
 
-<div class="page" id="page-news">
-  <div style="padding:4.5rem 0">
-    <div class="con">
-      <div class="shdr"><span class="slabel">Latest Updates</span><h2 class="stitle">News &amp; Announcements</h2></div>
-      <div class="news-grid" id="all-news"></div>
-    </div>
-  </div>
-</div>
+<div class="page" id="page-news"><div style="padding:4.5rem 0"><div class="con">
+  <div class="shdr"><span class="slabel">Latest Updates</span><h2 class="stitle">News &amp; Announcements</h2></div>
+  <div class="news-grid" id="all-news"></div>
+</div></div></div>
 
-<div class="page" id="page-gallery">
-  <div style="padding:4.5rem 0">
-    <div class="con">
-      <div class="shdr"><span class="slabel">Lab Life</span><h2 class="stitle">Group Gallery</h2></div>
-      <div class="gal-grid" id="gal-grid"></div>
-    </div>
-  </div>
-</div>
+<div class="page" id="page-gallery"><div style="padding:4.5rem 0"><div class="con">
+  <div class="shdr"><span class="slabel">Lab Life</span><h2 class="stitle">Group Gallery</h2></div>
+  <div class="gal-grid" id="gal-grid"></div>
+</div></div></div>
 
 <div class="page" id="page-contact">
-  <div style="padding:4.5rem 0;background:var(--navy);min-height:100vh">
-    <div class="con">
-      <div class="shdr"><span class="slabel" style="color:var(--accent-light)">Get In Touch</span><h2 class="stitle" style="color:#fff">Contact &amp; Join Us</h2></div>
-      <div class="contact-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start">
-        <div>
-          <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">📍</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Address</h4><p id="c-addr" style="color:rgba(255,255,255,.7);line-height:1.6"></p></div></div>
-          <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">✉️</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Email</h4><a id="c-email" href="" style="color:rgba(255,255,255,.7)"></a></div></div>
-        </div>
-        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);padding:2.5rem">
-          <h3 style="color:#fff;font-size:1.5rem;margin-bottom:1rem">Prospective Members</h3>
-          <p id="c-join" style="color:rgba(255,255,255,.7);margin-bottom:1.5rem;line-height:1.7"></p>
-          <ul id="c-reqs" style="list-style:none;margin-bottom:2rem;color:rgba(255,255,255,.7);line-height:2"></ul>
-          <a id="c-apply" href="#" class="btn btn-p">Send Application Email</a>
-        </div>
+  <div style="padding:4.5rem 0;background:var(--navy);min-height:100vh"><div class="con">
+    <div class="shdr"><span class="slabel" style="color:var(--accent-light)">Get In Touch</span><h2 class="stitle" style="color:#fff">Contact &amp; Join Us</h2></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start">
+      <div>
+        <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">📍</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Address</h4><p id="c-addr" style="color:rgba(255,255,255,.7);line-height:1.6"></p></div></div>
+        <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">✉️</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Email</h4><a id="c-email" href="" style="color:rgba(255,255,255,.7)"></a></div></div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);padding:2.5rem">
+        <h3 style="color:#fff;font-size:1.5rem;margin-bottom:1rem">Prospective Members</h3>
+        <p id="c-join" style="color:rgba(255,255,255,.7);margin-bottom:1.5rem;line-height:1.7"></p>
+        <ul id="c-reqs" style="list-style:none;margin-bottom:2rem;color:rgba(255,255,255,.7);line-height:2"></ul>
+        <a id="c-apply" href="#" class="btn btn-p">Send Application Email</a>
       </div>
     </div>
-  </div>
+  </div></div>
 </div>
 
 <div class="page" id="page-profile"><div style="padding:4.5rem 0"><div class="con" id="dp-profile-body"></div></div></div>
 <div class="page" id="page-publication"><div style="padding:4.5rem 0"><div class="con" id="dp-pub-body"></div></div></div>
 <div class="page" id="page-newsdetail"><div style="padding:4.5rem 0"><div class="con" id="dp-news-body"></div></div></div>
 
-<footer>
-  <div class="con">
-    <div class="footer-grid">
-      <div>
-        <div class="f-title" style="font-size:1.4rem; line-height:1.5">ILAMPS</div>
-        <div class="f-logos">
-          <div class="f-logo-box" id="f-logo-box-1" style="display:none"><img id="f-logo-ilamps" src=""></div>
-          <div class="f-logo-box" id="f-logo-box-2" style="display:none"><img id="f-logo-just" src=""></div>
-        </div>
-      </div>
-      <div>
-        <div class="f-title">Contact</div>
-        <div style="display:flex;gap:10px;margin-bottom:.8rem;align-items:flex-start"><span>📍</span><p id="f-addr"></p></div>
-        <div style="display:flex;gap:10px;align-items:center"><span>✉️</span><a id="f-email" class="f-link" style="margin:0"></a></div>
-      </div>
-      <div>
-        <div class="f-title">Quick Links</div>
-        <a onclick="goPage('team')" class="f-link">Team</a>
-        <a onclick="goPage('publications')" class="f-link">Publications</a>
-        <a onclick="goPage('contact')" class="f-link">Contact Us</a>
-      </div>
-    </div>
-    <div class="f-bottom">
-      <p id="footer-copy">© ILAMPS</p>
-    </div>
+<footer><div class="con">
+  <div class="footer-grid">
+    <div><div class="f-title">ILAMPS</div><div class="f-logos"><div class="f-logo-box" id="f-logo-box-1" style="display:none"><img id="f-logo-ilamps" src=""></div><div class="f-logo-box" id="f-logo-box-2" style="display:none"><img id="f-logo-just" src=""></div></div></div>
+    <div><div class="f-title">Contact</div><div style="display:flex;gap:10px;margin-bottom:.8rem;align-items:flex-start"><span>📍</span><p id="f-addr"></p></div><div style="display:flex;gap:10px;align-items:center"><span>✉️</span><a id="f-email" class="f-link" style="margin:0"></a></div></div>
+    <div><div class="f-title">Quick Links</div><a onclick="goPage('team')" class="f-link">Team</a><a onclick="goPage('publications')" class="f-link">Publications</a><a onclick="goPage('contact')" class="f-link">Contact Us</a></div>
   </div>
-</footer>
+  <div class="f-bottom"><p id="footer-copy">© ILAMPS</p></div>
+</div></footer>
 
-<div class="mo" id="mo-login">
-  <div class="mb" style="max-width:420px">
-    <div class="mh"><h2>Lab Login</h2><button class="mc" onclick="closeMo('login')">✕</button></div>
-    <div class="mbody">
-      <div class="ff"><label>Email</label><input type="email" id="l-email"></div>
-      <div class="ff"><label>Password</label><input type="password" id="l-pwd"></div>
-      <div class="ferr" id="l-err"></div>
-      <button class="btn btn-p" style="width:100%;justify-content:center;margin-top:.5rem" id="l-btn" onclick="signIn()">Sign In →</button>
-    </div>
-    <div class="mft" style="display:flex; justify-content:space-between; align-items:center;">
-      <span>No account?</span> <button class="btn btn-o btn-sm" onclick="swMo('login','signup')">Request Access</button>
-    </div>
+<div class="mo" id="mo-login"><div class="mb" style="max-width:420px">
+  <div class="mh"><h2>Lab Login</h2><button class="mc" onclick="closeMo('login')">✕</button></div>
+  <div class="mbody">
+    <div class="ff"><label>Email</label><input type="email" id="l-email"></div>
+    <div class="ff"><label>Password</label><input type="password" id="l-pwd"></div>
+    <div class="ferr" id="l-err" style="display:none"></div>
+    <button class="btn btn-p" style="width:100%;justify-content:center;margin-top:.5rem" id="l-btn" onclick="signIn()">Sign In →</button>
   </div>
-</div>
-<div class="mo" id="mo-signup">
-  <div class="mb" style="max-width:450px">
-    <div class="mh"><h2>Request Access</h2><button class="mc" onclick="closeMo('signup')">✕</button></div>
-    <div class="mbody">
-      <div class="ff"><label>Full Name</label><input type="text" id="s-name"></div>
-      <div class="ff"><label>Email</label><input type="email" id="s-email"></div>
-      <div class="ff"><label>Password (min 8 chars)</label><input type="password" id="s-pwd"></div>
-      <div class="ferr" id="s-err"></div>
-      <button class="btn btn-p" style="width:100%;justify-content:center;margin-top:.5rem" id="s-btn" onclick="signUp()">Create Account →</button>
-    </div>
-    <div class="mft" style="display:flex; justify-content:space-between; align-items:center;">
-      <span>Have account?</span> <button class="btn btn-o btn-sm" onclick="swMo('signup','login')">Sign In</button>
-    </div>
-  </div>
-</div>
+  <div class="mft">No account? <a onclick="swMo('login','signup')">Request Access</a></div>
+</div></div>
 
-<div class="mo" id="mo-orcid" style="z-index:9999;">
-  <div class="mb" style="max-width:600px">
-    <div class="mh"><h2>Select from ORCID</h2><button class="mc" onclick="closeMo('orcid')">✕</button></div>
-    <div class="mbody" style="padding:1.5rem;display:flex;flex-direction:column;gap:1rem">
-      <div id="orcid-list" style="display:flex;flex-direction:column;gap:.8rem"></div>
-    </div>
+<div class="mo" id="mo-signup"><div class="mb" style="max-width:450px">
+  <div class="mh"><h2>Request Access</h2><button class="mc" onclick="closeMo('signup')">✕</button></div>
+  <div class="mbody">
+    <div class="ff"><label>Full Name</label><input type="text" id="s-name"></div>
+    <div class="ff"><label>Email</label><input type="email" id="s-email"></div>
+    <div class="ff"><label>Password (min 8)</label><input type="password" id="s-pwd"></div>
+    <div class="ferr" id="s-err" style="display:none"></div>
+    <button class="btn btn-p" style="width:100%;justify-content:center;margin-top:.5rem" id="s-btn" onclick="signUp()">Create Account →</button>
   </div>
-</div>
+  <div class="mft">Have account? <a onclick="swMo('signup','login')">Sign In</a></div>
+</div></div>
 
-<div class="mo" id="mo-crop" style="z-index:9999;">
-  <div class="mb" style="max-width:600px">
-    <div class="mh"><h2>Crop Image</h2><button class="mc" onclick="cancelCrop()">✕</button></div>
-    <div class="mbody" style="padding:1.5rem;display:flex;flex-direction:column;gap:1.5rem">
-      <div style="max-height:400px;min-height:250px;background:#000;border-radius:var(--r);overflow:hidden;border:1px solid var(--border)"><img id="crop-img" src="" style="display:block;max-width:100%"></div>
-      <div style="display:flex;justify-content:flex-end;gap:1rem;padding-top:.5rem">
-        <button class="btn btn-o" onclick="cancelCrop()">Cancel</button>
-        <button class="btn btn-p" onclick="confirmCrop()">✓ Use This Image</button>
-      </div>
+<div class="mo" id="mo-orcid" style="z-index:9999"><div class="mb" style="max-width:600px">
+  <div class="mh"><h2>Select from ORCID</h2><button class="mc" onclick="closeMo('orcid')">✕</button></div>
+  <div class="mbody" style="padding:1.5rem;display:flex;flex-direction:column;gap:1rem">
+    <div id="orcid-list" style="display:flex;flex-direction:column;gap:.8rem"></div>
+  </div>
+</div></div>
+
+<div class="mo" id="mo-crop" style="z-index:9999"><div class="mb" style="max-width:600px">
+  <div class="mh"><h2>Crop Image</h2><button class="mc" onclick="cancelCrop()">✕</button></div>
+  <div class="mbody" style="padding:1.5rem;display:flex;flex-direction:column;gap:1.5rem">
+    <div style="max-height:400px;min-height:250px;background:#000;border-radius:var(--r);overflow:hidden;border:1px solid var(--border)"><img id="crop-img" src="" style="display:block;max-width:100%"></div>
+    <div style="display:flex;justify-content:flex-end;gap:1rem">
+      <button class="btn btn-o" onclick="cancelCrop()">Cancel</button>
+      <button class="btn btn-p" onclick="confirmCrop()">✓ Use This Image</button>
     </div>
   </div>
-</div>
+</div></div>
 
 <div id="dash">
   <div class="dn">
-    <div class="dn-brand">ILAMPS Admin</div>
-    <div style="display:flex;gap:1rem"><button class="btn btn-g btn-sm" onclick="closeDash()">← Back</button><button class="btn btn-d btn-sm" onclick="signOut()">Logout</button></div>
+    <div class="dn-brand">ILAMPS Dashboard</div>
+    <div style="display:flex;gap:1rem"><button class="btn btn-g btn-sm" onclick="closeDash()">← Back to Site</button><button class="btn btn-d btn-sm" onclick="signOut()">Logout</button></div>
   </div>
   <div class="dl">
     <div class="ds">
@@ -568,9 +383,9 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
       <button class="dni" data-sec="d-mypubs">📄 My Publications</button>
       <div id="admin-nav" style="display:none">
         <div class="dnsep">System Admin</div>
-        <button class="dni" data-sec="d-lab">⚙️ Settings & Logos</button>
+        <button class="dni" data-sec="d-lab">⚙️ Settings &amp; Logos</button>
         <button class="dni" data-sec="d-hero">🖼️ Hero Slides</button>
-        <button class="dni" data-sec="d-members">👥 Members Approvals</button>
+        <button class="dni" data-sec="d-members">👥 Members</button>
         <button class="dni" data-sec="d-research">🔬 Research Areas</button>
         <button class="dni" data-sec="d-ongoing">⚡ Projects</button>
         <button class="dni" data-sec="d-news">📢 News</button>
@@ -580,153 +395,145 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     <div class="dc">
 
       <div class="dsec active" id="d-profile">
-        <div class="dpt">My Profile</div>
-        <div class="dps">Your public profile. Provide your ORCID link to auto-fetch publications.</div>
-        <div class="dcard">
-          <div class="d2">
-            <div class="ff">
-              <label>Photo (Square)</label>
-              <div class="up-wrap" onclick="prepareUpload('profiles', 1, url=>{profilePhotoUrl=url;showPrev('prev-profile','ph-profile',url)})">
-                <img class="up-preview" id="prev-profile" src="">
-                <span class="up-ph" id="ph-profile">📷</span>
-                <span class="up-label">Click to upload</span>
-                <span class="up-hint">Or click here and press Ctrl+V to paste</span>
-                <input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
-              </div>
-            </div>
-            <div>
-              <div class="ff"><label>Full Name</label><input type="text" id="p-name"></div>
-              <div class="ff"><label>Hierarchy Role (Used for Sorting)</label>
-                <select id="p-role" onchange="if(this.value==='Custom'){$('p-custom-role').style.display='block'}else{$('p-custom-role').style.display='none';$('p-custom-role').value=''}">
-                  <option value="Principal Investigator">Principal Investigator</option>
-                  <option value="Assistant Investigator">Assistant Investigator</option>
-                  <option value="Research Assistant">Research Assistant</option>
-                  <option value="PhD. Student">PhD. Student</option>
-                  <option value="MSc. Student">MSc. Student</option>
-                  <option value="Graduate Research Student">Graduate Research Student</option>
-                  <option value="Undergraduate Student">Undergraduate Student</option>
-                  <option value="Lab Technician">Lab Technician</option>
-                  <option value="Alumni">Alumni</option>
-                  <option value="Custom">Custom Role...</option>
-                </select>
-                <input type="text" id="p-custom-role" placeholder="Type custom role here" style="display:none; margin-top:.5rem">
-              </div>
-              <div class="ff"><label>Display Designation (e.g. Lead Researcher)</label><input type="text" id="p-desig" placeholder="Visible on your card"></div>
+        <div class="dpt">My Profile</div><div class="dps">Your public profile on the Team page.</div>
+        <div class="dcard"><div class="g2">
+          <div class="ff"><label>Photo</label>
+            <div class="up-wrap" onclick="prepareUpload('profiles',1,url=>{profilePhotoUrl=url;showPrev('prev-profile','ph-profile',url)})">
+              <img class="up-preview" id="prev-profile" src=""><span class="up-ph" id="ph-profile">📷</span>
+              <span class="up-label">Click to upload photo</span><span class="up-hint">Crop after selecting</span>
+              <input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
             </div>
           </div>
-          <div class="g2">
-             <div class="ff"><label>Department</label><input type="text" id="p-dept"></div>
-             <div class="ff"><label>University</label><input type="text" id="p-uni"></div>
+          <div>
+            <div class="ff"><label>Full Name</label><input type="text" id="p-name"></div>
+            <div class="ff"><label>Role / Position</label>
+              <select id="p-role" onchange="if(this.value==='Custom'){document.getElementById('p-custom-role').style.display='block'}else{document.getElementById('p-custom-role').style.display='none'}">
+                <option>Principal Investigator</option><option>Assistant Investigator</option><option>Research Assistant</option>
+                <option>PhD. Student</option><option>MSc. Student</option><option>Graduate Research Student</option>
+                <option>Undergraduate Student</option><option>Lab Technician</option><option>Alumni</option><option value="Custom">Custom...</option>
+              </select>
+              <input type="text" id="p-custom-role" placeholder="Custom role" style="display:none;margin-top:.5rem">
+            </div>
+            <div class="ff"><label>Display Designation</label><input type="text" id="p-desig" placeholder="e.g. Lead Researcher"></div>
           </div>
-          <div class="ff"><label>Research Topic / Tagline</label><input type="text" id="p-research"></div>
-          <div class="ff"><label>Detailed Biography</label><textarea id="p-bio" style="min-height:100px"></textarea></div>
-          <div class="ff"><label>Research Interests (comma or line separated)</label><textarea id="p-interests" style="min-height:70px"></textarea></div>
-          <div class="g2">
-            <div class="ff"><label>Public Email</label><input type="email" id="p-email"></div>
-            <div class="ff"><label>Website</label><input type="text" id="p-website"></div>
-            <div class="ff"><label>LinkedIn Link</label><input type="text" id="p-linkedin"></div>
-            <div class="ff"><label>ORCID Link (Required for auto-fetch)</label><input type="text" id="p-orcid" placeholder="https://orcid.org/0000-..."></div>
-          </div>
-          <button class="btn btn-p" onclick="saveProfile()">💾 Save Profile</button>
         </div>
+        <div class="g2"><div class="ff"><label>Department</label><input type="text" id="p-dept"></div><div class="ff"><label>University</label><input type="text" id="p-uni"></div></div>
+        <div class="ff"><label>Research Topic</label><input type="text" id="p-research"></div>
+        <div class="ff"><label>Biography</label><textarea id="p-bio" style="min-height:100px"></textarea></div>
+        <div class="ff"><label>Research Interests (comma or newline separated)</label><textarea id="p-interests" style="min-height:70px"></textarea></div>
+        <div class="g2">
+          <div class="ff"><label>Email</label><input type="email" id="p-email"></div>
+          <div class="ff"><label>Website</label><input type="text" id="p-website"></div>
+          <div class="ff"><label>LinkedIn</label><input type="text" id="p-linkedin"></div>
+          <div class="ff"><label>ORCID</label><input type="text" id="p-orcid"></div>
+        </div>
+        <button class="btn btn-p" onclick="saveProfile()">💾 Save Profile</button></div>
       </div>
 
       <div class="dsec" id="d-mypubs">
-        <div class="dpt" style="display:flex;align-items:center;justify-content:space-between">
-          Publications
-          <button class="btn btn-o btn-sm" onclick="fetchFromOrcid()">Fetch from ORCID</button>
+        <div class="dpt" style="display:flex;align-items:center;justify-content:space-between">Publications
+          <button class="btn btn-o btn-sm" onclick="fetchFromOrcid()">🔗 Fetch from ORCID</button>
         </div>
-        <div class="dcard">
-          <h3 id="pub-form-title">Add Publication</h3>
+        <div class="dcard"><h3 id="pub-form-title">Add Publication</h3>
+          <div class="g2">
+            <div class="ff"><label>Thumbnail (Square - shown in list)</label>
+              <div class="up-wrap" onclick="prepareUpload('publications',1,url=>{pubThumbUrl=url;showPrev('prev-pub-thumb','ph-pub-thumb',url)})">
+                <img class="up-preview" id="prev-pub-thumb" src=""><span class="up-ph" id="ph-pub-thumb">🔳</span>
+                <span class="up-label">Upload Thumbnail</span>
+                <input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
+              </div>
+            </div>
+            <div class="ff"><label>Detail Image (shown in full view)</label>
+              <div class="up-wrap" onclick="prepareUpload('pub-detail',16/9,url=>{pubDetailUrl=url;showPrev('prev-pub-detail','ph-pub-detail',url)})">
+                <img class="up-preview" id="prev-pub-detail" src=""><span class="up-ph" id="ph-pub-detail">🖼️</span>
+                <span class="up-label">Upload Detail Image</span>
+                <input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
+              </div>
+            </div>
+          </div>
           <div class="ff"><label>Title</label><input type="text" id="np-t"></div>
-          <div class="ff">
-            <label>Authors</label>
-            <div class="authors-chips" id="np-auth-chips" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem"></div>
+          <div class="ff"><label>Authors</label>
+            <div id="np-auth-chips" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem;min-height:28px"></div>
             <div class="g2" style="margin-top:.4rem">
               <div style="display:flex;gap:.5rem"><select id="np-auth-select" style="flex:1"></select><button class="btn btn-o btn-sm" onclick="addAuthorMember()">Add Member</button></div>
-              <div style="display:flex;gap:.5rem"><input type="text" id="np-auth-custom" placeholder="Custom name..." style="flex:1"><button class="btn btn-o btn-sm" onclick="addAuthorCustom()">Add External</button></div>
+              <div style="display:flex;gap:.5rem"><input type="text" id="np-auth-custom" placeholder="Custom name..." style="flex:1"><button class="btn btn-o btn-sm" onclick="addAuthorCustom()">Add Custom</button></div>
             </div>
           </div>
           <div class="g3">
             <div class="ff"><label>Date</label><input type="date" id="np-date"></div>
-            <div class="ff"><label>Year</label><input type="text" id="np-yr"></div>
+            <div class="ff"><label>Year</label><input type="text" id="np-yr" placeholder="2025"></div>
             <div class="ff"><label>Type</label><select id="np-type"><option>Journal Paper</option><option>Conference Paper</option><option>Preprint</option><option>Book Chapter</option></select></div>
           </div>
           <div class="g2">
-            <div class="ff"><label>Journal / Conference Name</label><input type="text" id="np-venue"></div>
+            <div class="ff"><label>Journal / Conference</label><input type="text" id="np-venue"></div>
             <div class="ff"><label>Status</label><select id="np-status"><option>Published</option><option>Accepted</option><option>Under Review</option><option>Submitted</option></select></div>
           </div>
           <div class="ff"><label>Abstract</label><textarea id="np-abs" style="min-height:90px"></textarea></div>
           <div class="ff"><label>DOI / Link</label><input type="text" id="np-doi"></div>
-          <div style="display:flex;gap:1rem;">
-             <button class="btn btn-p" id="btn-save-pub" onclick="savePub()">+ Save Publication</button>
-             <button class="btn btn-edit" id="btn-cancel-pub" style="display:none" onclick="resetPubForm()">Cancel Edit</button>
+          <div style="display:flex;gap:1rem">
+            <button class="btn btn-p" id="btn-save-pub" onclick="savePub()">+ Save Publication</button>
+            <button class="btn btn-edit" id="btn-cancel-pub" style="display:none" onclick="resetPubForm()">Cancel Edit</button>
           </div>
         </div>
         <div class="dcard"><h3>Manage Papers</h3><div id="my-pubs"></div></div>
       </div>
 
       <div class="dsec" id="d-lab">
-        <div class="dpt">Settings & Logos</div>
-        <div class="dcard">
-          <div class="d2">
-            <div class="ff">
-              <label>ILAMPS Logo</label>
-              <div class="up-wrap" onclick="prepareUpload('logos',NaN,url=>{setVal('ls-logo',url);showPrev('prev-logo','ph-logo',url);updateFavicon(url)})">
-                <img class="up-preview" id="prev-logo" src=""><span class="up-ph" id="ph-logo">🏛️</span>
-                <span class="up-label">Upload or Paste Logo</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
-              </div>
-              <input type="hidden" id="ls-logo">
+        <div class="dpt">Settings &amp; Logos</div>
+        <div class="dcard"><div class="g2">
+          <div class="ff"><label>ILAMPS Logo</label>
+            <div class="up-wrap" onclick="prepareUpload('logos',NaN,url=>{setVal('ls-logo',url);showPrev('prev-logo','ph-logo',url);updateFavicon(url)})">
+              <img class="up-preview" id="prev-logo" src=""><span class="up-ph" id="ph-logo">🏛️</span>
+              <span class="up-label">Upload Logo (PNG transparent)</span>
+              <input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
             </div>
-            <div class="ff">
-              <label>JUST Logo (University)</label>
-              <div class="up-wrap" onclick="prepareUpload('logos',NaN,url=>{setVal('ls-just-logo',url);showPrev('prev-just-logo','ph-just-logo',url);})">
-                <img class="up-preview" id="prev-just-logo" src=""><span class="up-ph" id="ph-just-logo">🏫</span>
-                <span class="up-label">Upload or Paste Logo</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
-              </div>
-              <input type="hidden" id="ls-just-logo">
-            </div>
+            <input type="hidden" id="ls-logo">
           </div>
-          <div class="g2"><div class="ff"><label>Lab Full Name</label><input type="text" id="ls-fullname"></div><div class="ff"><label>Lab Short Name</label><input type="text" id="ls-name"></div></div>
-          <div class="g3"><div class="ff"><label>Founded Year</label><input type="text" id="ls-founded"></div><div class="ff"><label>University</label><input type="text" id="ls-uni"></div><div class="ff"><label>Department</label><input type="text" id="ls-dept"></div></div>
-          <div class="ff"><label>About Lab Intro Paragraph</label><textarea id="ls-a1" style="min-height:80px"></textarea></div>
-          <div class="ff"><label>Address</label><textarea id="ls-addr"></textarea></div>
-          <div class="g2"><div class="ff"><label>Email</label><input type="email" id="ls-email"></div><div class="ff"><label>Phone</label><input type="text" id="ls-phone"></div></div>
-          <button class="btn btn-p" onclick="saveLabSettings()">💾 Save Settings</button>
+          <div class="ff"><label>JUST University Logo</label>
+            <div class="up-wrap" onclick="prepareUpload('logos',NaN,url=>{setVal('ls-just-logo',url);showPrev('prev-just-logo','ph-just-logo',url)})">
+              <img class="up-preview" id="prev-just-logo" src=""><span class="up-ph" id="ph-just-logo">🏫</span>
+              <span class="up-label">Upload University Logo</span>
+              <input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
+            </div>
+            <input type="hidden" id="ls-just-logo">
+          </div>
         </div>
+        <div class="g2"><div class="ff"><label>Lab Full Name</label><input type="text" id="ls-fullname"></div><div class="ff"><label>Lab Short Name</label><input type="text" id="ls-name"></div></div>
+        <div class="g3"><div class="ff"><label>Founded Year</label><input type="text" id="ls-founded"></div><div class="ff"><label>University</label><input type="text" id="ls-uni"></div><div class="ff"><label>Department</label><input type="text" id="ls-dept"></div></div>
+        <div class="ff"><label>About</label><textarea id="ls-a1" style="min-height:80px"></textarea></div>
+        <div class="ff"><label>Address</label><textarea id="ls-addr"></textarea></div>
+        <div class="g2"><div class="ff"><label>Email</label><input type="email" id="ls-email"></div><div class="ff"><label>Phone</label><input type="text" id="ls-phone"></div></div>
+        <div class="ff"><label>Join Us Text</label><textarea id="ls-join-text"></textarea></div>
+        <div class="ff"><label>Join Requirements (one per line)</label><textarea id="ls-join-reqs" placeholder="Strong math background&#10;Python programming"></textarea></div>
+        <button class="btn btn-p" onclick="saveLabSettings()">💾 Save All Settings</button></div>
       </div>
 
       <div class="dsec" id="d-hero">
-        <div class="dpt">Hero Slides</div>
-        <div class="dcard">
-          <div class="ff">
-            <label>Slide Image (Automatically crops to 4:3)</label>
+        <div class="dpt">Hero Slides</div><div class="dcard">
+          <div class="ff"><label>Slide Image (4:3 recommended)</label>
             <div class="up-wrap" onclick="prepareUpload('slides',4/3,url=>{setVal('ns-url',url);showPrev('prev-slide','ph-slide',url)})">
               <img class="up-preview" id="prev-slide" src=""><span class="up-ph" id="ph-slide">🖼️</span>
-              <span class="up-label">Upload or Paste Slide</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
+              <span class="up-label">Upload Slide Image</span>
+              <input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
             </div>
           </div>
           <input type="hidden" id="ns-url">
-          <div class="ff"><label>Caption</label><input type="text" id="ns-cap"></div>
+          <div class="ff"><label>Caption (optional)</label><input type="text" id="ns-cap"></div>
           <button class="btn btn-p" onclick="addSlide()">+ Add Slide</button>
         </div>
         <div class="dcard"><h3>Current Slides</h3><div class="aci-list" id="slides-list"></div></div>
       </div>
 
-      <div class="dsec" id="d-members">
-        <div class="dpt">Members Approvals</div>
-        <div class="dcard"><h3>All Members</h3><div id="members-list"></div></div>
-      </div>
+      <div class="dsec" id="d-members"><div class="dpt">Members</div><div class="dcard"><h3>All Members</h3><div id="members-list"></div></div></div>
 
       <div class="dsec" id="d-research">
         <div class="dpt">Research Areas</div>
-        <div class="dcard">
-          <h3 id="res-form-title">Add Area</h3>
-          <div class="g2"><div class="ff"><label>Icon (emoji)</label><input type="text" id="ra-icon"></div><div class="ff"><label>Title</label><input type="text" id="ra-title"></div></div>
-          <div class="ff"><label>Description</label><textarea id="ra-desc" style="min-height:80px"></textarea></div>
-          <div style="display:flex;gap:1rem;">
+        <div class="dcard"><h3 id="res-form-title">Add Area</h3>
+          <div class="g2"><div class="ff"><label>Icon</label><input type="text" id="ra-icon" placeholder="🔬"></div><div class="ff"><label>Title</label><input type="text" id="ra-title"></div></div>
+          <div class="ff"><label>Description</label><textarea id="ra-desc"></textarea></div>
+          <div style="display:flex;gap:1rem">
             <button class="btn btn-p" id="btn-save-res" onclick="saveResearch()">+ Save Area</button>
-            <button class="btn btn-edit" id="btn-cancel-res" style="display:none" onclick="resetResForm()">Cancel Edit</button>
+            <button class="btn btn-edit" id="btn-cancel-res" style="display:none" onclick="resetResForm()">Cancel</button>
           </div>
         </div>
         <div class="dcard"><h3>Current Areas</h3><div class="aci-list" id="research-admin"></div></div>
@@ -734,14 +541,13 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
       <div class="dsec" id="d-ongoing">
         <div class="dpt">Projects</div>
-        <div class="dcard">
-          <h3 id="proj-form-title">Add Project</h3>
+        <div class="dcard"><h3 id="proj-form-title">Add Project</h3>
           <div class="ff"><label>Title</label><input type="text" id="op-t"></div>
-          <div class="g2"><div class="ff"><label>Status</label><select id="op-s"><option value="active">Active</option><option value="completed">Completed</option><option value="planned">Planned</option></select></div><div class="ff"><label>Members (comma sep names)</label><input type="text" id="op-m"></div></div>
-          <div class="ff"><label>Description</label><textarea id="op-d" style="min-height:80px"></textarea></div>
-          <div style="display:flex;gap:1rem;">
-             <button class="btn btn-p" id="btn-save-proj" onclick="saveProject()">+ Save Project</button>
-             <button class="btn btn-edit" id="btn-cancel-proj" style="display:none" onclick="resetProjForm()">Cancel Edit</button>
+          <div class="g2"><div class="ff"><label>Status</label><select id="op-s"><option value="active">Active</option><option value="completed">Completed</option><option value="planned">Planned</option></select></div><div class="ff"><label>Members (comma separated)</label><input type="text" id="op-m"></div></div>
+          <div class="ff"><label>Description</label><textarea id="op-d"></textarea></div>
+          <div style="display:flex;gap:1rem">
+            <button class="btn btn-p" id="btn-save-proj" onclick="saveProject()">+ Save Project</button>
+            <button class="btn btn-edit" id="btn-cancel-proj" style="display:none" onclick="resetProjForm()">Cancel</button>
           </div>
         </div>
         <div class="dcard"><h3>Current Projects</h3><div class="aci-list" id="proj-admin"></div></div>
@@ -749,20 +555,31 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
       <div class="dsec" id="d-news">
         <div class="dpt">News</div>
-        <div class="dcard">
-          <h3 id="news-form-title">Add News</h3>
-          <div class="ff">
-            <div class="up-wrap" onclick="prepareUpload('news',16/9,url=>{newsImgUrl=url;showPrev('prev-news-img','ph-news-img',url)})">
-              <img class="up-preview" id="prev-news-img" src=""><span class="up-ph" id="ph-news-img">📰</span>
-              <span class="up-label">Upload or Paste Cover</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
+        <div class="dcard"><h3 id="news-form-title">Add News</h3>
+          <div class="g2">
+            <div class="ff">
+              <label>Thumbnail <small style="font-weight:400;color:var(--muted)">(card list)</small></label>
+              <div class="up-wrap" onclick="prepareUpload('news',4/3,url=>{newsThumbUrl=url;showPrev('prev-nw-thumb','ph-nw-thumb',url)})">
+                <img class="up-preview" id="prev-nw-thumb" src=""><span class="up-ph" id="ph-nw-thumb">📰</span>
+                <span class="up-label">Square/Landscape Thumbnail</span>
+                <input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
+              </div>
+            </div>
+            <div class="ff">
+              <label>Detail Image <small style="font-weight:400;color:var(--muted)">(full view)</small></label>
+              <div class="up-wrap" onclick="prepareUpload('news-detail',16/9,url=>{newsImgUrl=url;showPrev('prev-news-img','ph-news-img',url)})">
+                <img class="up-preview" id="prev-news-img" src=""><span class="up-ph" id="ph-news-img">🖼️</span>
+                <span class="up-label">Detail Banner Image</span>
+                <input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
+              </div>
             </div>
           </div>
-          <div class="g2"><div class="ff"><label>Date (Text)</label><input type="text" id="nw-d"></div><div class="ff"><label>Category</label><select id="nw-cat"><option>General</option><option>Publication</option><option>Event</option><option>Award</option></select></div></div>
+          <div class="g2"><div class="ff"><label>Date</label><input type="date" id="nw-date"></div><div class="ff"><label>Category</label><select id="nw-cat"><option>General</option><option>Publication</option><option>Event</option><option>Award</option></select></div></div>
           <div class="ff"><label>Headline</label><input type="text" id="nw-t"></div>
           <div class="ff"><label>Description</label><textarea id="nw-desc" style="min-height:90px"></textarea></div>
-          <div style="display:flex;gap:1rem;">
+          <div style="display:flex;gap:1rem">
             <button class="btn btn-p" id="btn-save-news" onclick="saveNews()">+ Save News</button>
-            <button class="btn btn-edit" id="btn-cancel-news" style="display:none" onclick="resetNewsForm()">Cancel Edit</button>
+            <button class="btn btn-edit" id="btn-cancel-news" style="display:none" onclick="resetNewsForm()">Cancel</button>
           </div>
         </div>
         <div class="dcard"><h3>All News</h3><div class="aci-list" id="news-admin"></div></div>
@@ -770,23 +587,19 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
       <div class="dsec" id="d-gallery">
         <div class="dpt">Gallery</div>
-        <div class="dcard">
-          <h3 id="gal-form-title">Add Photo</h3>
+        <div class="dcard"><h3 id="gal-form-title">Add Photo</h3>
           <div class="ff">
-            <label>Photo (Automatically crops to 4:3)</label>
             <div class="up-wrap" onclick="prepareUpload('gallery',4/3,url=>{setVal('g-url',url);showPrev('prev-gal','ph-gal',url)})">
               <img class="up-preview" id="prev-gal" src=""><span class="up-ph" id="ph-gal">📸</span>
-              <span class="up-label">Upload or Paste Photo</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
+              <span class="up-label">Upload Photo</span>
+              <input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
             </div>
             <input type="hidden" id="g-url">
           </div>
-          <div class="g2">
-             <div class="ff"><label>Caption</label><input type="text" id="g-cap"></div>
-             <div class="ff"><label>Date</label><input type="date" id="g-date"></div>
-          </div>
-          <div style="display:flex;gap:1rem;">
-             <button class="btn btn-p" id="btn-save-gal" onclick="saveGallery()">+ Save Photo</button>
-             <button class="btn btn-edit" id="btn-cancel-gal" style="display:none" onclick="resetGalForm()">Cancel Edit</button>
+          <div class="g2"><div class="ff"><label>Caption</label><input type="text" id="g-cap"></div><div class="ff"><label>Date</label><input type="date" id="g-date"></div></div>
+          <div style="display:flex;gap:1rem">
+            <button class="btn btn-p" id="btn-save-gal" onclick="saveGallery()">+ Save Photo</button>
+            <button class="btn btn-edit" id="btn-cancel-gal" style="display:none" onclick="resetGalForm()">Cancel</button>
           </div>
         </div>
         <div class="dcard"><h3>Gallery Photos</h3><div class="aci-list" id="gal-admin"></div></div>
@@ -797,82 +610,58 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 </div>
 
 <script>
-// ═══ INIT & GLOBALS ═══
+// ═══ CONFIG & GLOBALS ═══
 const {createClient}=supabase;
 let db;
 try{db=createClient(SUPABASE_URL,SUPABASE_ANON);}catch(e){}
 let CU=null,CP=null;
 let slides=[],slideIdx=0,slideTimer=null;
-let newsImgUrl='', profilePhotoUrl='';
+let pubThumbUrl='',pubDetailUrl='',newsImgUrl='',newsThumbUrl='',profilePhotoUrl='';
 let npAuthorsList=[];
 let cropCb=null,cropper=null,cropFolder='',targetRatio=NaN;
-
-let editState = { pub: null, news: null, gal: null, proj: null, res: null };
-let fetchedData = { pubs: [], news: [], gal: [], proj: [], res: [] };
-
-const roleRanks = {
-  'Principal Investigator': 1, 'Assistant Investigator': 2, 'Research Assistant': 3,
-  'PhD. Student': 4, 'MSc. Student': 5, 'Graduate Research Student': 6,
-  'Undergraduate Student': 7, 'Lab Technician': 8, 'Alumni': 9
-};
-const getRank = role => roleRanks[role] || 10;
+let editState={pub:null,news:null,gal:null,proj:null,res:null};
+let fetchedData={pubs:[],news:[],gal:[],proj:[],res:[]};
+const roleRanks={'Principal Investigator':1,'Assistant Investigator':2,'Research Assistant':3,'PhD. Student':4,'MSc. Student':5,'Graduate Research Student':6,'Undergraduate Student':7,'Lab Technician':8,'Alumni':9};
+const getRank=role=>roleRanks[role]||10;
 
 // ═══ HELPERS ═══
 const $=id=>document.getElementById(id);
-const setText=(id,v)=>{const e=$(id);if(e)e.textContent=v||'0'};
+// FIX: setText handles numbers (0 is falsy in JS)
+const setText=(id,v)=>{const e=$(id);if(e)e.textContent=(v!=null)?String(v):''};
 const setVal=(id,v)=>{const e=$(id);if(e)e.value=v||''};
 const getVal=id=>{const e=$(id);return e?e.value.trim():''};
 const gS=(arr,k,fb='')=>{const f=(arr||[]).find(r=>r.key===k);return f?f.value:fb};
 const ini=n=>(n||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
 const genSlug=s=>s?s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)+/g,''):'';
-
 function showToast(msg,dur=3000){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur)}
 function showPrev(prevId,phId,url){const p=$(prevId),ph=$(phId);if(p){p.src=url;p.classList.add('show')}if(ph)ph.style.display='none'}
 function hidePrev(prevId,phId){const p=$(prevId),ph=$(phId);if(p){p.src='';p.classList.remove('show')}if(ph)ph.style.display='block'}
-
 window.addEventListener('scroll',()=>$('scroll-top').classList.toggle('show',window.scrollY>300));
 function updateFavicon(url){if(!url)return;const l=$('favicon-link');if(l)l.href=url}
 
-// ═══ SPA CLEAN ROUTING (History API) ═══
-window.addEventListener('popstate', handleRoute);
-function handleRoute() {
-  const path = window.location.pathname;
-  if (path === '/' || path.includes('index.html')) return loadPage('home');
-  const parts = path.split('/').filter(Boolean);
-  const page = parts[0]; const id = parts[1];
-  
-  if (page === 'profile' && id) { loadPage('profile'); buildProfileDetail(id); }
-  else if (page === 'publication' && id) { loadPage('publication'); buildPubDetail(id); }
-  else if (page === 'newsdetail' && id) { loadPage('newsdetail'); buildNewsDetail(id); }
-  else { loadPage(page || 'home'); }
+// ═══ ROUTING ═══
+window.addEventListener('popstate',handleRoute);
+function handleRoute(){
+  const path=window.location.pathname;
+  if(path==='/'||path.includes('index.html'))return loadPage('home');
+  const parts=path.split('/').filter(Boolean);
+  const page=parts[0];const id=parts[1];
+  if(page==='profile'&&id){loadPage('profile');buildProfileDetail(id);}
+  else if(page==='publication'&&id){loadPage('publication');buildPubDetail(id);}
+  else if(page==='newsdetail'&&id){loadPage('newsdetail');buildNewsDetail(id);}
+  else{loadPage(page||'home');}
 }
-
-function loadPage(p) {
+function loadPage(p){
   document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
-  const pageEl = $(`page-${p}`);
-  if(pageEl) pageEl.classList.add('active');
-  const navA = document.querySelector(`.nav-links a[onclick="goPage('${p}')"]`);
-  if(navA) navA.classList.add('active');
-  window.scrollTo(0,0);
-  $('nav-links').classList.remove('open');
+  const pageEl=$(`page-${p}`);if(pageEl)pageEl.classList.add('active');
+  const navA=document.querySelector(`.nav-links a[onclick="goPage('${p}')"]`);if(navA)navA.classList.add('active');
+  window.scrollTo(0,0);$('nav-links').classList.remove('open');
 }
-
-function goPage(p, id=null) {
-  const path = id ? `/${p}/${id}` : `/${p}`;
-  window.history.pushState({}, '', path);
-  handleRoute();
+function goPage(p,id=null){
+  const path=id?`/${p}/${id}`:`/${p}`;
+  window.history.pushState({},''  ,path);handleRoute();
 }
-
-document.addEventListener('click', e => {
-  let target = e.target;
-  while(target && target.tagName !== 'A') target = target.parentNode;
-  if (target && target.href && target.href.startsWith(window.location.origin) && !target.hasAttribute('target')) {
-    e.preventDefault();
-    window.history.pushState({}, '', target.href);
-    handleRoute();
-  }
-});
 
 // ═══ SLIDESHOW ═══
 async function loadSlides(){
@@ -880,97 +669,67 @@ async function loadSlides(){
   const {data}=await db.from('hero_slides').select('*').order('sort_order');
   slides=data||[];
   const wrap=$('slides-wrap');
-  if(!slides.length){wrap.innerHTML=`<div class="hero-no-slide"><span class="hero-no-slide-txt">No slides uploaded.</span></div>`;return;}
+  if(!slides.length){wrap.innerHTML=`<div style="position:absolute;inset:0;background:var(--navy-mid);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;color:rgba(255,255,255,.3);font-size:.9rem">🖼️<span>Add slides from Dashboard</span></div>`;return;}
   wrap.innerHTML=slides.map((s,i)=>`<div class="slide${i===0?' active':''}" id="sl${i}"><img src="${s.image_url}"><div class="slide-overlay"></div></div>`).join('');
-  const dots=$('slide-dots');
-  dots.innerHTML=slides.map((_,i)=>`<button class="slide-dot${i===0?' active':''}" onclick="goSlide(${i})"></button>`).join('');
+  $('slide-dots').innerHTML=slides.map((_,i)=>`<button class="slide-dot${i===0?' active':''}" onclick="goSlide(${i})"></button>`).join('');
   if(slides.length>1){$('sl-prev').style.display='flex';$('sl-next').style.display='flex';}
   startSlideTimer();
 }
-function goSlide(i){
-  document.querySelectorAll('.slide').forEach((s,j)=>s.classList.toggle('active',j===i));
-  document.querySelectorAll('.slide-dot').forEach((d,j)=>d.classList.toggle('active',j===i));
-  slideIdx=i;
-}
+function goSlide(i){document.querySelectorAll('.slide').forEach((s,j)=>s.classList.toggle('active',j===i));document.querySelectorAll('.slide-dot').forEach((d,j)=>d.classList.toggle('active',j===i));slideIdx=i;}
 function slideDir(d){const n=(slideIdx+d+slides.length)%slides.length;goSlide(n);}
 function startSlideTimer(){clearInterval(slideTimer);if(slides.length>1)slideTimer=setInterval(()=>slideDir(1),5000);}
 
-// ═══ UPLOAD, CROP & PASTE ═══
-function prepareUpload(folder, ratio, cb) {
-  cropFolder = folder; cropCb = cb; targetRatio = ratio;
-  document.querySelectorAll('.up-wrap').forEach(w=>w.classList.remove('active-drop'));
-  if(event && event.currentTarget) event.currentTarget.classList.add('active-drop');
-}
-
-function handleFileInput(e) {
-  const file = e.target.files[0]; if (!file) return;
-  processFileForCrop(file); e.target.value = '';
-}
-
-window.addEventListener('paste', e => {
-  if(!cropCb) return;
-  const items = (e.clipboardData || e.originalEvent.clipboardData).items;
-  for (let i = 0; i < items.length; i++) {
-    if (items[i].type.indexOf('image') === 0) {
-      processFileForCrop(items[i].getAsFile()); e.preventDefault(); break;
-    }
-  }
+// ═══ IMAGE UPLOAD & CROP ═══
+function prepareUpload(folder,ratio,cb){cropFolder=folder;cropCb=cb;targetRatio=ratio;}
+function handleFileInput(e){const file=e.target.files[0];if(!file)return;processFileForCrop(file);e.target.value='';}
+window.addEventListener('paste',e=>{
+  if(!cropCb)return;
+  const items=(e.clipboardData||e.originalEvent.clipboardData).items;
+  for(let i=0;i<items.length;i++){if(items[i].type.indexOf('image')===0){processFileForCrop(items[i].getAsFile());e.preventDefault();break;}}
 });
-
-function processFileForCrop(file) {
-  const reader = new FileReader();
-  reader.onload = ev => {
-    $('crop-img').src = ev.target.result;
-    $('mo-crop').classList.add('open');
-    setTimeout(() => {
-      if(cropper) cropper.destroy();
-      cropper = new Cropper($('crop-img'), {viewMode:1, aspectRatio: targetRatio, autoCropArea:0.9});
-    }, 150);
-  };
+function processFileForCrop(file){
+  const reader=new FileReader();
+  reader.onload=ev=>{$('crop-img').src=ev.target.result;$('mo-crop').classList.add('open');setTimeout(()=>{if(cropper)cropper.destroy();cropper=new Cropper($('crop-img'),{viewMode:1,aspectRatio:targetRatio,autoCropArea:.9});},150);};
   reader.readAsDataURL(file);
 }
-
 function cancelCrop(){$('mo-crop').classList.remove('open');if(cropper){cropper.destroy();cropper=null;}}
 async function confirmCrop(){
   if(!cropper)return;
-  const canvas=cropper.getCroppedCanvas({maxWidth:1600,maxHeight:1200});
-  canvas.toBlob(async blob=>{
-    $('mo-crop').classList.remove('open');
-    if(cropper){cropper.destroy();cropper=null;}
+  cropper.getCroppedCanvas({maxWidth:1600,maxHeight:1200}).toBlob(async blob=>{
+    $('mo-crop').classList.remove('open');if(cropper){cropper.destroy();cropper=null;}
     try{
       const fname=`${cropFolder}/${Date.now()}.jpg`;
       const {error}=await db.storage.from('ilamps-media').upload(fname,blob,{contentType:'image/jpeg',upsert:false});
       if(error)throw error;
       const {data:{publicUrl}}=db.storage.from('ilamps-media').getPublicUrl(fname);
-      if(cropCb) cropCb(publicUrl);
-      showToast('✓ Image Ready!');
+      if(cropCb)cropCb(publicUrl);showToast('✓ Image uploaded!');
     }catch(err){showToast('❌ Upload failed: '+err.message);}
-  },'image/jpeg',0.9);
+  },'image/jpeg',.9);
 }
 
 // ═══ AUTH ═══
 const openMo=m=>$(`mo-${m}`).classList.add('open');
 const closeMo=m=>$(`mo-${m}`).classList.remove('open');
-const swMo=(a,b)=>{closeMo(a);openMo(b)};
-document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o && o.id!=='mo-crop' && o.id!=='mo-orcid')o.classList.remove('open')}));
-
+const swMo=(a,b)=>{closeMo(a);openMo(b);};
+document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o&&o.id!=='mo-crop')o.classList.remove('open')}));
 async function signIn(){
+  const err=$('l-err');err.style.display='none';
   const {error}=await db.auth.signInWithPassword({email:getVal('l-email'),password:getVal('l-pwd')});
-  if(error)return $('l-err').textContent=error.message;
+  if(error){err.textContent=error.message;err.style.display='block';return;}
   closeMo('login');await loadUser();openDash();showToast('✓ Welcome back!');
 }
 async function signUp(){
+  const err=$('s-err');err.style.display='none';
   const {data,error}=await db.auth.signUp({email:getVal('s-email'),password:getVal('s-pwd'),options:{data:{name:getVal('s-name')}}});
-  if(error)return $('s-err').textContent=error.message;
+  if(error){err.textContent=error.message;err.style.display='block';return;}
   if(data.user)await db.from('profiles').update({name:getVal('s-name'),slug:genSlug(getVal('s-name'))}).eq('id',data.user.id);
-  closeMo('signup');showToast('✓ Account created! Admin will approve.');
+  closeMo('signup');showToast('✓ Account created! Admin will approve your profile.');
 }
 async function signOut(){await db.auth.signOut();CU=null;CP=null;$('nav-in-logged').style.display='none';$('nav-out').style.display='flex';closeDash();}
 async function loadUser(){
-  const {data:{user}}=await db.auth.getUser();
-  if(!user)return; CU=user;
-  const {data:p}=await db.from('profiles').select('*').eq('id',user.id).single();
-  CP=p; $('nav-in-logged').style.display='flex';$('nav-out').style.display='none';
+  const {data:{user}}=await db.auth.getUser();if(!user)return;CU=user;
+  const {data:p}=await db.from('profiles').select('*').eq('id',user.id).single();CP=p;
+  $('nav-in-logged').style.display='flex';$('nav-out').style.display='none';
   $('admin-nav').style.display=p?.is_admin?'block':'none';
 }
 
@@ -982,127 +741,52 @@ document.querySelectorAll('.dni').forEach(btn=>{
     document.querySelectorAll('.dni').forEach(b=>b.classList.remove('active'));
     document.querySelectorAll('.dsec').forEach(s=>s.classList.remove('active'));
     btn.classList.add('active');$(btn.dataset.sec).classList.add('active');
-    const sec=btn.dataset.sec;
-    if(sec==='d-profile')loadProfileForm(); else if(sec==='d-mypubs')loadMyPubs();
-    else if(sec==='d-lab')loadLabForm(); else if(sec==='d-members')loadMembersAdmin();
-    else if(sec==='d-hero')loadSlidesAdmin(); else if(sec==='d-research')loadResearchAdmin(); 
-    else if(sec==='d-ongoing')loadProjAdmin(); else if(sec==='d-news')loadNewsAdmin(); 
-    else if(sec==='d-gallery')loadGalAdmin();
+    const s=btn.dataset.sec;
+    if(s==='d-profile')loadProfileForm();else if(s==='d-mypubs'){loadMyPubs();loadMemberSelect();}
+    else if(s==='d-lab')loadLabForm();else if(s==='d-members')loadMembersAdmin();
+    else if(s==='d-hero')loadSlidesAdmin();else if(s==='d-research')loadResearchAdmin();
+    else if(s==='d-ongoing')loadProjAdmin();else if(s==='d-news')loadNewsAdmin();
+    else if(s==='d-gallery')loadGalAdmin();
   });
 });
 
 // Profile
 function loadProfileForm(){
   if(!CP)return;
-  ['name','desig','dept','uni','research','bio','interests','email','website','linkedin','orcid'].forEach(k=>setVal('p-'+k, CP[k==='orcid'?'orcid':k]));
-  
-  if (roleRanks[CP.role]) {
-    setVal('p-role', CP.role);
-    $('p-custom-role').style.display = 'none';
-  } else if (CP.role) {
-    setVal('p-role', 'Custom');
-    $('p-custom-role').style.display = 'block';
-    setVal('p-custom-role', CP.role);
-  }
-  
+  setVal('p-name',CP.name);setVal('p-desig',CP.designation);setVal('p-dept',CP.department);
+  setVal('p-uni',CP.university);setVal('p-research',CP.research);setVal('p-bio',CP.bio);
+  setVal('p-interests',CP.interests);setVal('p-email',CP.email);setVal('p-website',CP.website);
+  setVal('p-linkedin',CP.linkedin);setVal('p-orcid',CP.orcid);
+  if(roleRanks[CP.role]){setVal('p-role',CP.role);$('p-custom-role').style.display='none';}
+  else if(CP.role){setVal('p-role','Custom');$('p-custom-role').style.display='block';setVal('p-custom-role',CP.role);}
   if(CP.photo_url){showPrev('prev-profile','ph-profile',CP.photo_url);profilePhotoUrl=CP.photo_url;}
 }
 async function saveProfile(){
-  const nm = getVal('p-name');
-  const roleSelect = getVal('p-role');
-  const finalRole = roleSelect === 'Custom' ? getVal('p-custom-role') : roleSelect;
-  
-  await db.from('profiles').update({
-    name:nm, slug:genSlug(nm), role:finalRole, designation:getVal('p-desig'), 
-    department:getVal('p-dept'), university:getVal('p-uni'), research:getVal('p-research'),
-    bio:getVal('p-bio'), interests:getVal('p-interests'), email:getVal('p-email'), photo_url:profilePhotoUrl||'',
-    website:getVal('p-website'), linkedin:getVal('p-linkedin'), orcid:getVal('p-orcid')
+  const nm=getVal('p-name');
+  const roleSelect=getVal('p-role');
+  const finalRole=roleSelect==='Custom'?getVal('p-custom-role'):roleSelect;
+  const {error}=await db.from('profiles').update({
+    name:nm,slug:genSlug(nm),role:finalRole,designation:getVal('p-desig'),
+    department:getVal('p-dept'),university:getVal('p-uni'),research:getVal('p-research'),
+    bio:getVal('p-bio'),interests:getVal('p-interests'),email:getVal('p-email'),
+    photo_url:profilePhotoUrl||'',website:getVal('p-website'),linkedin:getVal('p-linkedin'),orcid:getVal('p-orcid')
   }).eq('id',CU.id);
-  showToast('✓ Profile Saved!');await loadUser(); initPublicData();
+  if(error)showToast('❌ '+error.message);else{showToast('✓ Profile Saved!');await loadUser();initPublicData();}
 }
 
-// ── ORCID INTEGRATION ──
-async function fetchFromOrcid() {
-  if(!CP.orcid) return showToast('❌ Set your ORCID link in My Profile first!');
-  const match = CP.orcid.match(/\d{4}-\d{4}-\d{4}-\d{3}[0-9X]/i);
-  if(!match) return showToast('❌ Invalid ORCID format in profile!');
-  const orcid = match[0];
-  showToast('⏳ Fetching from ORCID...');
-  
-  try {
-    const res = await fetch(`https://pub.orcid.org/v3.0/${orcid}/works`, {headers:{'Accept':'application/json'}});
-    const data = await res.json();
-    const works = data.group;
-    if(!works || !works.length) return showToast('No publications found on ORCID.');
-    
-    let html = works.map((w,i) => {
-      const summary = w['work-summary'][0];
-      const title = summary.title?.title?.value || 'Unknown Title';
-      const year = summary['publication-date']?.year?.value || '';
-      const type = summary.type || '';
-      const journal = summary['journal-title']?.value || '';
-      const doiEl = summary['external-ids']?.['external-id']?.find(e => e['external-id-type'] === 'doi');
-      const doi = doiEl ? `https://doi.org/${doiEl['external-id-value']}` : '';
-      
-      const pubData = JSON.stringify({title, year, type, journal, doi}).replace(/"/g, '&quot;');
-      return `<div class="aci"><div class="aci-h" style="align-items:flex-start">
-        <span style="font-size:.85rem;font-weight:700;line-height:1.4">${title} (${year})<br><span style="font-weight:400;color:var(--muted)">${journal}</span></span>
-        <button class="btn btn-p btn-sm" onclick="fillPubFormFromOrcid(${pubData});closeMo('orcid')">Use</button>
-      </div></div>`;
-    }).join('');
-    
-    $('orcid-list').innerHTML = html;
-    openMo('orcid');
-  } catch(e) {
-    showToast('❌ Failed to fetch ORCID data');
-  }
-}
-
-function fillPubFormFromOrcid(data) {
-  setVal('np-t', data.title);
-  setVal('np-yr', data.year);
-  setVal('np-venue', data.journal);
-  setVal('np-doi', data.doi);
-  let t = 'Journal Paper';
-  if(data.type.toLowerCase().includes('conference')) t = 'Conference Paper';
-  if(data.type.toLowerCase().includes('book')) t = 'Book Chapter';
-  setVal('np-type', t);
-  showToast('✓ Form filled from ORCID. Review and save.');
-  $('d-mypubs').scrollIntoView({behavior: 'smooth'});
-}
-
-// ── CRUD EDITS (Pubs) ──
+// Publications CRUD
 async function loadMyPubs(){
   const {data}=await db.from('publications').select('*').eq('user_id',CU.id).order('pub_date',{ascending:false});
-  fetchedData.pubs = data || [];
-  $('my-pubs').innerHTML=fetchedData.pubs.map(p=>`
-    <div class="aci">
-      <div class="aci-h"><span style="font-weight:700;color:var(--navy);font-size:.9rem">${p.title}</span>
-        <div style="display:flex;gap:.4rem">
-          <button class="btn btn-edit btn-sm" onclick="triggerEditPub('${p.id}')">Edit</button>
-          <button class="btn btn-d btn-sm" onclick="delRow('publications','${p.id}',loadMyPubs)">Del</button>
-        </div>
+  fetchedData.pubs=data||[];
+  $('my-pubs').innerHTML=fetchedData.pubs.length?fetchedData.pubs.map(p=>`
+    <div class="aci"><div class="aci-h">
+      <div style="flex:1"><div style="font-weight:700;color:var(--navy);font-size:.9rem">${p.title}</div>
+      <small style="color:var(--muted)">${p.venue||''} · ${p.pub_date||p.year||''} · ${p.status||''}</small></div>
+      <div style="display:flex;gap:.4rem">
+        <button class="btn btn-edit btn-sm" onclick="triggerEditPub('${p.id}')">Edit</button>
+        <button class="btn btn-d btn-sm" onclick="delRow('publications','${p.id}',loadMyPubs)">Del</button>
       </div>
-      <small style="color:var(--muted)">${p.venue} · ${p.pub_date || p.year}</small>
-    </div>`).join('');
-  loadMemberSelect();
-}
-function triggerEditPub(id) {
-  const p = fetchedData.pubs.find(x => x.id === id); if(!p) return;
-  editState.pub = id;
-  setVal('np-t', p.title); setVal('np-date', p.pub_date); setVal('np-yr', p.year);
-  setVal('np-type', p.type); setVal('np-status', p.status || 'Published'); setVal('np-venue', p.venue); setVal('np-abs', p.abstract); setVal('np-doi', p.doi);
-  npAuthorsList = [];
-  if(p.authors_list) p.authors_list.split(',').forEach(a => npAuthorsList.push({name: a.trim()}));
-  renderAuthChips();
-  $('pub-form-title').textContent = 'Edit Publication'; $('btn-save-pub').textContent = '💾 Update Publication'; $('btn-cancel-pub').style.display='inline-flex';
-  $('d-mypubs').scrollIntoView({behavior: 'smooth'});
-}
-function resetPubForm() {
-  editState.pub = null;
-  ['np-t','np-yr','np-venue','np-doi','np-abs','np-date'].forEach(id=>setVal(id,'')); setVal('np-status', 'Published');
-  npAuthorsList=[]; renderAuthChips(); 
-  $('pub-form-title').textContent = 'Add Publication'; $('btn-save-pub').textContent = '+ Save Publication'; $('btn-cancel-pub').style.display='none';
+    </div></div>`).join(''):'<div class="empty">No publications yet.</div>';
 }
 async function loadMemberSelect(){
   const {data}=await db.from('profiles').select('id,name').eq('approved',true);
@@ -1112,408 +796,396 @@ function addAuthorMember(){const sel=$('np-auth-select');const id=sel.value,name
 function addAuthorCustom(){const nm=getVal('np-auth-custom');if(nm){npAuthorsList.push({name:nm});renderAuthChips();}setVal('np-auth-custom','');}
 function removeAuthor(i){npAuthorsList.splice(i,1);renderAuthChips();}
 function renderAuthChips(){$('np-auth-chips').innerHTML=npAuthorsList.map((a,i)=>`<span class="tag-b" style="display:inline-flex;align-items:center;gap:.3rem">${a.name}<button style="background:none;border:none;color:inherit;cursor:pointer;font-size:.8rem" onclick="removeAuthor(${i})">✕</button></span>`).join('');}
-
+function triggerEditPub(id){
+  const p=fetchedData.pubs.find(x=>x.id===id);if(!p)return;editState.pub=id;
+  setVal('np-t',p.title);setVal('np-date',p.pub_date);setVal('np-yr',p.year);
+  setVal('np-type',p.type);setVal('np-status',p.status||'Published');setVal('np-venue',p.venue);setVal('np-abs',p.abstract);setVal('np-doi',p.doi);
+  pubThumbUrl=p.thumbnail_image;pubDetailUrl=p.detail_image;
+  if(pubThumbUrl)showPrev('prev-pub-thumb','ph-pub-thumb',pubThumbUrl);else hidePrev('prev-pub-thumb','ph-pub-thumb');
+  if(pubDetailUrl)showPrev('prev-pub-detail','ph-pub-detail',pubDetailUrl);else hidePrev('prev-pub-detail','ph-pub-detail');
+  npAuthorsList=[];
+  if(p.authors_list)p.authors_list.split(',').forEach(a=>npAuthorsList.push({name:a.trim()}));
+  renderAuthChips();
+  $('pub-form-title').textContent='Edit Publication';$('btn-save-pub').textContent='💾 Update';$('btn-cancel-pub').style.display='inline-flex';
+  $('d-mypubs').scrollIntoView({behavior:'smooth'});
+}
+function resetPubForm(){
+  editState.pub=null;['np-t','np-yr','np-venue','np-doi','np-abs','np-date'].forEach(id=>setVal(id,''));setVal('np-status','Published');
+  npAuthorsList=[];renderAuthChips();pubThumbUrl='';pubDetailUrl='';
+  hidePrev('prev-pub-thumb','ph-pub-thumb');hidePrev('prev-pub-detail','ph-pub-detail');
+  $('pub-form-title').textContent='Add Publication';$('btn-save-pub').textContent='+ Save Publication';$('btn-cancel-pub').style.display='none';
+}
 async function savePub(){
   const title=getVal('np-t');if(!title)return showToast('❌ Title required');
   const authStr=npAuthorsList.map(a=>a.name).join(', ');
-  const linkedUsers = npAuthorsList.filter(a=>a.user_id).map(a=>a.user_id);
-  const payload = {
-    title, authors:authStr, authors_list:authStr, pub_date: getVal('np-date') || null,
-    year:getVal('np-yr'), venue:getVal('np-venue'), type:getVal('np-type'), status:getVal('np-status'),
-    doi:getVal('np-doi'), abstract:getVal('np-abs'), linked_users:linkedUsers
-  };
-  
-  if (editState.pub) {
-    await db.from('publications').update(payload).eq('id', editState.pub); showToast('✓ Updated!');
-  } else {
-    payload.user_id = CU.id; await db.from('publications').insert(payload); showToast('✓ Added!');
-  }
-  resetPubForm(); loadMyPubs(); initPublicData();
+  const linkedUsers=npAuthorsList.filter(a=>a.user_id).map(a=>a.user_id);
+  const payload={title,authors:authStr,authors_list:authStr,linked_users:linkedUsers,
+    pub_date:getVal('np-date')||null,year:getVal('np-yr'),venue:getVal('np-venue'),
+    type:getVal('np-type'),status:getVal('np-status'),doi:getVal('np-doi'),abstract:getVal('np-abs'),
+    thumbnail_image:pubThumbUrl||'',detail_image:pubDetailUrl||''};
+  if(editState.pub){await db.from('publications').update(payload).eq('id',editState.pub);showToast('✓ Updated!');}
+  else{payload.user_id=CU.id;await db.from('publications').insert(payload);showToast('✓ Added!');}
+  resetPubForm();loadMyPubs();loadCountsDisplay();initPublicData();
 }
 
-// ── CRUD EDITS (Admin Sections) ──
+// Lab Settings
+async function loadLabForm(){
+  const {data:s}=await db.from('lab_settings').select('*');if(!s)return;
+  const g=(k,f='')=>gS(s,k,f);
+  setVal('ls-name',g('lab_name'));setVal('ls-fullname',g('lab_fullname'));setVal('ls-founded',g('founded'));
+  setVal('ls-uni',g('university'));setVal('ls-dept',g('department'));setVal('ls-a1',g('about'));
+  setVal('ls-addr',g('contact_address'));setVal('ls-email',g('contact_email'));setVal('ls-phone',g('contact_phone'));
+  setVal('ls-join-text',g('join_text'));setVal('ls-join-reqs',g('join_reqs','').replace(/\|/g,'\n'));
+  const logo=g('lab_logo');if(logo){setVal('ls-logo',logo);showPrev('prev-logo','ph-logo',logo);}
+  const jlogo=g('just_logo');if(jlogo){setVal('ls-just-logo',jlogo);showPrev('prev-just-logo','ph-just-logo',jlogo);}
+}
+async function ups(k,v){await db.from('lab_settings').upsert({key:k,value:v},{onConflict:'key'});}
+async function saveLabSettings(){
+  await Promise.all([
+    ups('lab_logo',getVal('ls-logo')),ups('just_logo',getVal('ls-just-logo')),
+    ups('lab_name',getVal('ls-name')),ups('lab_fullname',getVal('ls-fullname')),ups('founded',getVal('ls-founded')),
+    ups('university',getVal('ls-uni')),ups('department',getVal('ls-dept')),ups('about',getVal('ls-a1')),
+    ups('contact_address',getVal('ls-addr')),ups('contact_email',getVal('ls-email')),ups('contact_phone',getVal('ls-phone')),
+    ups('join_text',getVal('ls-join-text')),
+    ups('join_reqs',getVal('ls-join-reqs').split('\n').map(s=>s.trim()).filter(Boolean).join('|'))
+  ]);
+  showToast('✓ Settings saved!');initPublicData();
+}
+
+// Admin sections CRUD
 async function loadMembersAdmin(){
   const {data}=await db.from('profiles').select('*').order('created_at');
   $('members-list').innerHTML=(data||[]).map(m=>`
     <div class="aci"><div class="aci-h">
       <div><span style="font-weight:700">${m.name||'—'}</span> <span style="font-size:.7rem;color:var(--muted)">(${m.role||'—'})</span></div>
       <div style="display:flex;gap:.5rem;align-items:center">
-        <label style="font-size:.7rem"><input type="checkbox" ${m.approved?'checked':''} onchange="updateMemberStatus('${m.id}', 'approved', this.checked)"> Public</label>
-        <label style="font-size:.7rem"><input type="checkbox" ${m.is_admin?'checked':''} onchange="updateMemberStatus('${m.id}', 'is_admin', this.checked)"> Admin</label>
+        <label style="font-size:.7rem"><input type="checkbox"${m.approved?' checked':''} onchange="updateMemberField('${m.id}','approved',this.checked)"> Public</label>
+        <label style="font-size:.7rem"><input type="checkbox"${m.is_admin?' checked':''} onchange="updateMemberField('${m.id}','is_admin',this.checked)"> Admin</label>
       </div>
     </div></div>`).join('');
 }
-async function updateMemberStatus(id, field, val){
-  const payload = {}; payload[field] = val;
-  await db.from('profiles').update(payload).eq('id',id);
-  showToast('✓ Updated'); initPublicData();
-}
-
+async function updateMemberField(id,field,val){const p={};p[field]=val;await db.from('profiles').update(p).eq('id',id);showToast('✓ Updated');initPublicData();}
 async function loadResearchAdmin(){
-  const {data}=await db.from('research_areas').select('*').order('sort_order'); fetchedData.res=data||[];
-  $('research-admin').innerHTML=fetchedData.res.map(a=>`<div class="aci"><div class="aci-h"><span style="font-weight:700;color:var(--navy)">${a.icon} ${a.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditRes('${a.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('research_areas','${a.id}',loadResearchAdmin)">Del</button></div></div></div>`).join('');
+  const {data}=await db.from('research_areas').select('*').order('sort_order');fetchedData.res=data||[];
+  $('research-admin').innerHTML=fetchedData.res.map(a=>`<div class="aci"><div class="aci-h"><span style="font-weight:700">${a.icon} ${a.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditRes('${a.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('research_areas','${a.id}',loadResearchAdmin)">Del</button></div></div></div>`).join('');
 }
-function triggerEditRes(id){
-  const x=fetchedData.res.find(i=>i.id===id); if(!x)return; editState.res=id;
-  setVal('ra-icon',x.icon); setVal('ra-title',x.title); setVal('ra-desc',x.description);
-  $('res-form-title').textContent='Edit Area'; $('btn-save-res').textContent='💾 Update'; $('btn-cancel-res').style.display='inline-flex';
-}
-function resetResForm(){ editState.res=null; ['ra-icon','ra-title','ra-desc'].forEach(id=>setVal(id,'')); $('res-form-title').textContent='Add Area'; $('btn-save-res').textContent='+ Save Area'; $('btn-cancel-res').style.display='none'; }
+function triggerEditRes(id){const x=fetchedData.res.find(i=>i.id===id);if(!x)return;editState.res=id;setVal('ra-icon',x.icon);setVal('ra-title',x.title);setVal('ra-desc',x.description);$('res-form-title').textContent='Edit Area';$('btn-save-res').textContent='💾 Update';$('btn-cancel-res').style.display='inline-flex';}
+function resetResForm(){editState.res=null;['ra-icon','ra-title','ra-desc'].forEach(id=>setVal(id,''));$('res-form-title').textContent='Add Area';$('btn-save-res').textContent='+ Save Area';$('btn-cancel-res').style.display='none';}
 async function saveResearch(){
-  const payload = {icon:getVal('ra-icon'), title:getVal('ra-title'), description:getVal('ra-desc')};
-  if(editState.res) await db.from('research_areas').update(payload).eq('id',editState.res); else { payload.sort_order=99; await db.from('research_areas').insert(payload); }
-  showToast('✓ Saved'); resetResForm(); loadResearchAdmin(); initPublicData();
+  const payload={icon:getVal('ra-icon'),title:getVal('ra-title'),description:getVal('ra-desc')};
+  if(editState.res)await db.from('research_areas').update(payload).eq('id',editState.res);
+  else{payload.sort_order=99;await db.from('research_areas').insert(payload);}
+  showToast('✓ Saved');resetResForm();loadResearchAdmin();initPublicData();
 }
-
 async function loadProjAdmin(){
-  const {data}=await db.from('ongoing_projects').select('*').order('sort_order'); fetchedData.proj=data||[];
-  $('proj-admin').innerHTML=fetchedData.proj.map(p=>`<div class="aci"><div class="aci-h"><span style="font-weight:700;color:var(--navy)">${p.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditProj('${p.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('ongoing_projects','${p.id}',loadProjAdmin)">Del</button></div></div></div>`).join('');
+  const {data}=await db.from('ongoing_projects').select('*').order('sort_order');fetchedData.proj=data||[];
+  $('proj-admin').innerHTML=fetchedData.proj.map(p=>`<div class="aci"><div class="aci-h"><span style="font-weight:700">${p.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditProj('${p.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('ongoing_projects','${p.id}',loadProjAdmin)">Del</button></div></div></div>`).join('');
 }
-function triggerEditProj(id){
-  const x=fetchedData.proj.find(i=>i.id===id); if(!x)return; editState.proj=id;
-  setVal('op-t',x.title); setVal('op-s',x.status); setVal('op-m',(x.members||[]).join(', ')); setVal('op-d',x.description);
-  $('proj-form-title').textContent='Edit Project'; $('btn-save-proj').textContent='💾 Update'; $('btn-cancel-proj').style.display='inline-flex';
-}
-function resetProjForm(){ editState.proj=null; ['op-t','op-m','op-d'].forEach(id=>setVal(id,'')); $('proj-form-title').textContent='Add Project'; $('btn-save-proj').textContent='+ Save Project'; $('btn-cancel-proj').style.display='none'; }
+function triggerEditProj(id){const x=fetchedData.proj.find(i=>i.id===id);if(!x)return;editState.proj=id;setVal('op-t',x.title);setVal('op-s',x.status);setVal('op-m',(x.members||[]).join(', '));setVal('op-d',x.description);$('proj-form-title').textContent='Edit Project';$('btn-save-proj').textContent='💾 Update';$('btn-cancel-proj').style.display='inline-flex';}
+function resetProjForm(){editState.proj=null;['op-t','op-m','op-d'].forEach(id=>setVal(id,''));$('proj-form-title').textContent='Add Project';$('btn-save-proj').textContent='+ Save Project';$('btn-cancel-proj').style.display='none';}
 async function saveProject(){
-  const payload = {title:getVal('op-t'), status:getVal('op-s'), description:getVal('op-d'), members:getVal('op-m').split(',').map(s=>s.trim()).filter(Boolean)};
-  if(editState.proj) await db.from('ongoing_projects').update(payload).eq('id',editState.proj); else { payload.sort_order=99; await db.from('ongoing_projects').insert(payload); }
-  showToast('✓ Saved'); resetProjForm(); loadProjAdmin(); initPublicData();
+  const payload={title:getVal('op-t'),status:getVal('op-s'),description:getVal('op-d'),members:getVal('op-m').split(',').map(s=>s.trim()).filter(Boolean)};
+  if(editState.proj)await db.from('ongoing_projects').update(payload).eq('id',editState.proj);
+  else{payload.sort_order=99;await db.from('ongoing_projects').insert(payload);}
+  showToast('✓ Saved');resetProjForm();loadProjAdmin();initPublicData();
 }
-
 async function loadNewsAdmin(){
-  const {data}=await db.from('news').select('*').order('created_at',{ascending:false}); fetchedData.news=data||[];
-  $('news-admin').innerHTML=fetchedData.news.map(n=>`<div class="aci"><div class="aci-h"><span style="font-weight:700;color:var(--navy)">${n.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditNews('${n.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('news','${n.id}',loadNewsAdmin)">Del</button></div></div></div>`).join('');
+  const {data}=await db.from('news').select('*').order('news_date',{ascending:false,nullsFirst:false});fetchedData.news=data||[];
+  $('news-admin').innerHTML=fetchedData.news.map(n=>`<div class="aci"><div class="aci-h"><span style="font-weight:700">${n.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditNews('${n.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('news','${n.id}',loadNewsAdmin)">Del</button></div></div></div>`).join('');
 }
-function triggerEditNews(id){
-  const x=fetchedData.news.find(i=>i.id===id); if(!x)return; editState.news=id;
-  setVal('nw-d',x.date_label); setVal('nw-cat',x.category); setVal('nw-t',x.title); setVal('nw-desc',x.description);
-  newsImgUrl = x.featured_image; if(newsImgUrl) showPrev('prev-news-img','ph-news-img',newsImgUrl); else hidePrev('prev-news-img','ph-news-img');
-  $('news-form-title').textContent='Edit News'; $('btn-save-news').textContent='💾 Update'; $('btn-cancel-news').style.display='inline-flex';
-}
-function resetNewsForm(){ editState.news=null; ['nw-d','nw-t','nw-desc'].forEach(id=>setVal(id,'')); newsImgUrl=''; hidePrev('prev-news-img','ph-news-img'); $('news-form-title').textContent='Add News'; $('btn-save-news').textContent='+ Save News'; $('btn-cancel-news').style.display='none'; }
+function triggerEditNews(id){const x=fetchedData.news.find(i=>i.id===id);if(!x)return;editState.news=id;setVal('nw-date',x.news_date||'');setVal('nw-cat',x.category);setVal('nw-t',x.title);setVal('nw-desc',x.description);newsImgUrl=x.featured_image||'';newsThumbUrl=x.thumbnail_image||'';if(newsImgUrl)showPrev('prev-news-img','ph-news-img',newsImgUrl);else hidePrev('prev-news-img','ph-news-img');if(newsThumbUrl)showPrev('prev-nw-thumb','ph-nw-thumb',newsThumbUrl);else hidePrev('prev-nw-thumb','ph-nw-thumb');$('news-form-title').textContent='Edit News';$('btn-save-news').textContent='💾 Update';$('btn-cancel-news').style.display='inline-flex';}
+function resetNewsForm(){editState.news=null;['nw-date','nw-t','nw-desc'].forEach(id=>setVal(id,''));newsImgUrl='';newsThumbUrl='';hidePrev('prev-news-img','ph-news-img');hidePrev('prev-nw-thumb','ph-nw-thumb');$('news-form-title').textContent='Add News';$('btn-save-news').textContent='+ Save News';$('btn-cancel-news').style.display='none';}
 async function saveNews(){
-  const payload = {date_label:getVal('nw-d'), category:getVal('nw-cat'), title:getVal('nw-t'), description:getVal('nw-desc'), featured_image:newsImgUrl};
-  if(editState.news) await db.from('news').update(payload).eq('id',editState.news); else await db.from('news').insert(payload);
-  showToast('✓ Saved'); resetNewsForm(); loadNewsAdmin(); initPublicData();
+  const rawDate=getVal('nw-date');
+  const dateLabel=rawDate?new Date(rawDate+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}):'';
+  const payload={date_label:dateLabel,news_date:rawDate||null,category:getVal('nw-cat'),title:getVal('nw-t'),description:getVal('nw-desc'),featured_image:newsImgUrl,thumbnail_image:newsThumbUrl||''};
+  if(editState.news)await db.from('news').update(payload).eq('id',editState.news);else await db.from('news').insert(payload);
+  showToast('✓ Saved');resetNewsForm();loadNewsAdmin();initPublicData();
 }
-
 async function loadGalAdmin(){
-  const {data}=await db.from('gallery').select('*').order('item_date',{ascending:false}); fetchedData.gal=data||[];
-  $('gal-admin').innerHTML=fetchedData.gal.map(g=>`<div class="aci" style="display:flex;align-items:center;gap:.8rem"><img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--border);"><div style="flex:1;font-weight:700;color:var(--navy);font-size:.85rem">${g.caption||'Photo'}</div><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditGal('${g.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('gallery','${g.id}',loadGalAdmin)">Del</button></div></div>`).join('');
+  const {data}=await db.from('gallery').select('*').order('item_date',{ascending:false});fetchedData.gal=data||[];
+  $('gal-admin').innerHTML=fetchedData.gal.map(g=>`<div class="aci" style="display:flex;align-items:center;gap:.8rem"><img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--border)"><div style="flex:1;font-weight:700;font-size:.85rem">${g.caption||'Photo'}</div><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditGal('${g.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('gallery','${g.id}',loadGalAdmin)">Del</button></div></div>`).join('');
 }
-function triggerEditGal(id){
-  const x=fetchedData.gal.find(i=>i.id===id); if(!x)return; editState.gal=id;
-  setVal('g-url',x.url); setVal('g-cap',x.caption); setVal('g-date',x.item_date);
-  if(x.url) showPrev('prev-gal','ph-gal',x.url);
-  $('gal-form-title').textContent='Edit Photo'; $('btn-save-gal').textContent='💾 Update'; $('btn-cancel-gal').style.display='inline-flex';
-}
-function resetGalForm(){ editState.gal=null; ['g-url','g-cap','g-date'].forEach(id=>setVal(id,'')); hidePrev('prev-gal','ph-gal'); $('gal-form-title').textContent='Add Photo'; $('btn-save-gal').textContent='+ Save Photo'; $('btn-cancel-gal').style.display='none'; }
+function triggerEditGal(id){const x=fetchedData.gal.find(i=>i.id===id);if(!x)return;editState.gal=id;setVal('g-url',x.url);setVal('g-cap',x.caption);setVal('g-date',x.item_date);if(x.url)showPrev('prev-gal','ph-gal',x.url);$('gal-form-title').textContent='Edit Photo';$('btn-save-gal').textContent='💾 Update';$('btn-cancel-gal').style.display='inline-flex';}
+function resetGalForm(){editState.gal=null;['g-url','g-cap','g-date'].forEach(id=>setVal(id,''));hidePrev('prev-gal','ph-gal');$('gal-form-title').textContent='Add Photo';$('btn-save-gal').textContent='+ Save Photo';$('btn-cancel-gal').style.display='none';}
 async function saveGallery(){
-  const payload = {url:getVal('g-url'), caption:getVal('g-cap'), item_date:getVal('g-date') || null};
-  if(editState.gal) await db.from('gallery').update(payload).eq('id',editState.gal); else await db.from('gallery').insert(payload);
-  showToast('✓ Saved'); resetGalForm(); loadGalAdmin(); initPublicData();
+  const url=getVal('g-url');if(!url)return showToast('❌ Upload photo first');
+  const payload={url,caption:getVal('g-cap'),item_date:getVal('g-date')||null};
+  if(editState.gal)await db.from('gallery').update(payload).eq('id',editState.gal);else await db.from('gallery').insert(payload);
+  showToast('✓ Saved');resetGalForm();loadGalAdmin();initPublicData();
 }
-
 async function loadSlidesAdmin(){
   const {data}=await db.from('hero_slides').select('*').order('sort_order');
-  $('slides-list').innerHTML=(data||[]).map(s=>`<div class="aci" style="display:flex;align-items:center;gap:.8rem"><img src="${s.image_url}" style="width:70px;height:40px;object-fit:cover;border-radius:4px;"><div style="flex:1;font-size:.8rem;font-weight:700">${s.caption||'Slide'}</div><button class="btn btn-d btn-sm" onclick="delRow('hero_slides','${s.id}',loadSlidesAdmin)">Del</button></div>`).join('');
+  $('slides-list').innerHTML=(data||[]).map(s=>`<div class="aci" style="display:flex;align-items:center;gap:.8rem"><img src="${s.image_url}" style="width:70px;height:40px;object-fit:cover;border-radius:4px"><div style="flex:1;font-size:.8rem;font-weight:700">${s.caption||'Slide'}</div><button class="btn btn-d btn-sm" onclick="delRow('hero_slides','${s.id}',loadSlidesAdmin)">Del</button></div>`).join('');
 }
 async function addSlide(){
   const url=getVal('ns-url');if(!url)return showToast('❌ Upload image first');
   await db.from('hero_slides').insert({image_url:url,caption:getVal('ns-cap'),sort_order:99});
-  showToast('✓ Added!'); setVal('ns-url','');setVal('ns-cap',''); hidePrev('prev-slide','ph-slide');
-  loadSlidesAdmin(); loadSlides();
+  showToast('✓ Slide added!');setVal('ns-url','');setVal('ns-cap','');hidePrev('prev-slide','ph-slide');loadSlidesAdmin();loadSlides();
 }
+async function delRow(table,id,reload){if(confirm('Delete?')){await db.from(table).delete().eq('id',id);showToast('✓ Deleted.');reload();initPublicData();}}
 
-async function delRow(table,id,reload){if(confirm('Delete?')){await db.from(table).delete().eq('id',id); showToast('✓ Deleted.'); reload(); initPublicData();}}
-
-// Settings 
-async function loadLabForm(){
-  const {data:s}=await db.from('lab_settings').select('*');if(!s)return; const g=(k,f='')=>gS(s,k,f);
-  ['name','fullname','founded','uni','dept','a1','addr','email','phone'].forEach(k=>setVal('ls-'+k,g(k==='name'?'lab_name':(k==='fullname'?'lab_fullname':(k==='uni'?'university':(k==='dept'?'department':(k==='a1'?'about':(k==='addr'?'contact_address':(k==='email'?'contact_email':k)))))))));
-  if(g('lab_logo')){setVal('ls-logo',g('lab_logo'));showPrev('prev-logo','ph-logo',g('lab_logo'));}
-  if(g('just_logo')){setVal('ls-just-logo',g('just_logo'));showPrev('prev-just-logo','ph-just-logo',g('just_logo'));}
-}
-async function ups(k,v){await db.from('lab_settings').upsert({key:k,value:v},{onConflict:'key'});}
-async function saveLabSettings(){
-  await Promise.all([
-    ups('lab_logo',getVal('ls-logo')), ups('just_logo',getVal('ls-just-logo')), ups('lab_name',getVal('ls-name')),
-    ups('lab_fullname',getVal('ls-fullname')), ups('founded',getVal('ls-founded')), ups('university',getVal('ls-uni')), 
-    ups('department',getVal('ls-dept')), ups('about',getVal('ls-a1')),
-    ups('contact_address',getVal('ls-addr')), ups('contact_email',getVal('ls-email')), ups('contact_phone',getVal('ls-phone'))
-  ]);
-  showToast('✓ Settings saved!'); initPublicData();
+// ═══ COUNTS — INDEPENDENT (FIX: runs without waiting for lab_settings) ═══
+async function loadCountsDisplay(){
+  if(!db)return;
+  try{
+    const [r1,r2,r3]=await Promise.all([
+      db.from('publications').select('*',{count:'exact',head:true}),
+      db.from('ongoing_projects').select('*',{count:'exact',head:true}),
+      db.from('profiles').select('*',{count:'exact',head:true}).eq('approved',true)
+    ]);
+    const pubs=r1.count??0,projs=r2.count??0,mems=r3.count??0;
+    setText('hs-pubs',pubs);setText('hs-projs',projs);setText('hs-mems',mems);
+    setText('pub-total-count',pubs?`(${pubs})`:'');
+  }catch(e){console.warn('Count error:',e);}
 }
 
 // ═══ PUBLIC RENDERING ═══
-async function initPublicData() {
+async function initPublicData(){
   if(!db)return;
-  const {data:s}=await db.from('lab_settings').select('*');if(!s)return;
-  const g=(k,f='')=>gS(s,k,f);
-  
-  const labFullName = g('lab_fullname', 'Interdisciplinary Laboratory for Advanced Material Processing and Simulation');
-  const labShortName = g('lab_name', 'ILAMPS');
-  setText('h-name', `${labFullName} (${labShortName})`);
-  setText('nav-lab-name', labShortName);
-  setText('h-desc',g('about'));
-  
-  const logo=g('lab_logo'); if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}">`;updateFavicon(logo);}
-  
-  setText('f-addr', g('contact_address')); setText('f-email', g('contact_email')); $('f-email').href='mailto:'+g('contact_email');
-  const jlogo = g('just_logo');
-  if(logo) { $('f-logo-box-1').style.display='flex'; $('f-logo-ilamps').src=logo; }
-  if(jlogo) { $('f-logo-box-2').style.display='flex'; $('f-logo-just').src=jlogo; }
+  const {data:s}=await db.from('lab_settings').select('*');
+  const sArr=s||[];
+  const g=(k,f='')=>gS(sArr,k,f);
+  setText('h-name',g('lab_name','ILAMPS'));setText('nav-lab-name',g('lab_name','ILAMPS'));
+  setText('h-desc',g('about'));setText('hs-founded',g('founded','—'));
+  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · ${g('university','JUST')}`);
+  const logo=g('lab_logo');if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}">`;updateFavicon(logo);}
+  const jlogo=g('just_logo');
+  if(logo){$('f-logo-box-1').style.display='flex';$('f-logo-ilamps').src=logo;}
+  if(jlogo){$('f-logo-box-2').style.display='flex';$('f-logo-just').src=jlogo;}
+  const fe=$('f-email');if(fe){fe.textContent=g('contact_email');fe.href='mailto:'+g('contact_email');}
+  setText('f-addr',g('contact_address'));
 
-  // COUNT AGGREGATIONS OVER LIFETIME INSTANCES
-  const [{count:pubs},{count:projs},{count:mems}]=await Promise.all([
-    db.from('publications').select('*',{count:'exact',head:true}),
-    db.from('ongoing_projects').select('*',{count:'exact',head:true}),
-    db.from('profiles').select('*',{count:'exact',head:true}).eq('approved',true)
+  // Fetch latest data for home page
+  const [{data:news},{data:pubsData},{data:memsData},{data:galData}]=await Promise.all([
+    db.from('news').select('*').order('news_date',{ascending:false,nullsFirst:false}).limit(3),
+    db.from('publications').select('*').order('pub_date',{ascending:false,nullsFirst:false}).limit(4),
+    db.from('profiles').select('*').eq('approved',true),
+    db.from('gallery').select('*').order('created_at',{ascending:false}).limit(3)
   ]);
-  
-  const fYear = g('founded','—');
-  const checkInvalid = (val) => {
-    // Ensuring 'id' or null check passes correctly if somehow UUID breaks UI binding
-    return val || '0';
-  };
-
-  const safeUpdate = (id, val) => {
-    const el = $(id);
-    if(el) el.textContent = val;
-  };
-
-  safeUpdate('hs-pubs', checkInvalid(pubs));
-  safeUpdate('hs-projs', checkInvalid(projs));
-  safeUpdate('hs-mems', checkInvalid(mems));
-  safeUpdate('hs-founded', fYear);
-  safeUpdate('pub-total-count', pubs ? `(${pubs})` : '');
-
-  // Fetch Latest Data
-  const [{data:news},{data:pubsData},{data:memsData},{data:galData}] = await Promise.all([
-    db.from('news').select('*').order('created_at',{ascending:false}).limit(3),
-    db.from('publications').select('*').order('pub_date',{ascending:false}).limit(4),
-    db.from('profiles').select('*').eq('approved',true), // Fetch all members to sort
-    db.from('gallery').select('*').order('item_date',{ascending:false}).limit(3)
-  ]);
-
-  // Sort Members by Hierarchy Rank
-  const sortedMems = (memsData || []).sort((a,b) => getRank(a.role) - getRank(b.role));
-  
-  const homeTeam = $('home-team');
-  if(homeTeam) homeTeam.innerHTML = sortedMems.slice(0,6).map(m=>memberCardHTML(m)).join('');
-  
-  const homeNews = $('home-news');
-  if(homeNews) homeNews.innerHTML=(news&&news.length)?news.map(n=>newsCard(n)).join(''):'<div class="empty">No news yet.</div>';
-  
-  const homePubs = $('home-pubs');
-  if(homePubs) homePubs.innerHTML=(pubsData&&pubsData.length)?pubsData.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications.</div>';
-  
-  const homeGal = $('home-gallery');
-  if(homeGal) homeGal.innerHTML=(galData&&galData.length)?galData.map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span><span class="gi-date">${g.item_date||''}</span></div></div>`).join(''):'<div class="empty">No gallery images.</div>';
-
-  renderTeamPage(sortedMems); renderResearchPage(); renderAllPubs(); renderAllNews(); renderGallery(); renderContact();
+  const sortedMems=(memsData||[]).sort((a,b)=>getRank(a.role)-getRank(b.role));
+  $('home-team').innerHTML=sortedMems.slice(0,6).map(m=>memberCardHTML(m)).join('');
+  $('home-news').innerHTML=(news&&news.length)?news.map(n=>newsCard(n)).join(''):'<div class="empty">No news yet.</div>';
+  $('home-pubs').innerHTML=(pubsData&&pubsData.length)?pubsData.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications.</div>';
+  $('home-gallery').innerHTML=(galData&&galData.length)?galData.map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span></div></div>`).join(''):'<div class="empty">No gallery yet.</div>';
+  renderTeamPage(sortedMems);renderResearchPage();renderAllPubs();renderAllNews();renderGallery();renderContact(sArr);
 }
 
 function pubCardHome(p){
-  const statusBadge = p.status ? `<span style="font-size:0.75rem; padding:0.15rem 0.6rem; border-radius:4px; background:var(--silver); color:var(--navy); font-weight:700">${p.status}</span>` : '';
-  return `<div class="pubi-home" onclick="goPage('publication', '${p.id}')">
+  const shortAbs=p.abstract?(p.abstract.length>100?p.abstract.substring(0,100)+'...':p.abstract):'';
+  const statusBadge=p.status?`<span style="font-size:.7rem;padding:.12rem .5rem;border-radius:4px;background:var(--silver);color:var(--navy);font-weight:700">${p.status}</span>`:'';
+  return `<div class="pubi-home" onclick="goPage('publication','${p.id}')">
+    ${p.thumbnail_image?`<img class="pubi-home-img" src="${p.thumbnail_image}">`:`<div class="pubi-home-img" style="background:var(--off);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--gray-light)">📄</div>`}
     <div class="pubi-home-body">
       <div class="pub-title">${p.title}</div>
       <div class="pub-authors" style="margin-bottom:.3rem">${p.authors_list||p.authors||''}</div>
-      <div class="pub-venue" style="font-size:.8rem;color:var(--gray);font-style:italic;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem">${p.venue||''} · ${p.pub_date || p.year} ${statusBadge}</div>
+      <div style="font-size:.8rem;color:var(--gray);font-style:italic;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">${p.venue||''} · ${p.pub_date||p.year||''} ${statusBadge}</div>
+      ${shortAbs?`<div style="font-size:.85rem;color:var(--muted)">${shortAbs} <span class="pubi-home-more">More...</span></div>`:''}
     </div>
   </div>`;
 }
-
 function newsCard(n){
-  return `<div class="nc" onclick="goPage('newsdetail', '${n.id}')">
-    ${n.featured_image?`<img class="nc-img" src="${n.featured_image}">`:`<div class="nc-img-ph">📰</div>`}
-    <div class="nc-dbar"><span>${n.date_label||'—'}</span><span class="nc-cat">${n.category||'General'}</span></div>
+  const cardImg=n.thumbnail_image||n.featured_image||'';
+  const dateStr=n.date_label||'—';
+  return `<div class="nc" onclick="goPage('newsdetail','${n.id}')">
+    ${cardImg?`<img class="nc-img" src="${cardImg}">`:`<div class="nc-img-ph">📰</div>`}
+    <div class="nc-dbar"><span>${dateStr}</span><span class="nc-cat">${n.category||'General'}</span></div>
     <div class="nc-body"><h3>${n.title}</h3><p>${(n.description||'').substring(0,120)}...</p></div>
   </div>`;
 }
-
+// FIX: memberCardHTML always uses m.id (not slug) for routing
 function memberCardHTML(m){
-  const routeParam = m.slug || m.id;
-  let links = '';
-  if(m.email) links += `<a href="mailto:${m.email}" title="Email">✉️</a>`;
-  if(m.linkedin) links += `<a href="${m.linkedin}" target="_blank" title="LinkedIn">in</a>`;
-  if(m.orcid) links += `<a href="${m.orcid}" target="_blank" title="ORCID" style="font-weight:800;font-family:sans-serif">iD</a>`;
-
-  return `<div class="tc" onclick="goPage('profile', '${routeParam}')">
+  const routeParam=m.id;
+  let links='';
+  if(m.email)links+=`<a href="mailto:${m.email}" title="Email">✉️</a>`;
+  if(m.linkedin)links+=`<a href="${m.linkedin}" target="_blank" title="LinkedIn">in</a>`;
+  if(m.orcid)links+=`<a href="${m.orcid}" target="_blank" title="ORCID" style="font-weight:800">iD</a>`;
+  return `<div class="tc" onclick="goPage('profile','${routeParam}')">
     ${m.photo_url?`<img src="${m.photo_url}" class="tc-av">`:`<div class="tc-av-ph">${ini(m.name)}</div>`}
     <div class="tc-name">${m.name||'—'}</div>
-    <div class="tc-role">${m.designation||m.role}</div>
-    <div style="font-size:.75rem;color:var(--muted);line-height:1.4;height:35px">${m.department||''}<br>${m.university||''}</div>
+    <div class="tc-role">${m.designation||m.role||''}</div>
+    <div style="font-size:.75rem;color:var(--muted);line-height:1.4;min-height:35px">${m.department||''}<br>${m.university||''}</div>
     <div class="tc-links" style="display:flex;gap:.5rem;justify-content:center;margin-top:1rem" onclick="event.stopPropagation()">${links}</div>
   </div>`;
 }
 
-// ── DEDICATED PAGES RENDERING ──
-async function buildProfileDetail(id) {
-  const isUUID = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(id);
-  let query = db.from('profiles').select('*');
-  if(isUUID) query = query.eq('id', id);
-  else query = query.eq('slug', id);
-  const {data:m, error} = await query.single();
-  
-  if(!m || error) {
-    console.error(error);
-    return $('dp-profile-body').innerHTML='<div class="empty">Profile not found. Did you save it from dashboard to generate slug?</div>';
-  }
-  
-  const [{data:pubs}, {data:allProjs}] = await Promise.all([
-    db.from('publications').select('*').or(`user_id.eq.${m.id},linked_users.cs.{${m.id}}`).order('pub_date',{ascending:false}),
+// FIX: buildProfileDetail uses id only (no slug query)
+async function buildProfileDetail(id){
+  const el=$('dp-profile-body');
+  el.innerHTML='<div class="loading"><div class="spin-el"></div>Loading profile...</div>';
+  const {data:m,error}=await db.from('profiles').select('*').eq('id',id).single();
+  if(!m||error)return el.innerHTML='<button class="back-btn" onclick="history.back()">← Back</button><div class="empty">Profile not found.</div>';
+  const [{data:pubs},{data:allProjs}]=await Promise.all([
+    db.from('publications').select('*').or(`user_id.eq.${m.id},linked_users.cs.{${m.id}}`).order('pub_date',{ascending:false,nullsFirst:false}),
     db.from('ongoing_projects').select('*')
   ]);
-  
-  const userProjs = (allProjs||[]).filter(p => (p.members||[]).some(mem => mem.toLowerCase() === (m.name||'').toLowerCase() || mem.includes(m.name)));
-  
-  let socialHTML = '';
-  if(m.email) socialHTML += `<a href="mailto:${m.email}" target="_blank" class="btn btn-o btn-sm">✉️ Email</a>`;
-  if(m.linkedin) socialHTML += `<a href="${m.linkedin}" target="_blank" class="btn btn-o btn-sm">in LinkedIn</a>`;
-  if(m.orcid) socialHTML += `<a href="${m.orcid}" target="_blank" class="btn btn-o btn-sm" style="font-weight:800">iD ORCID</a>`;
-  if(m.website) socialHTML += `<a href="${m.website}" target="_blank" class="btn btn-o btn-sm">🌐 Website</a>`;
-  if(m.google_scholar) socialHTML += `<a href="${m.google_scholar}" target="_blank" class="btn btn-o btn-sm">🎓 Scholar</a>`;
-
-  $('dp-profile-body').innerHTML=`
+  const userProjs=(allProjs||[]).filter(p=>(p.members||[]).some(mem=>mem.toLowerCase().includes((m.name||'').toLowerCase())));
+  let socialHTML='';
+  if(m.email)socialHTML+=`<a href="mailto:${m.email}" class="btn btn-o btn-sm">✉️ Email</a>`;
+  if(m.linkedin)socialHTML+=`<a href="${m.linkedin}" target="_blank" class="btn btn-o btn-sm">in LinkedIn</a>`;
+  if(m.orcid)socialHTML+=`<a href="${m.orcid}" target="_blank" class="btn btn-o btn-sm">iD ORCID</a>`;
+  if(m.website)socialHTML+=`<a href="${m.website}" target="_blank" class="btn btn-o btn-sm">🌐 Website</a>`;
+  if(m.google_scholar)socialHTML+=`<a href="${m.google_scholar}" target="_blank" class="btn btn-o btn-sm">🎓 Scholar</a>`;
+  el.innerHTML=`
     <button class="back-btn" onclick="history.back()">← Back</button>
     <div class="dp-container">
       <div class="dp-hero">
         ${m.photo_url?`<img src="${m.photo_url}" class="dp-photo">`:`<div class="dp-photo-ph">${ini(m.name)}</div>`}
-        <div>
-          <div class="dp-name">${m.name||'—'}</div>
-          <div class="dp-role">${m.designation||m.role||'Researcher'}</div>
-          <div class="dp-dept" style="margin-bottom:1rem">${m.department?m.department+', ':''}${m.university||''}</div>
-          <div style="display:flex;gap:.5rem;flex-wrap:wrap">${socialHTML}</div>
-        </div>
+        <div><div class="dp-name">${m.name||'—'}</div><div class="dp-role">${m.designation||m.role||'Researcher'}</div>
+        <div class="dp-dept" style="margin-bottom:1rem">${m.department?m.department+', ':''}${m.university||''}</div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap">${socialHTML}</div></div>
       </div>
-      
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2rem">
         ${m.bio?`<div class="dp-section"><span class="dp-slabel">Biography</span><p style="color:var(--muted);line-height:1.7;font-size:.95rem">${m.bio}</p></div>`:''}
         ${m.interests?`<div class="dp-section"><span class="dp-slabel">Research Interests</span><ul style="color:var(--muted);font-size:.95rem;padding-left:1.2rem;line-height:1.8">${m.interests.split(/[\n,]+/).filter(Boolean).map(i=>`<li>${i.trim()}</li>`).join('')}</ul></div>`:''}
       </div>
-
-      ${userProjs.length ? `<div class="dp-section"><span class="dp-slabel">Projects</span>
-        <div class="proj-list">${userProjs.map(p=>`<div class="pc" style="padding:1rem 1.5rem"><div><h3 style="font-size:.95rem">${p.title}</h3><p style="font-size:.85rem;margin-bottom:0">${p.description}</p></div></div>`).join('')}</div>
-      </div>` : ''}
-
-      <div class="dp-section"><span class="dp-slabel">Publications (${pubs?pubs.length:0})</span>
-        <div class="pub-list">
-          ${(pubs||[]).map(p=>{
-            const boldNameStr = (p.authors_list||'').replace(new RegExp(`(${m.name})`, 'gi'), '<strong style="color:var(--navy);">$1</strong>');
-            const statusBadge = p.status ? `<span style="font-size:0.7rem; padding:0.15rem 0.5rem; border-radius:4px; background:var(--silver); color:var(--navy); font-weight:700">${p.status}</span>` : '';
-            return `<div class="pubi" onclick="goPage('publication', '${p.id}')">
-              <div class="pubi-top"><span class="pub-type">${p.type}</span>${statusBadge}<span class="pub-yr">${p.pub_date||p.year}</span></div>
+      ${userProjs.length?`<div class="dp-section"><span class="dp-slabel">Projects</span><div class="proj-list">${userProjs.map(p=>`<div class="pc" style="padding:1rem 1.5rem"><div><h3 style="font-size:.95rem">${p.title}</h3><p style="font-size:.85rem;margin-bottom:0">${p.description}</p></div></div>`).join('')}</div></div>`:''}
+      <div class="dp-section"><span class="dp-slabel">Publications (${(pubs||[]).length})</span>
+        <div class="pub-list">${(pubs||[]).map(p=>{
+          const boldName=new RegExp('('+((m.name||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&'))+')', 'gi');
+          const boldAuthors=(p.authors_list||p.authors||'').replace(boldName,'<strong style="color:var(--navy)">$1</strong>');
+          const shortAbs=p.abstract?(p.abstract.length>120?p.abstract.substring(0,120)+'...':p.abstract):'';
+          return `<div class="pubi-home" onclick="goPage('publication','${p.id}')">
+            ${p.thumbnail_image?`<img class="pubi-home-img" src="${p.thumbnail_image}">`:`<div class="pubi-home-img" style="background:var(--off);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--gray-light)">📄</div>`}
+            <div class="pubi-home-body">
+              <div class="pubi-top"><span class="pub-type">${p.type}</span><span class="pub-yr">${p.pub_date||p.year||''}</span></div>
               <div class="pub-title">${p.title}</div>
-              <div class="pub-authors">${boldNameStr}</div>
+              <div class="pub-authors">${boldAuthors}</div>
               <div class="pub-venue">${p.venue||''}</div>
-            </div>`;
-          }).join('')}
-        </div>
+              ${shortAbs?`<div style="font-size:.82rem;color:var(--muted);margin-top:.35rem">${shortAbs}</div>`:''}
+            </div>
+          </div>`;
+        }).join('')||'<div class="empty" style="padding:1rem">No publications yet.</div>'}</div>
       </div>
     </div>`;
 }
 
-async function buildPubDetail(id) {
+async function buildPubDetail(id){
+  const el=$('dp-pub-body');
+  el.innerHTML='<div class="loading"><div class="spin-el"></div>Loading...</div>';
   const {data:p}=await db.from('publications').select('*').eq('id',id).single();
-  if(!p) return $('dp-pub-body').innerHTML='<div class="empty">Publication not found.</div>';
-  const statusBadge = p.status ? `<span style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:4px; background:var(--silver); color:var(--navy); font-weight:700">${p.status}</span>` : '';
-  $('dp-pub-body').innerHTML=`
+  if(!p)return el.innerHTML='<button class="back-btn" onclick="history.back()">← Back</button><div class="empty">Publication not found.</div>';
+  el.innerHTML=`
     <button class="back-btn" onclick="history.back()">← Back</button>
     <div class="dp-container">
-      <div style="display:flex;gap:.5rem;margin-bottom:1rem;align-items:center"><span class="tag-b">${p.type}</span>${statusBadge}<span style="font-size:.85rem;color:var(--gray);font-weight:700">${p.pub_date||p.year}</span></div>
+      ${p.detail_image?`<img class="dp-img" src="${p.detail_image}">`:''}
+      <div style="display:flex;gap:.5rem;margin-bottom:1rem;align-items:center;flex-wrap:wrap"><span class="tag-b">${p.type}</span>${p.status?`<span style="font-size:.75rem;padding:.2rem .6rem;border-radius:4px;background:var(--silver);color:var(--navy);font-weight:700">${p.status}</span>`:''}<span style="font-size:.85rem;color:var(--gray);font-weight:700">${p.pub_date||p.year||''}</span></div>
       <div class="dp-title">${p.title}</div>
-      <div style="font-size:1.15rem;color:var(--accent);font-weight:700;margin-bottom:1rem">${p.authors_list||p.authors||''}</div>
+      <div style="font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1rem">${p.authors_list||p.authors||''}</div>
       <div style="font-size:1.05rem;color:var(--muted);font-style:italic;margin-bottom:2rem">${p.venue||''}</div>
       ${p.abstract?`<span class="dp-slabel">Abstract</span><p style="color:var(--muted);line-height:1.8;font-size:1rem;margin-bottom:2.5rem">${p.abstract}</p>`:''}
-      ${p.doi?`<a href="${p.doi}" target="_blank" class="btn btn-p" style="font-size:.9rem">🔗 View Full Paper</a>`:''}
+      ${p.doi?`<a href="${p.doi}" target="_blank" class="btn btn-p">🔗 View Full Paper</a>`:''}
     </div>`;
 }
 
-async function buildNewsDetail(id) {
+async function buildNewsDetail(id){
+  const el=$('dp-news-body');
+  el.innerHTML='<div class="loading"><div class="spin-el"></div>Loading...</div>';
   const {data:n}=await db.from('news').select('*').eq('id',id).single();
-  if(!n) return $('dp-news-body').innerHTML='<div class="empty">News not found.</div>';
-  $('dp-news-body').innerHTML=`
+  if(!n)return el.innerHTML='<button class="back-btn" onclick="history.back()">← Back</button><div class="empty">News not found.</div>';
+  el.innerHTML=`
     <button class="back-btn" onclick="history.back()">← Back</button>
     <div class="dp-container">
-      ${n.featured_image ? `<img class="dp-img" src="${n.featured_image}">` : ''}
-      <div style="display:flex;gap:.5rem;margin-bottom:1rem"><span class="tag-b">${n.category||'General'}</span><span style="font-size:.85rem;color:var(--gray);font-weight:700">${n.date_label}</span></div>
+      ${n.featured_image?`<img class="dp-img" src="${n.featured_image}">`:''}
+      <div style="display:flex;gap:.5rem;margin-bottom:1rem"><span class="tag-b">${n.category||'General'}</span><span style="font-size:.85rem;color:var(--gray);font-weight:700">${n.date_label||''}</span></div>
       <div class="dp-title">${n.title}</div>
-      <p style="color:var(--muted);line-height:1.8;white-space:pre-wrap;font-size:1rem">${n.description}</p>
+      <p style="color:var(--muted);line-height:1.8;white-space:pre-wrap;font-size:1rem">${n.description||''}</p>
     </div>`;
 }
 
 async function renderTeamPage(sortedMems){
-  if(!sortedMems) {
-    const {data}=await db.from('profiles').select('*').eq('approved',true).neq('role','pending');
-    sortedMems = (data||[]).sort((a,b) => getRank(a.role) - getRank(b.role));
-  }
-  
-  const groups = {
-    'Principal Investigator': sortedMems.filter(m => m.role === 'Principal Investigator'),
-    'Assistant Investigator': sortedMems.filter(m => m.role === 'Assistant Investigator'),
-    'Research Assistants': sortedMems.filter(m => m.role === 'Research Assistant'),
-    'PhD. Students': sortedMems.filter(m => m.role === 'PhD. Student'),
-    'MSc. Students': sortedMems.filter(m => m.role === 'MSc. Student'),
-    'Graduate Researchers': sortedMems.filter(m => m.role === 'Graduate Research Student'),
-    'Undergraduate Researchers': sortedMems.filter(m => m.role === 'Undergraduate Student'),
-    'Lab Technicians': sortedMems.filter(m => m.role === 'Lab Technician'),
-    'Alumni': sortedMems.filter(m => m.role === 'Alumni'),
-    'Other Members': sortedMems.filter(m => getRank(m.role) > 9)
-  };
-
-  let html = '';
-  for (const [title, mems] of Object.entries(groups)) {
-    if (mems.length) {
-      if (title === 'Principal Investigator') {
-        html += `<div style="margin-bottom:4rem"><span class="dp-slabel" style="font-size:1rem;margin-bottom:1.5rem">${title}</span><div class="pi-card">${mems.map(m=>`
-          <div style="text-align:center"><img src="${m.photo_url}" class="pi-photo"><div class="pi-name">${m.name}</div><div class="pi-desig">${m.designation}</div><div class="pi-dept">${m.department || ''}<br>${m.university || ''}</div></div>
-          <div><span class="pi-sl">Biography</span><p class="pi-bio">${m.bio || ''}</p><button class="btn btn-o btn-sm" style="margin-top:1rem" onclick="goPage('profile', '${m.slug||m.id}')">View Full Profile</button></div>
-        `).join('')}</div></div>`;
-      } else {
-        html += `<div style="margin-bottom:4rem"><span class="dp-slabel" style="font-size:1rem">${title}</span><div class="team-grid">${mems.map(m=>memberCardHTML(m)).join('')}</div></div>`;
-      }
+  if(!sortedMems){const {data}=await db.from('profiles').select('*').eq('approved',true);sortedMems=(data||[]).sort((a,b)=>getRank(a.role)-getRank(b.role));}
+  const groups={'Principal Investigator':sortedMems.filter(m=>m.role==='Principal Investigator'),'Assistant Investigator':sortedMems.filter(m=>m.role==='Assistant Investigator'),'Research Assistants':sortedMems.filter(m=>m.role==='Research Assistant'),'PhD. Students':sortedMems.filter(m=>m.role==='PhD. Student'),'MSc. Students':sortedMems.filter(m=>m.role==='MSc. Student'),'Graduate Researchers':sortedMems.filter(m=>m.role==='Graduate Research Student'),'Undergraduate Researchers':sortedMems.filter(m=>m.role==='Undergraduate Student'),'Alumni':sortedMems.filter(m=>m.role==='Alumni'),'Others':sortedMems.filter(m=>getRank(m.role)>9)};
+  let html='';
+  for(const [title,mems] of Object.entries(groups)){
+    if(!mems.length)continue;
+    if(title==='Principal Investigator'){
+      html+=`<div style="margin-bottom:4rem"><span class="dp-slabel" style="font-size:1rem;margin-bottom:1.5rem">${title}</span><div class="pi-card">${mems.map(m=>`
+        <div style="text-align:center">${m.photo_url?`<img src="${m.photo_url}" class="pi-photo">`:`<div class="pi-photo-ph">${ini(m.name)}</div>`}<div class="pi-name">${m.name}</div><div class="pi-desig">${m.designation||m.role}</div><div class="pi-dept">${m.department||''}<br>${m.university||''}</div></div>
+        <div><span class="pi-sl">Biography</span><p class="pi-bio">${m.bio||''}</p><button class="btn btn-o btn-sm" style="margin-top:1rem" onclick="goPage('profile','${m.id}')">View Full Profile</button></div>
+      `).join('')}</div></div>`;
+    }else{
+      html+=`<div style="margin-bottom:4rem"><span class="dp-slabel" style="font-size:1rem">${title}</span><div class="team-grid">${mems.map(m=>memberCardHTML(m)).join('')}</div></div>`;
     }
   }
-  
-  $('team-content').innerHTML = html;
+  $('team-content').innerHTML=html||'<div class="empty">No approved members yet.</div>';
   $('team-load').style.display='none';
 }
-
 async function renderResearchPage(){
   const [{data:areas},{data:projs}]=await Promise.all([db.from('research_areas').select('*').order('sort_order'),db.from('ongoing_projects').select('*').order('sort_order')]);
-  $('research-grid').innerHTML=(areas||[]).map(a=>`<div class="rc"><span class="rc-icon">${a.icon}</span><h3>${a.title}</h3><p>${a.description}</p></div>`).join('');
-  $('proj-list').innerHTML=(projs||[]).map(p=>`<div class="pc"><div><h3>${p.title}</h3><p>${p.description}</p><div class="pc-mems">${(p.members||[]).map(m=>`<span class="pc-mem">${m}</span>`).join('')}</div></div><span class="badge badge-${p.status||'active'}">${p.status||'active'}</span></div>`).join('');
+  $('research-grid').innerHTML=(areas||[]).map(a=>`<div class="rc"><span class="rc-icon">${a.icon}</span><h3>${a.title}</h3><p>${a.description}</p></div>`).join('')||'<div class="empty">No research areas yet.</div>';
+  $('proj-list').innerHTML=(projs||[]).map(p=>`<div class="pc"><div><h3>${p.title}</h3><p>${p.description}</p><div class="pc-mems">${(p.members||[]).map(m=>`<span class="pc-mem">${m}</span>`).join('')}</div></div><span class="badge badge-${p.status||'active'}">${p.status||'active'}</span></div>`).join('')||'<div class="empty">No projects yet.</div>';
 }
 async function renderAllPubs(){
-  const {data}=await db.from('publications').select('*').order('pub_date',{ascending:false});
-  $('all-pubs').innerHTML=(data||[]).map(p=> {
-    const statusBadge = p.status ? `<span style="font-size:0.7rem; padding:0.15rem 0.5rem; border-radius:4px; background:var(--silver); color:var(--navy); font-weight:700">${p.status}</span>` : '';
-    return `<div class="pubi" onclick="goPage('publication', '${p.id}')"><div class="pubi-top"><span class="pub-type">${p.type}</span>${statusBadge}<span class="pub-yr">${p.pub_date||p.year}</span></div><div class="pub-title">${p.title}</div><div class="pub-authors">${p.authors_list||p.authors||''}</div><div class="pub-venue">${p.venue||''}</div></div>`;
-  }).join('');
+  const {data}=await db.from('publications').select('*').order('pub_date',{ascending:false,nullsFirst:false});
+  setText('pub-total-count',`(${(data||[]).length})`);
+  $('all-pubs').innerHTML=(data||[]).map(p=>pubCardHome(p)).join('')||'<div class="empty">No publications yet.</div>';
 }
 async function renderAllNews(){
-  const {data}=await db.from('news').select('*').order('created_at',{ascending:false});
-  $('all-news').innerHTML=(data||[]).map(n=>newsCard(n)).join('');
+  const {data}=await db.from('news').select('*').order('news_date',{ascending:false,nullsFirst:false});
+  $('all-news').innerHTML=(data||[]).map(n=>newsCard(n)).join('')||'<div class="empty">No news yet.</div>';
 }
 async function renderGallery(){
-  const {data}=await db.from('gallery').select('*').order('item_date',{ascending:false});
-  $('gal-grid').innerHTML=(data||[]).map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span><span class="gi-date">${g.item_date||''}</span></div></div>`).join('');
+  const {data}=await db.from('gallery').select('*').order('created_at',{ascending:false});
+  $('gal-grid').innerHTML=(data||[]).map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span><span class="gi-date">${g.item_date||''}</span></div></div>`).join('')||'<div class="empty">No photos yet.</div>';
 }
-async function renderContact(){
-  const {data:s}=await db.from('lab_settings').select('*');if(!s)return; const g=(k,f='')=>gS(s,k,f);
-  setText('c-addr',g('contact_address')); $('c-email').textContent=g('contact_email'); $('c-email').href='mailto:'+g('contact_email');
-  setText('c-join',g('join_text')); $('c-reqs').innerHTML=g('join_reqs','').split('|').filter(Boolean).map(r=>`<li>${r}</li>`).join('');
+async function renderContact(sArr){
+  const settings=sArr||(await db.from('lab_settings').select('*')).data||[];
+  const g=(k,f='')=>gS(settings,k,f);
+  setText('c-addr',g('contact_address'));
+  const ce=$('c-email');if(ce){ce.textContent=g('contact_email');ce.href='mailto:'+g('contact_email');}
+  setText('c-join',g('join_text'));
+  $('c-reqs').innerHTML=g('join_reqs','').split('|').filter(Boolean).map(r=>`<li style="padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.1);padding-left:1rem">→ ${r}</li>`).join('');
+  const ca=$('c-apply');if(ca)ca.href='mailto:'+g('contact_email')+'?subject=ILAMPS Application';
+}
+
+// ═══ NAV & INIT ═══
+
+// ── ORCID INTEGRATION ──
+async function fetchFromOrcid(){
+  if(!CP||!CP.orcid)return showToast('❌ Set your ORCID link in My Profile first!');
+  const match=(CP.orcid||'').match(/\d{4}-\d{4}-\d{4}-\d{3}[0-9X]/i);
+  if(!match)return showToast('❌ Invalid ORCID format!');
+  const orcid=match[0]; showToast('⏳ Fetching from ORCID...');
+  try{
+    const res=await fetch(`https://pub.orcid.org/v3.0/${orcid}/works`,{headers:{'Accept':'application/json'}});
+    const data=await res.json(); const works=data.group;
+    if(!works||!works.length)return showToast('No publications found on ORCID.');
+    $('orcid-list').innerHTML=works.map((w,i)=>{
+      const s=w['work-summary'][0];
+      const title=s.title?.title?.value||'Unknown Title';
+      const year=s['publication-date']?.year?.value||'';
+      const type=s.type||'';
+      const journal=s['journal-title']?.value||'';
+      const doiEl=(s['external-ids']?.['external-id']||[]).find(e=>e['external-id-type']==='doi');
+      const doi=doiEl?`https://doi.org/${doiEl['external-id-value']}`:'';
+      const pd=JSON.stringify({title,year,type,journal,doi}).replace(/"/g,'&quot;');
+      return `<div class="aci"><div class="aci-h" style="align-items:flex-start">
+        <span style="font-size:.85rem;font-weight:700;line-height:1.4">${title} (${year})<br><span style="font-weight:400;color:var(--muted)">${journal}</span></span>
+        <button class="btn btn-p btn-sm" onclick='fillPubFromOrcid(${pd});closeMo("orcid")'>Use</button>
+      </div></div>`;
+    }).join('');
+    openMo('orcid');
+  }catch(e){showToast('❌ Failed to fetch ORCID data');}
+}
+function fillPubFromOrcid(d){
+  setVal('np-t',d.title); setVal('np-yr',d.year); setVal('np-venue',d.journal); setVal('np-doi',d.doi);
+  let t='Journal Paper';
+  if((d.type||'').toLowerCase().includes('conference'))t='Conference Paper';
+  if((d.type||'').toLowerCase().includes('book'))t='Book Chapter';
+  setVal('np-type',t);
+  showToast('✓ Form filled from ORCID. Review and save.');
 }
 
 $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
 
 async function init(){
-  if(!db)return showToast('❌ Configure Supabase client nodes correctly');
-  await loadUser(); await initPublicData(); await loadSlides();
-  handleRoute(); 
+  if(!db)return showToast('⚙️ Configure Supabase credentials in index.html',5000);
+  await loadUser();
+  loadCountsDisplay(); // FIX: runs independently, does not depend on lab_settings
+  await initPublicData();
+  await loadSlides();
+  handleRoute();
 }
 init();
 </script>
