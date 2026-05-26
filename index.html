@@ -499,8 +499,8 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
         <div class="dcard"><h3>Manage Papers</h3><div id="my-pubs"></div></div>
       <div class="dcard">
         <h3>Author Name Manager</h3>
-        <p style="font-size:.82rem;color:var(--muted);margin-bottom:.8rem">Replace abbreviated ORCID names (e.g. <em>Md.A. Hossain</em>) with full lab member names. After replacing, clicking the name on the website will open that member's profile.</p>
-        <div id="author-replace-list"><div class="empty" style="padding:1rem">Load publications to see author names.</div></div>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem">Replace abbreviated names (e.g. <em>Md.A. Hossain</em>) with full lab member names. After replacing, clicking the name on the website will open their profile.</p>
+        <div id="author-replace-list" style="max-height:400px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--r);padding:.5rem"><div style="text-align:center;padding:1rem;color:var(--gray-light)">Loading author names...</div></div>
       </div>
       </div>
 
@@ -902,7 +902,7 @@ async function loadMyPubs(){
       </div>
     </div>`).join('');
 }
-  buildAuthorReplaceUI(); // always call - will load members if needed
+  await buildAuthorReplaceUI(); // await ensures DOM update completes
 
 function toggleAllPubs(checked){
   document.querySelectorAll('.pub-chk').forEach(c=>c.checked=checked);
@@ -1513,7 +1513,10 @@ async function buildAuthorReplaceUI(){
   if(!globalMembers.length)await loadMemberSelect(); // ensure members loaded
   const allAuthors=new Set();
   fetchedData.pubs.forEach(p=>{
-    (p.authors_list||p.authors||'').split(',').map(n=>n.trim()).filter(Boolean).forEach(n=>allAuthors.add(n));
+    const authStr=p.authors_list||p.authors||'';
+    if(!authStr)return;
+    // Try comma-split for "Last1, First1, Last2, First2" style too
+    authStr.split(',').map(n=>n.trim()).filter(n=>n.length>1).forEach(n=>allAuthors.add(n));
   });
   authorReplaceCache=[...allAuthors];
   const el=$('author-replace-list');if(!el)return;
