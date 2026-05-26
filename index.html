@@ -1225,9 +1225,9 @@ async function initPublicData() {
   const {data:s}=await db.from('lab_settings').select('*');if(!s)return;
   const g=(k,f='')=>gS(s,k,f);
   
-  const labFullName = g('lab_fullname', 'Interdisciplinary Laboratory for Advanced Material Processing and Simulation');
+  const labFullName = g('lab_fullname', 'Interdisciplinary Laboratory of Advanced Material Processing and Simulation');
   const labShortName = g('lab_name', 'ILAMPS');
-  setText('h-name', `${labFullName} (${labShortName})`);
+  setText('h-name', `${labShortName}`);
   setText('nav-lab-name', labShortName);
   setText('h-desc',g('about'));
   
