@@ -265,7 +265,7 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
         <div class="hero-content">
           <h1 class="hero-title" id="h-name">ILAMPS</h1>
           <div class="hero-badge">Active Research Group</div>
-          <p class="hero-desc" id="h-desc">Loading...</p>
+          <p class="hero-desc" id="h-desc"></p>
           <div class="hero-actions">
             <button class="btn btn-p" onclick="goPage('research')">Explore Research</button>
             <button class="btn btn-g" onclick="goPage('contact')">Join the Lab</button>
@@ -1174,7 +1174,6 @@ async function loadCountsDisplay(){
 // ═══ PUBLIC RENDERING ═══
 async function initPublicData(){
   if(!db)return;
-  try{
   const {data:s}=await db.from('lab_settings').select('*');
   const sArr=s||[];
   const g=(k,f='')=>gS(sArr,k,f);
@@ -1202,7 +1201,6 @@ async function initPublicData(){
   $('home-gallery').innerHTML=(galData&&galData.length)?galData.map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span></div></div>`).join(''):'<div class="empty">No gallery yet.</div>';
   renderTeamPage(sortedMems);renderResearchPage();renderAllPubs();renderAllNews();renderGallery();renderContact(sArr);
 }
-  }catch(e){console.error('initPublicData error:',e);}
 
 function pubCardHome(p){
   const shortAbs=p.abstract?(p.abstract.length>130?p.abstract.substring(0,130)+'...':p.abstract):'';
