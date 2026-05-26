@@ -346,7 +346,7 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
     <div><div class="f-title">Contact</div><div style="display:flex;gap:10px;margin-bottom:.8rem;align-items:flex-start"><span>📍</span><p id="f-addr"></p></div><div style="display:flex;gap:10px;align-items:center"><span>✉️</span><a id="f-email" class="f-link" style="margin:0"></a></div></div>
     <div><div class="f-title">Quick Links</div><a onclick="goPage('team')" class="f-link">Team</a><a onclick="goPage('publications')" class="f-link">Publications</a><a onclick="goPage('contact')" class="f-link">Contact Us</a></div>
   </div>
-  <div class="f-bottom"><p id="footer-copy">© ILAMPS.</p>
+  <div class="f-bottom"><p id="footer-copy">© ILAMPS</p>
       <div style="display:flex;gap:.6rem;align-items:center">
         <div id="footer-out"><button class="btn btn-g btn-sm" onclick="openMo('login')" style="font-size:.72rem;padding:.3rem .75rem">🔐 Login</button></div>
         <div id="footer-in" style="display:none"><button class="btn btn-p btn-sm" onclick="openDash()" style="font-size:.72rem;padding:.3rem .75rem">📊 Dashboard</button></div>
@@ -452,6 +452,7 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
               <input type="text" id="p-custom-role" placeholder="Custom role" style="display:none;margin-top:.5rem">
             </div>
             <div class="ff"><label>Display Designation</label><input type="text" id="p-desig" placeholder="e.g. Lead Researcher"></div>
+            <div class="ff"><label>Degree / Title</label><input type="text" id="p-degree" placeholder="e.g. Dr.Eng, PhD, MSc, BSc"></div>
           </div>
         </div>
         <div class="g2"><div class="ff"><label>Department</label><input type="text" id="p-dept"></div><div class="ff"><label>University</label><input type="text" id="p-uni"></div></div>
@@ -849,7 +850,7 @@ document.querySelectorAll('.dni').forEach(btn=>{
 // Profile
 function loadProfileForm(){
   if(!CP)return;
-  setVal('p-name',CP.name);setVal('p-desig',CP.designation);setVal('p-dept',CP.department);
+  setVal('p-name',CP.name);setVal('p-desig',CP.designation);setVal('p-degree',CP.degree||'');setVal('p-dept',CP.department);
   setVal('p-uni',CP.university);setVal('p-research',CP.research);setVal('p-bio',CP.bio);
   setVal('p-interests',CP.interests);setVal('p-email',CP.email);setVal('p-website',CP.website);
   setVal('p-linkedin',CP.linkedin);setVal('p-orcid',CP.orcid);
@@ -862,7 +863,7 @@ async function saveProfile(){
   const roleSelect=getVal('p-role');
   const finalRole=roleSelect==='Custom'?getVal('p-custom-role'):roleSelect;
   const {error}=await db.from('profiles').update({
-    name:nm,slug:genSlug(nm),role:finalRole,designation:getVal('p-desig'),
+    name:nm,slug:genSlug(nm),role:finalRole,designation:getVal('p-desig'),degree:getVal('p-degree'),
     department:getVal('p-dept'),university:getVal('p-uni'),research:getVal('p-research'),
     bio:getVal('p-bio'),interests:getVal('p-interests'),email:getVal('p-email'),
     photo_url:profilePhotoUrl||'',website:getVal('p-website'),linkedin:getVal('p-linkedin'),orcid:getVal('p-orcid')
@@ -1207,7 +1208,7 @@ async function initPublicData(){
   const g=(k,f='')=>gS(sArr,k,f);
   setText('h-name',g('lab_name','ILAMPS'));setText('nav-lab-name',g('lab_name','ILAMPS'));
   setText('h-desc',g('about'));setText('hs-founded',g('founded','—'));
-  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · 'Developed by Abdullah Shadek Fahim`);
+  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · Developed by Abdullah Shadek Fahim`);
   const logo=g('lab_logo');if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}">`;updateFavicon(logo);}
   const jlogo=g('just_logo');
   if(logo){$('f-logo-box-1').style.display='flex';$('f-logo-ilamps').src=logo;}
@@ -1229,6 +1230,16 @@ async function initPublicData(){
   $('home-pubs').innerHTML=sortedHomePubs.length?sortedHomePubs.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications.</div>';
   $('home-gallery').innerHTML=(galData&&galData.length)?galData.map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span></div></div>`).join(''):'<div class="empty">No gallery yet.</div>';
   renderTeamPage(sortedMems);renderResearchPage();renderAllPubs();renderAllNews();renderGallery();renderContact(sArr);
+}
+
+function fmtName(m){
+  const name=m.name||'—';
+  const deg=m.degree||'';
+  return deg?`${name}, <span style="font-size:.85em;font-weight:600;color:var(--accent)">${deg}</span>`:name;
+}
+function fmtNamePlain(m){
+  const name=m.name||'—';
+  return m.degree?`${name}, ${m.degree}`:name;
 }
 
 function renderAuthors(p){
@@ -1282,7 +1293,7 @@ function memberCardHTML(m){
   if(m.orcid)links+=`<a href="${m.orcid}" target="_blank" title="ORCID" style="font-weight:800">iD</a>`;
   return `<div class="tc" onclick="goPage('profile','${routeParam}')">
     ${m.photo_url?`<img src="${m.photo_url}" class="tc-av">`:`<div class="tc-av-ph">${ini(m.name)}</div>`}
-    <div class="tc-name">${m.name||'—'}</div>
+    <div class="tc-name">${m.name||'—'}${m.degree?` <span style='font-size:.7rem;color:var(--accent);font-weight:700'>${m.degree}</span>`:''}</div>
     <div class="tc-role">${m.designation||m.role||''}</div>
     <div style="font-size:.75rem;color:var(--muted);line-height:1.4;min-height:35px">${m.department||''}<br>${m.university||''}</div>
     <div class="tc-links" style="display:flex;gap:.5rem;justify-content:center;margin-top:1rem" onclick="event.stopPropagation()">${links}</div>
@@ -1312,7 +1323,7 @@ async function buildProfileDetail(id){
     <div class="dp-container">
       <div class="dp-hero">
         ${m.photo_url?`<img src="${m.photo_url}" class="dp-photo">`:`<div class="dp-photo-ph">${ini(m.name)}</div>`}
-        <div><div class="dp-name">${m.name||'—'}</div><div class="dp-role">${m.designation||m.role||'Researcher'}</div>
+        <div><div class="dp-name">${m.name||'—'}${m.degree?` <span style='font-size:1.2rem;color:var(--accent);font-weight:700'>${m.degree}</span>`:''}</div><div class="dp-role">${m.designation||m.role||'Researcher'}</div>
         <div class="dp-dept" style="margin-bottom:1rem">${m.department?m.department+', ':''}${m.university||''}</div>
         <div style="display:flex;gap:.5rem;flex-wrap:wrap">${socialHTML}</div></div>
       </div>
@@ -1381,7 +1392,7 @@ async function renderTeamPage(sortedMems){
     if(!mems.length)continue;
     if(title==='Principal Investigator'){
       html+=`<div style="margin-bottom:4rem"><span class="dp-slabel" style="font-size:1rem;margin-bottom:1.5rem">${title}</span><div class="pi-card">${mems.map(m=>`
-        <div style="text-align:center">${m.photo_url?`<img src="${m.photo_url}" class="pi-photo">`:`<div class="pi-photo-ph">${ini(m.name)}</div>`}<div class="pi-name">${m.name}</div><div class="pi-desig">${m.designation||m.role}</div><div class="pi-dept">${m.department||''}<br>${m.university||''}</div></div>
+        <div style="text-align:center">${m.photo_url?`<img src="${m.photo_url}" class="pi-photo">`:`<div class="pi-photo-ph">${ini(m.name)}</div>`}<div class="pi-name">${m.name}${m.degree?' <span style="font-size:.75rem;color:var(--accent-light)">('+m.degree+')</span>':''}</div><div class="pi-desig">${m.designation||m.role}</div><div class="pi-dept">${m.department||''}<br>${m.university||''}</div></div>
         <div><span class="pi-sl">Biography</span><p class="pi-bio">${m.bio||''}</p><button class="btn btn-o btn-sm" style="margin-top:1rem" onclick="goPage('profile','${m.id}')">View Full Profile</button></div>
       `).join('')}</div></div>`;
     }else{
