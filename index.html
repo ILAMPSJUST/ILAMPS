@@ -227,9 +227,9 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
 // ── EmailJS Config (for admin notifications) ──
 // Setup: emailjs.com → free account → Gmail service → template with {from_name}, {from_email}, {message} vars
-const EMAILJS_SERVICE_ID  = 'service_mh86scj';   // e.g. 'service_abc123'
-const EMAILJS_TEMPLATE_ID = 'template_g8i9owl';  // e.g. 'template_xyz789'
-const EMAILJS_PUBLIC_KEY  = 'dl0NwGrQSXRyfGvV-';   // e.g. 'user_ABCDEF123'
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_abc123'
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xyz789'
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'user_ABCDEF123'
 const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
 </script>
 <div class="toast" id="toast"></div>
@@ -1057,8 +1057,29 @@ async function deleteUserProfile(userId,userName){
 async function updateMemberField(id,field,val){
   const p={};p[field]=val;
   const {error}=await db.from('profiles').update(p).eq('id',id);
-  if(error)showToast('❌ '+error.message);
-  else{showToast('✓ Updated');loadMembersAdmin();}
+  if(error){showToast('❌ '+error.message);return;}
+  showToast('✓ Updated');
+  // Send approval email to user
+  if(field==='approved'&&val===true){
+    const {data:m}=await db.from('profiles').select('name,email').eq('id',id).single();
+    if(m?.email)sendApprovalEmail(m.name||'Member',m.email);
+  }
+  loadMembersAdmin();
+}
+
+async function sendApprovalEmail(userName,userEmail){
+  if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY')return;
+  try{
+    emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});
+    await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{
+      to_email:userEmail,
+      from_name:'ILAMPS Lab',
+      from_email:ADMIN_EMAIL,
+      message:`Dear ${userName},\n\nYour ILAMPS account has been approved! You can now log in to the dashboard at ilamps.pages.dev.\n\nWelcome to the lab!\n\nILAMPS Team`,
+      subject:`ILAMPS: Your account has been approved ✓`
+    });
+    showToast('✓ Approval email sent to '+userEmail);
+  }catch(e){console.warn('Approval email failed:',e);}
 }
 
 
