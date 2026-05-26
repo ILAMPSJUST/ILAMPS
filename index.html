@@ -1293,7 +1293,8 @@ function memberCardHTML(m){
   if(m.orcid)links+=`<a href="${m.orcid}" target="_blank" title="ORCID" style="font-weight:800">iD</a>`;
   return `<div class="tc" onclick="goPage('profile','${routeParam}')">
     ${m.photo_url?`<img src="${m.photo_url}" class="tc-av">`:`<div class="tc-av-ph">${ini(m.name)}</div>`}
-    <div class="tc-name">${m.name||'—'}${m.degree?` <span style='font-size:.7rem;color:var(--accent);font-weight:700'>${m.degree}</span>`:''}</div>
+    <div class="tc-name">${m.name||'—'}</div>
+    ${m.degree?`<div style="font-size:.65rem;color:var(--accent);font-weight:700;background:rgba(74,123,200,.1);padding:.1rem .45rem;border-radius:4px;display:inline-block;margin-bottom:.3rem">${m.degree}</div>`:''}
     <div class="tc-role">${m.designation||m.role||''}</div>
     <div style="font-size:.75rem;color:var(--muted);line-height:1.4;min-height:35px">${m.department||''}<br>${m.university||''}</div>
     <div class="tc-links" style="display:flex;gap:.5rem;justify-content:center;margin-top:1rem" onclick="event.stopPropagation()">${links}</div>
@@ -1323,7 +1324,12 @@ async function buildProfileDetail(id){
     <div class="dp-container">
       <div class="dp-hero">
         ${m.photo_url?`<img src="${m.photo_url}" class="dp-photo">`:`<div class="dp-photo-ph">${ini(m.name)}</div>`}
-        <div><div class="dp-name">${m.name||'—'}${m.degree?` <span style='font-size:1.2rem;color:var(--accent);font-weight:700'>${m.degree}</span>`:''}</div><div class="dp-role">${m.designation||m.role||'Researcher'}</div>
+        <div>
+          <div style="display:flex;align-items:baseline;flex-wrap:wrap;gap:.5rem;margin-bottom:.3rem">
+            <div class="dp-name" style="margin-bottom:0">${m.name||'—'}</div>
+            ${m.degree?`<span style="font-size:1rem;color:var(--accent);font-weight:700;padding:.15rem .6rem;background:rgba(74,123,200,.1);border-radius:6px;white-space:nowrap">${m.degree}</span>`:''}
+          </div>
+          <div class="dp-role" style="margin-bottom:.2rem">${m.designation||m.role||'Researcher'}</div>
         <div class="dp-dept" style="margin-bottom:1rem">${m.department?m.department+', ':''}${m.university||''}</div>
         <div style="display:flex;gap:.5rem;flex-wrap:wrap">${socialHTML}</div></div>
       </div>
@@ -1392,7 +1398,9 @@ async function renderTeamPage(sortedMems){
     if(!mems.length)continue;
     if(title==='Principal Investigator'){
       html+=`<div style="margin-bottom:4rem"><span class="dp-slabel" style="font-size:1rem;margin-bottom:1.5rem">${title}</span><div class="pi-card">${mems.map(m=>`
-        <div style="text-align:center">${m.photo_url?`<img src="${m.photo_url}" class="pi-photo">`:`<div class="pi-photo-ph">${ini(m.name)}</div>`}<div class="pi-name">${m.name}${m.degree?' <span style="font-size:.75rem;color:var(--accent-light)">('+m.degree+')</span>':''}</div><div class="pi-desig">${m.designation||m.role}</div><div class="pi-dept">${m.department||''}<br>${m.university||''}</div></div>
+        <div style="text-align:center">${m.photo_url?`<img src="${m.photo_url}" class="pi-photo">`:`<div class="pi-photo-ph">${ini(m.name)}</div>`}<div class="pi-name">${m.name}</div>
+          ${m.degree?`<div style="font-size:.72rem;color:var(--accent-light);font-weight:700;background:rgba(74,123,200,.18);padding:.15rem .55rem;border-radius:5px;display:inline-block;margin:0 auto .4rem">${m.degree}</div>`:''}
+          <div class="pi-desig">${m.designation||m.role}</div><div class="pi-dept">${m.department||''}<br>${m.university||''}</div></div>
         <div><span class="pi-sl">Biography</span><p class="pi-bio">${m.bio||''}</p><button class="btn btn-o btn-sm" style="margin-top:1rem" onclick="goPage('profile','${m.id}')">View Full Profile</button></div>
       `).join('')}</div></div>`;
     }else{
