@@ -209,7 +209,15 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem;font-si
 .up-preview{width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:.8rem;display:none;box-shadow:var(--shadow)}.up-preview.show{display:block}
 .up-ph{font-size:2rem;display:block;margin-bottom:.5rem;opacity:.5}.up-label{font-size:.85rem;font-weight:600;color:var(--navy)}.up-hint{font-size:.7rem;color:var(--muted);margin-top:.4rem;display:block}
 .up-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2}
-@media(max-width:768px){.dl{display:block}.ds{display:none}#mob-dash-nav{display:block!important}.g2,.g3,.d2,.d3{grid-template-columns:1fr}.dc{padding:1rem}}
+
+/* MOBILE DASHBOARD FIXES */
+@media(max-width:768px){
+  .dl{display:flex;flex-direction:column;flex:1;}
+  .ds{display:none}
+  #mob-dash-nav{display:block!important}
+  .dc{padding:1rem;flex:1;overflow-y:auto;}
+  .g2,.g3,.d2,.d3{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -402,17 +410,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     <div class="dc">
       <div id="mob-dash-nav" style="display:none;margin-bottom:1.2rem">
         <select onchange="switchDashSection(this.value)" style="width:100%;padding:.65rem 1rem;background:#fff;border:1.5px solid var(--border);border-radius:10px;color:var(--navy);font-size:.88rem;font-weight:600;font-family:var(--f)">
-          <option value="d-profile">👤 My Profile</option>
-          <option value="d-mypubs">📄 My Publications</option>
-          <option value="" disabled style="color:var(--gray);font-size:.7rem">── Admin ──</option>
-          <option value="d-lab">⚙️ Settings & Logos</option>
-          <option value="d-hero">🖼️ Hero Slides</option>
-          <option value="d-members">👥 Members</option>
-          <option value="d-research">🔬 Research Areas</option>
-          <option value="d-ongoing">⚡ Projects</option>
-          <option value="d-news">📢 News</option>
-          <option value="d-gallery">🖼️ Gallery</option>
-        </select>
+          </select>
       </div>
 
       <div class="dsec active" id="d-profile">
@@ -626,12 +624,13 @@ let npAuthorsList=[];
 let cropCb=null,cropper=null,cropFolder='',targetRatio=NaN;
 let editState={pub:null,news:null,gal:null,proj:null,res:null};
 let fetchedData={pubs:[],news:[],gal:[],proj:[],res:[]};
+let globalProfiles = []; // For Author linking
+
 const roleRanks={'Principal Investigator':1,'Assistant Investigator':2,'Research Assistant':3,'PhD. Student':4,'MSc. Student':5,'Graduate Research Student':6,'Undergraduate Student':7,'Lab Technician':8,'Alumni':9};
 const getRank=role=>roleRanks[role]||10;
 
 // ═══ HELPERS ═══
 const $=id=>document.getElementById(id);
-// FIX: setText handles numbers (0 is falsy in JS)
 const setText=(id,v)=>{const e=$(id);if(e)e.textContent=(v!=null)?String(v):''};
 const setVal=(id,v)=>{const e=$(id);if(e)e.value=v||''};
 const getVal=id=>{const e=$(id);return e?e.value.trim():''};
@@ -643,6 +642,25 @@ function showPrev(prevId,phId,url){const p=$(prevId),ph=$(phId);if(p){p.src=url;
 function hidePrev(prevId,phId){const p=$(prevId),ph=$(phId);if(p){p.src='';p.classList.remove('show')}if(ph)ph.style.display='block'}
 window.addEventListener('scroll',()=>$('scroll-top').classList.toggle('show',window.scrollY>300));
 function updateFavicon(url){if(!url)return;const l=$('favicon-link');if(l)l.href=url}
+
+// ═══ AUTHOR FORMATTING HELPER ═══
+function formatAuthors(authString, currentProfileName = null) {
+    let str = authString || '';
+    if(!globalProfiles.length) return str;
+    const sortedProfs = [...globalProfiles].sort((a,b) => (b.name||'').length - (a.name||'').length);
+    sortedProfs.forEach(prof => {
+        if (prof.name && str.includes(prof.name)) {
+            const safeName = prof.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`(^|\\s|,|;)\\s*(${safeName})\\s*(?=$|\\s|,|;)`, 'g');
+            if (currentProfileName && prof.name === currentProfileName) {
+                str = str.replace(regex, `$1<strong style="color:var(--navy)">$2</strong>`);
+            } else {
+                str = str.replace(regex, `$1<span onclick="event.stopPropagation(); goPage('profile', '${prof.id}')" style="color:var(--accent);cursor:pointer;text-decoration:underline;">$2</span>`);
+            }
+        }
+    });
+    return str;
+}
 
 // ═══ ROUTING ═══
 window.addEventListener('popstate',handleRoute);
@@ -736,40 +754,60 @@ async function loadUser(){
   const {data:p}=await db.from('profiles').select('*').eq('id',user.id).single();CP=p;
   $('nav-in-logged').style.display='flex';$('nav-out').style.display='none';const ml=$('mob-login-li'),md=$('mob-dash-li');if(ml)ml.style.display='none';if(md)md.style.display='block';const fo=$('footer-out'),fi=$('footer-in');if(fo)fo.style.display='none';if(fi)fi.style.display='block';
   $('admin-nav').style.display=p?.is_admin?'block':'none';
-  // Also update mob-dash-nav admin options
-  const msel=document.querySelector('#mob-dash-nav select');
-  if(msel){Array.from(msel.options).forEach(o=>{if(['d-lab','d-hero','d-members','d-research','d-ongoing','d-news','d-gallery'].includes(o.value))o.style.display=p?.is_admin?'':'none';});}
+  updateDashNav();
 }
 
 // ═══ DASHBOARD ═══
-function openDash(){$('dash').classList.add('open');document.body.style.overflow='hidden';
-  // Show mobile nav if small screen
-  const mn=$('mob-dash-nav');
-  if(mn){
-    mn.style.display=window.innerWidth<=768?'block':'none';
-    // Show/hide admin options
-    const sel=mn.querySelector('select');
-    if(sel){
-      Array.from(sel.options).forEach(o=>{
-        if(['d-lab','d-hero','d-members','d-research','d-ongoing','d-news','d-gallery'].includes(o.value)){
-          o.style.display=CP?.is_admin?'':'none';
-        }
-      });
-    }
-  }loadProfileForm();if(CP?.is_admin)loadLabForm();}
+function updateDashNav() {
+    const sel = document.querySelector('#mob-dash-nav select');
+    if(!sel) return;
+    sel.innerHTML = `
+      <option value="d-profile">👤 My Profile</option>
+      <option value="d-mypubs">📄 My Publications</option>
+      ${CP?.is_admin ? `
+      <option value="" disabled style="color:var(--gray);font-size:.7rem">── Admin ──</option>
+      <option value="d-lab">⚙️ Settings & Logos</option>
+      <option value="d-hero">🖼️ Hero Slides</option>
+      <option value="d-members">👥 Members</option>
+      <option value="d-research">🔬 Research Areas</option>
+      <option value="d-ongoing">⚡ Projects</option>
+      <option value="d-news">📢 News</option>
+      <option value="d-gallery">🖼️ Gallery</option>
+      ` : ''}
+    `;
+}
+
+function openDash(){
+    $('dash').classList.add('open');
+    document.body.style.overflow='hidden';
+    updateDashNav();
+    loadProfileForm();
+    if(CP?.is_admin)loadLabForm();
+}
 function closeDash(){$('dash').classList.remove('open');document.body.style.overflow='';}
+
+function switchDashSection(sec){
+  document.querySelectorAll('.dni').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.dsec').forEach(s=>s.classList.remove('active'));
+  const btn=document.querySelector(`.dni[data-sec="${sec}"]`);
+  if(btn)btn.classList.add('active');
+  const el=$(sec);if(el)el.classList.add('active');
+  const secMap={
+      'd-profile':loadProfileForm,
+      'd-mypubs':()=>{loadMyPubs();loadMemberSelect();},
+      'd-lab':loadLabForm,
+      'd-members':loadMembersAdmin,
+      'd-hero':loadSlidesAdmin,
+      'd-research':loadResearchAdmin,
+      'd-ongoing':loadProjAdmin,
+      'd-news':loadNewsAdmin,
+      'd-gallery':loadGalAdmin
+  };
+  if(secMap[sec])secMap[sec]();
+}
+
 document.querySelectorAll('.dni').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.dni').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.dsec').forEach(s=>s.classList.remove('active'));
-    btn.classList.add('active');$(btn.dataset.sec).classList.add('active');
-    const s=btn.dataset.sec;
-    if(s==='d-profile')loadProfileForm();else if(s==='d-mypubs'){loadMyPubs();loadMemberSelect();}
-    else if(s==='d-lab')loadLabForm();else if(s==='d-members')loadMembersAdmin();
-    else if(s==='d-hero')loadSlidesAdmin();else if(s==='d-research')loadResearchAdmin();
-    else if(s==='d-ongoing')loadProjAdmin();else if(s==='d-news')loadNewsAdmin();
-    else if(s==='d-gallery')loadGalAdmin();
-  });
+  btn.addEventListener('click',()=>switchDashSection(btn.dataset.sec));
 });
 
 // Profile
@@ -822,7 +860,6 @@ function triggerEditPub(id){
   const p=fetchedData.pubs.find(x=>x.id===id);if(!p)return;editState.pub=id;
   setVal('np-t',p.title);setVal('np-date',p.pub_date);setVal('np-yr',p.year);
   setVal('np-type',p.type);setVal('np-status',p.status||'Published');setVal('np-venue',p.venue);setVal('np-abs',p.abstract);setVal('np-doi',p.doi);
-  // thumbnail removed
   npAuthorsList=[];
   if(p.authors_list)p.authors_list.split(',').forEach(a=>npAuthorsList.push({name:a.trim()}));
   renderAuthChips();
@@ -932,7 +969,7 @@ async function saveGallery(){
   const url=getVal('g-url');if(!url)return showToast('❌ Upload photo first');
   const payload={url,caption:getVal('g-cap'),item_date:getVal('g-date')||null};
   const {error:ge}=editState.gal?await db.from('gallery').update(payload).eq('id',editState.gal):await db.from('gallery').insert(payload);
-  if(ge)return showToast('❌ '+ge.message,5000);
+  if(ge){ console.error(ge); return showToast('❌ '+ge.message,5000); }
   showToast('✓ Photo saved!');resetGalForm();loadGalAdmin();initPublicData();
 }
 async function loadSlidesAdmin(){
@@ -946,7 +983,7 @@ async function addSlide(){
 }
 async function delRow(table,id,reload){if(confirm('Delete?')){await db.from(table).delete().eq('id',id);showToast('✓ Deleted.');reload();initPublicData();}}
 
-// ═══ COUNTS — INDEPENDENT (FIX: runs without waiting for lab_settings) ═══
+// ═══ COUNTS — INDEPENDENT ═══
 async function loadCountsDisplay(){
   if(!db)return;
   try{
@@ -964,6 +1001,11 @@ async function loadCountsDisplay(){
 // ═══ PUBLIC RENDERING ═══
 async function initPublicData(){
   if(!db)return;
+  
+  // Fetch profiles for global Author linking first
+  const {data: profs} = await db.from('profiles').select('id,name').eq('approved',true);
+  globalProfiles = profs || [];
+
   const {data:s}=await db.from('lab_settings').select('*');
   const sArr=s||[];
   const g=(k,f='')=>gS(sArr,k,f);
@@ -977,7 +1019,6 @@ async function initPublicData(){
   const fe=$('f-email');if(fe){fe.textContent=g('contact_email');fe.href='mailto:'+g('contact_email');}
   setText('f-addr',g('contact_address'));
 
-  // Fetch latest data for home page
   const [{data:news},{data:pubsData},{data:memsData},{data:galData}]=await Promise.all([
     db.from('news').select('*').order('created_at',{ascending:false}).limit(3),
     db.from('publications').select('*').order('pub_date',{ascending:false,nullsFirst:false}).limit(4),
@@ -994,13 +1035,13 @@ async function initPublicData(){
 
 function pubCardHome(p){
   const shortAbs=p.abstract?(p.abstract.length>130?p.abstract.substring(0,130)+'...':p.abstract):'';
-  const authStr=p.authors_list||p.authors||'';
+  const authHtml=formatAuthors(p.authors_list||p.authors);
   const statusBadge=p.status?`<span style="font-size:.7rem;padding:.15rem .55rem;border-radius:4px;background:rgba(74,123,200,.12);color:var(--accent);font-weight:600">${p.status}</span>`:'';
   return `<div class="pubi-home" onclick="goPage('publication','${p.id}')">
     <div class="pubi-home-body">
       <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem;flex-wrap:wrap"><span style="font-size:.72rem;background:var(--silver);color:var(--navy);padding:.12rem .5rem;border-radius:4px;font-weight:700">${p.type||'Publication'}</span>${statusBadge}<span style="font-size:.75rem;color:var(--gray)">${p.pub_date||p.year||''}</span></div>
       <div class="pub-title">${p.title}</div>
-      ${authStr?`<div class="pub-authors" style="margin-bottom:.25rem">${authStr}</div>`:''}
+      ${authHtml?`<div class="pub-authors" style="margin-bottom:.25rem">${authHtml}</div>`:''}
       <div class="pub-venue" style="font-size:.8rem;color:var(--gray);font-style:italic">${p.venue||''}</div>
       ${shortAbs?`<div style="font-size:.83rem;color:var(--muted);margin-top:.4rem;line-height:1.6">${shortAbs}</div>`:''}
     </div>
@@ -1016,7 +1057,7 @@ function newsCard(n){
     <div class="nc-body"><h3>${n.title}</h3><p>${(n.description||'').substring(0,120)}...</p></div>
   </div>`;
 }
-// FIX: memberCardHTML always uses m.id (not slug) for routing
+
 function memberCardHTML(m){
   const routeParam=m.id;
   let links='';
@@ -1032,7 +1073,6 @@ function memberCardHTML(m){
   </div>`;
 }
 
-// FIX: buildProfileDetail uses id only (no slug query)
 async function buildProfileDetail(id){
   const el=$('dp-profile-body');
   el.innerHTML='<div class="loading"><div class="spin-el"></div>Loading profile...</div>';
@@ -1065,14 +1105,13 @@ async function buildProfileDetail(id){
       ${userProjs.length?`<div class="dp-section"><span class="dp-slabel">Projects</span><div class="proj-list">${userProjs.map(p=>`<div class="pc" style="padding:1rem 1.5rem"><div><h3 style="font-size:.95rem">${p.title}</h3><p style="font-size:.85rem;margin-bottom:0">${p.description}</p></div></div>`).join('')}</div></div>`:''}
       <div class="dp-section"><span class="dp-slabel">Publications (${(pubs||[]).length})</span>
         <div class="pub-list">${(pubs||[]).map(p=>{
-          const boldName=new RegExp('('+((m.name||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&'))+')', 'gi');
-          const boldAuthors=(p.authors_list||p.authors||'').replace(boldName,'<strong style="color:var(--navy)">$1</strong>');
+          const authHtml = formatAuthors(p.authors_list || p.authors, m.name);
           const shortAbs=p.abstract?(p.abstract.length>120?p.abstract.substring(0,120)+'...':p.abstract):'';
           return `<div class="pubi-home" onclick="goPage('publication','${p.id}')">
             <div class="pubi-home-body">
               <div class="pubi-top"><span class="pub-type">${p.type}</span><span class="pub-yr">${p.pub_date||p.year||''}</span></div>
               <div class="pub-title">${p.title}</div>
-              <div class="pub-authors">${boldAuthors}</div>
+              <div class="pub-authors">${authHtml}</div>
               <div class="pub-venue">${p.venue||''}</div>
               ${shortAbs?`<div style="font-size:.82rem;color:var(--muted);margin-top:.35rem">${shortAbs}</div>`:''}
             </div>
@@ -1087,13 +1126,14 @@ async function buildPubDetail(id){
   el.innerHTML='<div class="loading"><div class="spin-el"></div>Loading...</div>';
   const {data:p}=await db.from('publications').select('*').eq('id',id).single();
   if(!p)return el.innerHTML='<button class="back-btn" onclick="history.back()">← Back</button><div class="empty">Publication not found.</div>';
+  const authHtml = formatAuthors(p.authors_list || p.authors);
   el.innerHTML=`
     <button class="back-btn" onclick="history.back()">← Back</button>
     <div class="dp-container">
       ${p.detail_image?`<img class="dp-img" src="${p.detail_image}">`:''}
       <div style="display:flex;gap:.5rem;margin-bottom:1rem;align-items:center;flex-wrap:wrap"><span class="tag-b">${p.type}</span>${p.status?`<span style="font-size:.75rem;padding:.2rem .6rem;border-radius:4px;background:var(--silver);color:var(--navy);font-weight:700">${p.status}</span>`:''}<span style="font-size:.85rem;color:var(--gray);font-weight:700">${p.pub_date||p.year||''}</span></div>
       <div class="dp-title">${p.title}</div>
-      <div style="font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1rem">${p.authors_list||p.authors||''}</div>
+      <div style="font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1rem">${authHtml}</div>
       <div style="font-size:1.05rem;color:var(--muted);font-style:italic;margin-bottom:2rem">${p.venue||''}</div>
       ${p.abstract?`<span class="dp-slabel">Abstract</span><p style="color:var(--muted);line-height:1.8;font-size:1rem;margin-bottom:2.5rem">${p.abstract}</p>`:''}
       ${p.doi?`<a href="${p.doi}" target="_blank" class="btn btn-p">🔗 View Full Paper</a>`:''}
@@ -1161,8 +1201,6 @@ async function renderContact(sArr){
   const ca=$('c-apply');if(ca)ca.href='mailto:'+g('contact_email')+'?subject=ILAMPS Application';
 }
 
-// ═══ NAV & INIT ═══
-
 // ── ORCID INTEGRATION ──
 async function fetchFromOrcid(){
   if(!CP||!CP.orcid)return showToast('❌ Set your ORCID link in My Profile first!');
@@ -1199,25 +1237,13 @@ function fillPubFromOrcid(d){
   showToast('✓ Form filled from ORCID. Review and save.');
 }
 
-function switchDashSection(sec){
-  document.querySelectorAll('.dni').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.dsec').forEach(s=>s.classList.remove('active'));
-  const btn=document.querySelector(`.dni[data-sec="${sec}"]`);
-  if(btn)btn.classList.add('active');
-  const el=$(sec);if(el)el.classList.add('active');
-  // Load data for section
-  const secMap={'d-profile':loadProfileForm,'d-mypubs':loadMyPubs,'d-lab':loadLabForm,'d-members':loadMembersAdmin,'d-hero':loadSlidesAdmin,'d-research':loadResearchAdmin,'d-ongoing':loadProjAdmin,'d-news':loadNewsAdmin,'d-gallery':loadGalAdmin};
-  if(secMap[sec])secMap[sec]();
-}
-
 $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
 
 async function init(){
-  // Show mobile login button by default (will be hidden if logged in)
   const ml=$('mob-login-li');if(ml)ml.style.display='block';
   if(!db)return showToast('⚙️ Configure Supabase credentials in index.html',5000);
   await loadUser();
-  loadCountsDisplay(); // FIX: runs independently, does not depend on lab_settings
+  loadCountsDisplay(); 
   await initPublicData();
   await loadSlides();
   handleRoute();
