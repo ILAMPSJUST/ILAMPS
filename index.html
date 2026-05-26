@@ -187,7 +187,8 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem;font-si
 .dp-img{width:100%;max-height:450px;object-fit:cover;border-radius:var(--rl);margin-bottom:2.5rem;box-shadow:var(--shadow)}
 .dp-title{font-size:1.8rem;font-weight:900;color:var(--navy);margin-bottom:1rem;line-height:1.3}
 @media(max-width:600px){.dp-container{padding:1.5rem}.dp-hero{flex-direction:column;text-align:center}.dp-photo,.dp-photo-ph{width:120px;height:120px}}
-/* DASHBOARD */
+
+/* DASHBOARD GRID & AUTO OVERSCROLL FIXES */
 #dash{display:none;position:fixed;inset:0;z-index:9900;flex-direction:column;background:#eef1f7;overflow:hidden;}#dash.open{display:flex}
 .dn{background:var(--navy);height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;border-bottom:1px solid rgba(255,255,255,.07);box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:10}
 .dn-brand{font-size:1.2rem;font-weight:900;color:#fff}
@@ -210,13 +211,11 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem;font-si
 .up-ph{font-size:2rem;display:block;margin-bottom:.5rem;opacity:.5}.up-label{font-size:.85rem;font-weight:600;color:var(--navy)}.up-hint{font-size:.7rem;color:var(--muted);margin-top:.4rem;display:block}
 .up-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2}
 
-/* MOBILE DASHBOARD FIXES */
 @media(max-width:768px){
-  .dl{display:flex;flex-direction:column;flex:1;}
+  .dl{display:flex;flex-direction:column;flex:1;overflow-y:auto;}
   .ds{display:none}
   #mob-dash-nav{display:block!important}
-  .dc{padding:1rem;flex:1;overflow-y:auto;}
-  .g2,.g3,.d2,.d3{grid-template-columns:1fr}
+  .dc{padding:1rem;flex:none;}
 }
 </style>
 </head>
@@ -317,7 +316,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start">
       <div>
         <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">📍</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Address</h4><p id="c-addr" style="color:rgba(255,255,255,.7);line-height:1.6"></p></div></div>
-        <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">✉️</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Email</h4><a id="c-email" href="" style="color:rgba(255,255,255,.7)"></a></div></div>
+        <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">✉️</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Email</h4><a id="c-email" href="" style="color:rgba(255,255,255,.7); font-weight: bold;"></a></div></div>
       </div>
       <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);padding:2.5rem">
         <h3 style="color:#fff;font-size:1.5rem;margin-bottom:1rem">Prospective Members</h3>
@@ -788,10 +787,13 @@ async function loadUser(){
   }
 
   $('nav-in-logged').style.display='flex';$('nav-out').style.display='none';const ml=$('mob-login-li'),md=$('mob-dash-li');if(ml)ml.style.display='none';if(md)md.style.display='block';const fo=$('footer-out'),fi=$('footer-in');if(fo)fo.style.display='none';if(fi)fi.style.display='block';
-  $('admin-nav').style.display=p?.is_admin?'block':'none';
   
-  // Sidebar visibility configuration matching individual allowed components array
+  // Dashboard sidebar permission display logic
   let allowedArr = p.allowed_sections ? p.allowed_sections.split(',') : [];
+  
+  const hasAdminAccess = p.is_admin || allowedArr.some(sec => ['d-lab', 'd-hero', 'd-members', 'd-research', 'd-ongoing', 'd-news', 'd-gallery'].includes(sec));
+  $('admin-nav').style.display = hasAdminAccess ? 'block' : 'none';
+
   document.querySelectorAll('.ds .dni, #admin-nav .dni').forEach(btn => {
       const s = btn.dataset.sec;
       if(p.is_admin || allowedArr.includes(s) || s === 'd-profile' || s === 'd-mypubs') {
@@ -1153,7 +1155,10 @@ async function initPublicData(){
 
   const [{data:news},{data:pubsData},{data:memsData},{data:galData}]=await Promise.all([
     db.from('news').select('*').order('created_at',{ascending:false}).limit(3),
-    db.from('publications').select('*').order('pub_date',{ascending:false,nullsFirst:false}).limit(4),
+    db.from('publications').select('*')
+      .order('year',{ascending:false, nullsFirst:false})
+      .order('pub_date',{ascending:false, nullsFirst:false})
+      .limit(4),
     db.from('profiles').select('*').eq('approved',true),
     db.from('gallery').select('*').order('created_at',{ascending:false}).limit(3)
   ]);
@@ -1316,7 +1321,9 @@ async function renderResearchPage(){
   $('proj-list').innerHTML=(projs||[]).map(p=>`<div class="pc"><div><h3>${p.title}</h3><p>${p.description}</p><div class="pc-mems">${(p.members||[]).map(m=>`<span class="pc-mem">${m}</span>`).join('')}</div></div><span class="badge badge-${p.status||'active'}">${p.status||'active'}</span></div>`).join('')||'<div class="empty">No projects yet.</div>';
 }
 async function renderAllPubs(){
-  const {data}=await db.from('publications').select('*').order('pub_date',{ascending:false,nullsFirst:false});
+  const {data}=await db.from('publications').select('*')
+    .order('year',{ascending:false, nullsFirst:false})
+    .order('pub_date',{ascending:false, nullsFirst:false});
   setText('pub-total-count',`(${(data||[]).length})`);
   $('all-pubs').innerHTML=(data||[]).map(p=>pubCardHome(p)).join('')||'<div class="empty">No publications yet.</div>';
 }
@@ -1366,7 +1373,15 @@ async function fetchFromOrcid(){
       const doiEl=(s['external-ids']?.['external-id']||[]).find(e=>e['external-id-type']==='doi');
       const doi=doiEl?`https://doi.org/${doiEl['external-id-value']}`:'';
       
-      let authors = s['source']?.['source-name']?.value || CP.name;
+      // Author / Contributors parse from standard ORCID summary API
+      let authors = CP.name;
+      const contribs = s['contributors']?.['contributor'] || [];
+      if (contribs.length > 0) {
+          authors = contribs.map(c => c['credit-name']?.value).filter(Boolean).join(', ');
+      } else if (s['source']?.['source-name']?.value) {
+          authors = s['source']['source-name'].value;
+      }
+      if(!authors) authors = CP.name;
       
       const itemData = {title, year, type: t, journal, doi, authors};
       orcidCachedWorks.push(itemData);
