@@ -872,8 +872,8 @@ async function saveProfile(){
 // Publications CRUD
 async function loadMyPubs(){
   if(!globalMembers.length)await loadMemberSelect(); // ensure members loaded for author replace
-  const {data}=await db.from('publications').select('*').eq('user_id',CU.id).order('pub_date',{ascending:false,nullsFirst:false});
-  fetchedData.pubs=data||[];
+  const {data}=await db.from('publications').select('*').eq('user_id',CU.id);
+  fetchedData.pubs=sortPubsByDate(data||[]);
   const cont=$('my-pubs');
   if(!fetchedData.pubs.length){cont.innerHTML='<div class="empty">No publications yet.</div>';return;}
   
@@ -902,7 +902,7 @@ async function loadMyPubs(){
       </div>
     </div>`).join('');
 }
-  if(globalMembers.length)buildAuthorReplaceUI();
+  buildAuthorReplaceUI(); // always call - will load members if needed
 
 function toggleAllPubs(checked){
   document.querySelectorAll('.pub-chk').forEach(c=>c.checked=checked);
@@ -1190,14 +1190,15 @@ async function initPublicData(){
   // Fetch latest data for home page
   const [{data:news},{data:pubsData},{data:memsData},{data:galData}]=await Promise.all([
     db.from('news').select('*').order('created_at',{ascending:false}).limit(3),
-    db.from('publications').select('*').order('pub_date',{ascending:false,nullsFirst:false}).limit(4),
+    db.from('publications').select('*').limit(20), // fetch more, sort client-side
     db.from('profiles').select('*').eq('approved',true),
     db.from('gallery').select('*').order('created_at',{ascending:false}).limit(3)
   ]);
   const sortedMems=(memsData||[]).sort((a,b)=>getRank(a.role)-getRank(b.role));
   $('home-team').innerHTML=sortedMems.slice(0,6).map(m=>memberCardHTML(m)).join('');
   $('home-news').innerHTML=(news&&news.length)?news.map(n=>newsCard(n)).join(''):'<div class="empty">No news yet.</div>';
-  $('home-pubs').innerHTML=(pubsData&&pubsData.length)?pubsData.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications.</div>';
+  const sortedHomePubs=sortPubsByDate(pubsData).slice(0,4);
+  $('home-pubs').innerHTML=sortedHomePubs.length?sortedHomePubs.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications.</div>';
   $('home-gallery').innerHTML=(galData&&galData.length)?galData.map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span></div></div>`).join(''):'<div class="empty">No gallery yet.</div>';
   renderTeamPage(sortedMems);renderResearchPage();renderAllPubs();renderAllNews();renderGallery();renderContact(sArr);
 }
@@ -1249,9 +1250,10 @@ async function buildProfileDetail(id){
   const {data:m,error}=await db.from('profiles').select('*').eq('id',id).single();
   if(!m||error)return el.innerHTML='<button class="back-btn" onclick="history.back()">← Back</button><div class="empty">Profile not found.</div>';
   const [{data:pubs},{data:allProjs}]=await Promise.all([
-    db.from('publications').select('*').or(`user_id.eq.${m.id},linked_users.cs.{${m.id}}`).order('pub_date',{ascending:false,nullsFirst:false}),
+    db.from('publications').select('*').or(`user_id.eq.${m.id},linked_users.cs.{${m.id}}`),
     db.from('ongoing_projects').select('*')
   ]);
+  const sortedPubs=sortPubsByDate(pubs||[]);
   const userProjs=(allProjs||[]).filter(p=>(p.members||[]).some(mem=>mem.toLowerCase().includes((m.name||'').toLowerCase())));
   let socialHTML='';
   if(m.email)socialHTML+=`<a href="mailto:${m.email}" class="btn btn-o btn-sm">✉️ Email</a>`;
@@ -1273,8 +1275,8 @@ async function buildProfileDetail(id){
         ${m.interests?`<div class="dp-section"><span class="dp-slabel">Research Interests</span><div style="display:flex;flex-wrap:wrap;gap:.5rem">${m.interests.split(/[\n,]+/).filter(Boolean).map(i=>`<span style="background:rgba(74,123,200,.1);color:var(--accent);border:1px solid rgba(74,123,200,.2);padding:.3rem .9rem;border-radius:50px;font-size:.82rem;font-weight:600">${i.trim()}</span>`).join('')}</div></div>`:''}
       </div>
       ${userProjs.length?`<div class="dp-section"><span class="dp-slabel">Projects</span><div class="proj-list">${userProjs.map(p=>`<div class="pc" style="padding:1rem 1.5rem"><div><h3 style="font-size:.95rem">${p.title}</h3><p style="font-size:.85rem;margin-bottom:0">${p.description}</p></div></div>`).join('')}</div></div>`:''}
-      <div class="dp-section"><span class="dp-slabel">Publications (${(pubs||[]).length})</span>
-        <div class="pub-list">${(pubs||[]).map(p=>{
+      <div class="dp-section"><span class="dp-slabel">Publications (${sortedPubs.length})</span>
+        <div class="pub-list">${sortedPubs.map(p=>{
           const boldName=new RegExp('('+((m.name||'').replace(/[.*+?^${}()|[\]\\]/g,'\\$&'))+')', 'gi');
           const boldAuthors=(p.authors_list||p.authors||'').replace(boldName,'<strong style="color:var(--navy)">$1</strong>');
           const shortAbs=p.abstract?(p.abstract.length>120?p.abstract.substring(0,120)+'...':p.abstract):'';
@@ -1349,9 +1351,10 @@ async function renderResearchPage(){
   $('proj-list').innerHTML=(projs||[]).map(p=>`<div class="pc"><div><h3>${p.title}</h3><p>${p.description}</p><div class="pc-mems">${(p.members||[]).map(m=>`<span class="pc-mem">${m}</span>`).join('')}</div></div><span class="badge badge-${p.status||'active'}">${p.status||'active'}</span></div>`).join('')||'<div class="empty">No projects yet.</div>';
 }
 async function renderAllPubs(){
-  const {data}=await db.from('publications').select('*').order('pub_date',{ascending:false,nullsFirst:false});
-  setText('pub-total-count',`(${(data||[]).length})`);
-  $('all-pubs').innerHTML=(data||[]).map(p=>pubCardHome(p)).join('')||'<div class="empty">No publications yet.</div>';
+  const {data}=await db.from('publications').select('*');
+  const sorted=sortPubsByDate(data);
+  setText('pub-total-count',`(${sorted.length})`);
+  $('all-pubs').innerHTML=sorted.map(p=>pubCardHome(p)).join('')||'<div class="empty">No publications yet.</div>';
 }
 async function renderAllNews(){
   const {data}=await db.from('news').select('*').order('created_at',{ascending:false});
@@ -1506,7 +1509,8 @@ function swapOrcidName(name){
   return first?`${first} ${last}`:last;
 }
 
-function buildAuthorReplaceUI(){
+async function buildAuthorReplaceUI(){
+  if(!globalMembers.length)await loadMemberSelect(); // ensure members loaded
   const allAuthors=new Set();
   fetchedData.pubs.forEach(p=>{
     (p.authors_list||p.authors||'').split(',').map(n=>n.trim()).filter(Boolean).forEach(n=>allAuthors.add(n));
@@ -1544,6 +1548,18 @@ async function applyAuthorReplace(idx){
   if(count)showToast(`✓ Replaced "${oldName}" → "${memberName}" in ${count} pub(s)`);
   else showToast(`⚠️ No matching publications found`);
   loadMyPubs();
+}
+
+function sortPubsByDate(pubs){
+  return (pubs||[]).sort((a,b)=>{
+    // Use pub_date if available, else parse year text
+    const getTime=p=>{
+      if(p.pub_date)return new Date(p.pub_date).getTime();
+      const y=parseInt(p.year);
+      return isNaN(y)?0:new Date(y,11,31).getTime(); // year → Dec 31
+    };
+    return getTime(b)-getTime(a);
+  });
 }
 
 $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
