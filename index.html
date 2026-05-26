@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ILAMPS – Interdisciplinary Laboratory of Advanced Material Processing and Simulation</title>
+<title>ILAMPS – Interdisciplinary Laboratory for Advanced Materials Processing and Simulations</title>
 <meta name="description" content="ILAMPS – Computational materials science research at JUST, Bangladesh.">
 <link rel="icon" type="image/png" id="favicon-link" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚛️</text></svg>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
@@ -20,7 +20,7 @@
   --shadow:0 8px 30px rgba(13,31,66,.08);--shadow-lg:0 15px 40px rgba(13,31,66,.15);
   --r:14px;--rl:20px;--tr:0.3s cubic-bezier(.4,0,.2,1)
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0; overflow-wrap: break-word; word-wrap: break-word;}
 html{scroll-behavior:smooth}
 body{font-family:var(--f);color:var(--text);background:var(--white);overflow-x:hidden;-webkit-font-smoothing:antialiased}
 h1,h2,h3,h4,h5{font-family:var(--f);font-weight:700;line-height:1.2;letter-spacing:-.02em}
@@ -80,10 +80,13 @@ button{font-family:var(--f);cursor:pointer}
 .nav-ham span{display:block;width:24px;height:2.5px;background:#fff;border-radius:3px;transition:var(--tr)}
 @media(max-width:900px){
   .nav-ham{display:flex}
-  .nav-links{display:none;position:absolute;top:80px;left:0;right:0;flex-direction:column;background:rgba(10,20,55,.99);padding:1rem;border-top:1px solid rgba(255,255,255,.06);gap:.3rem;backdrop-filter:blur(20px)}
+  .nav-links{display:none;position:absolute;top:70px;left:0;right:0;flex-direction:column;background:rgba(10,20,55,.99);padding:1rem;border-top:1px solid rgba(255,255,255,.06);gap:.3rem;backdrop-filter:blur(20px)}
   .nav-links.open{display:flex}
   .nav-links a{width:100%;padding:.8rem 1rem;font-size:.95rem;}
   .nav-auth .btn-sm:first-child{display:none}
+  .nav-in { height: 70px; }
+  .nav-logo-box { width: 50px; height: 50px; }
+  .nav-logo-nm { font-size: 1.3rem; }
 }
 
 /* ═══ HERO ═══ */
@@ -115,16 +118,16 @@ button{font-family:var(--f);cursor:pointer}
 .hs-num:hover{color:var(--accent-light)}
 .hs-lbl{font-size:.65rem;color:var(--gray-light);letter-spacing:.1em;text-transform:uppercase;margin-top:.4rem;font-weight:600}
 
-/* Mobile Hero Reordering Rules */
+/* Mobile Hero Fixes */
 @media(max-width:900px){
-  .hero-split { display:flex; flex-direction:column; padding-top:110px; gap:1.2rem; text-align:left;}
-  .hero-content { display: contents; }
-  .hero-title { order: 1; font-size:1.8rem; line-height:1.25; margin-bottom:0;}
-  .hero-badge { order: 2; margin-bottom:0;}
-  .hero-slides-container { order: 3; width: 100%; aspect-ratio:4/3; height:auto; margin: .8rem 0; }
-  .hero-desc { order: 4; font-size:.95rem; margin-bottom:0;}
-  .hero-actions { order: 5; margin-bottom:0; width:100%;}
-  .hero-stats { order: 6; border-top:none; padding-top:1rem; gap:1rem; justify-content:flex-start;}
+  .hero-split { display:flex; flex-direction:column; padding-top:90px; gap:1.5rem; text-align:left;}
+  .hero-content { display: flex; flex-direction: column; align-items: flex-start;}
+  .hero-title { order: 1; font-size:clamp(1.7rem, 5vw, 2.2rem); line-height:1.3; margin-bottom:0.8rem;}
+  .hero-badge { order: 2; margin-bottom:1.5rem;}
+  .hero-slides-container { order: 3; width: 100%; aspect-ratio:4/3; height:auto; margin: 0 0 1.5rem 0; }
+  .hero-desc { order: 4; font-size:.95rem; margin-bottom:1.5rem;}
+  .hero-actions { order: 5; margin-bottom:0; width:100%; justify-content:flex-start;}
+  .hero-stats { order: 6; border-top:none; padding-top:1.5rem; gap:1.5rem; justify-content:flex-start;}
 }
 
 /* ═══ HOME SECTIONS ═══ */
@@ -132,6 +135,20 @@ button{font-family:var(--f);cursor:pointer}
 .home-sec.gray{background:var(--off)}
 .view-all{display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;font-weight:700;color:var(--accent);cursor:pointer;margin-top:2.5rem;transition:var(--tr);letter-spacing:.01em}
 .view-all:hover{gap:.7rem; color:var(--navy)}
+
+/* ABOUT & BADGES SYSTEM */
+.about-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:4rem;align-items:center}
+.about-big{background:var(--navy);border-radius:var(--rl);padding:1.75rem;position:relative;overflow:hidden;margin-bottom:.875rem; cursor:pointer;}
+.about-big::after{content:'';position:absolute;top:-25px;right:-25px;width:90px;height:90px;background:rgba(74,123,200,.12);border-radius:50%}
+.about-big-num{font-size:2.75rem;font-weight:900;color:var(--accent-light);line-height:1;}
+.about-big:hover .about-big-num{color:#fff}
+.about-big-lbl{font-size:.78rem;color:rgba(255,255,255,.58);margin-top:.28rem}
+.about-sm-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+.about-sm{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center;box-shadow:var(--shadow);cursor:pointer;transition:var(--tr)}
+.about-sm:hover{border-color:var(--accent);transform:translateY(-2px)}
+.about-sm .num{font-size:1.6rem;font-weight:800;color:var(--navy)}
+.about-sm .lbl{font-size:.63rem;color:var(--muted);margin-top:.18rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr;gap:2rem}.about-sm-row{grid-template-columns:1fr 1fr}}
 
 /* PI CONTAINER */
 .pi-card{display:grid;grid-template-columns:260px 1fr;gap:3rem;align-items:start;background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:2.5rem;box-shadow:var(--shadow);transition:var(--tr)}
@@ -332,7 +349,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     <div class="con" style="width: 100%; z-index: 3;">
       <div class="hero-split">
         <div class="hero-content">
-          <h1 class="hero-title" id="h-name">ILAMPS</h1>
+          <h1 class="hero-title" id="h-name">Interdisciplinary Laboratory for Advanced Material Processing and Simulation (ILAMPS)</h1>
           <div class="hero-badge">Active Research Group</div>
           <p class="hero-desc" id="h-desc"></p>
           <div class="hero-actions">
@@ -497,7 +514,9 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
       <div class="ferr" id="l-err"></div>
       <button class="btn btn-p" style="width:100%;justify-content:center;margin-top:.5rem" id="l-btn" onclick="signIn()">Sign In →</button>
     </div>
-    <div class="mft">No account? <a onclick="swMo('login','signup')">Request Access</a></div>
+    <div class="mft" style="display:flex; justify-content:space-between; align-items:center;">
+      <span>No account?</span> <button class="btn btn-o btn-sm" onclick="swMo('login','signup')">Request Access</button>
+    </div>
   </div>
 </div>
 <div class="mo" id="mo-signup">
@@ -510,7 +529,9 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
       <div class="ferr" id="s-err"></div>
       <button class="btn btn-p" style="width:100%;justify-content:center;margin-top:.5rem" id="s-btn" onclick="signUp()">Create Account →</button>
     </div>
-    <div class="mft">Have account? <a onclick="swMo('signup','login')">Sign In</a></div>
+    <div class="mft" style="display:flex; justify-content:space-between; align-items:center;">
+      <span>Have account?</span> <button class="btn btn-o btn-sm" onclick="swMo('signup','login')">Sign In</button>
+    </div>
   </div>
 </div>
 
@@ -931,12 +952,18 @@ async function confirmCrop(){
 const openMo=m=>$(`mo-${m}`).classList.add('open');
 const closeMo=m=>$(`mo-${m}`).classList.remove('open');
 const swMo=(a,b)=>{closeMo(a);openMo(b)};
-document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o && o.id!=='mo-crop')o.classList.remove('open')}));
+document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o && o.id!=='mo-crop' && o.id!=='mo-orcid')o.classList.remove('open')}));
 
 async function signIn(){
   const {error}=await db.auth.signInWithPassword({email:getVal('l-email'),password:getVal('l-pwd')});
   if(error)return $('l-err').textContent=error.message;
   closeMo('login');await loadUser();openDash();showToast('✓ Welcome back!');
+}
+async function signUp(){
+  const {data,error}=await db.auth.signUp({email:getVal('s-email'),password:getVal('s-pwd'),options:{data:{name:getVal('s-name')}}});
+  if(error)return $('s-err').textContent=error.message;
+  if(data.user)await db.from('profiles').update({name:getVal('s-name'),slug:genSlug(getVal('s-name'))}).eq('id',data.user.id);
+  closeMo('signup');showToast('✓ Account created! Admin will approve.');
 }
 async function signOut(){await db.auth.signOut();CU=null;CP=null;$('nav-in-logged').style.display='none';$('nav-out').style.display='flex';closeDash();}
 async function loadUser(){
@@ -1225,9 +1252,9 @@ async function initPublicData() {
   const {data:s}=await db.from('lab_settings').select('*');if(!s)return;
   const g=(k,f='')=>gS(s,k,f);
   
-  const labFullName = g('lab_fullname', 'Interdisciplinary Laboratory of Advanced Material Processing and Simulation');
+  const labFullName = g('lab_fullname', 'Interdisciplinary Laboratory for Advanced Material Processing and Simulation');
   const labShortName = g('lab_name', 'ILAMPS');
-  setText('h-name', `${labShortName}`);
+  setText('h-name', `${labFullName} (${labShortName})`);
   setText('nav-lab-name', labShortName);
   setText('h-desc',g('about'));
   
@@ -1245,42 +1272,56 @@ async function initPublicData() {
     db.from('profiles').select('*',{count:'exact',head:true}).eq('approved',true)
   ]);
   
-  // Binding values safely to both overview sections
-  ['hs-pubs'].forEach(id=>setText(id,pubs||'0'));
-  ['hs-projs'].forEach(id=>setText(id,projs||'0'));
-  ['hs-mems'].forEach(id=>setText(id,mems||'0'));
-  
   const fYear = g('founded','—');
-  setText('hs-founded', fYear);
-  setText('pub-total-count',pubs?`(${pubs})`:'');
+  const checkInvalid = (val) => {
+    // Ensuring 'id' or null check passes correctly if somehow UUID breaks UI binding
+    return val || '0';
+  };
 
-  // Fetch Group Matrix Nodes
+  const safeUpdate = (id, val) => {
+    const el = $(id);
+    if(el) el.textContent = val;
+  };
+
+  safeUpdate('hs-pubs', checkInvalid(pubs));
+  safeUpdate('hs-projs', checkInvalid(projs));
+  safeUpdate('hs-mems', checkInvalid(mems));
+  safeUpdate('hs-founded', fYear);
+  safeUpdate('pub-total-count', pubs ? `(${pubs})` : '');
+
+  // Fetch Latest Data
   const [{data:news},{data:pubsData},{data:memsData},{data:galData}] = await Promise.all([
     db.from('news').select('*').order('created_at',{ascending:false}).limit(3),
     db.from('publications').select('*').order('pub_date',{ascending:false}).limit(4),
-    db.from('profiles').select('*').eq('approved',true),
+    db.from('profiles').select('*').eq('approved',true), // Fetch all members to sort
     db.from('gallery').select('*').order('item_date',{ascending:false}).limit(3)
   ]);
 
+  // Sort Members by Hierarchy Rank
   const sortedMems = (memsData || []).sort((a,b) => getRank(a.role) - getRank(b.role));
   
-  $('home-team').innerHTML=sortedMems.slice(0,6).map(m=>memberCardHTML(m)).join('');
-  $('home-news').innerHTML=(news&&news.length)?news.map(n=>newsCard(n)).join(''):'<div class="empty">No news yet.</div>';
-  $('home-pubs').innerHTML=(pubsData&&pubsData.length)?pubsData.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications.</div>';
-  $('home-gallery').innerHTML=(galData&&galData.length)?galData.map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span><span class="gi-date">${g.item_date||''}</span></div></div>`).join(''):'<div class="empty">No gallery images.</div>';
+  const homeTeam = $('home-team');
+  if(homeTeam) homeTeam.innerHTML = sortedMems.slice(0,6).map(m=>memberCardHTML(m)).join('');
+  
+  const homeNews = $('home-news');
+  if(homeNews) homeNews.innerHTML=(news&&news.length)?news.map(n=>newsCard(n)).join(''):'<div class="empty">No news yet.</div>';
+  
+  const homePubs = $('home-pubs');
+  if(homePubs) homePubs.innerHTML=(pubsData&&pubsData.length)?pubsData.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications.</div>';
+  
+  const homeGal = $('home-gallery');
+  if(homeGal) homeGal.innerHTML=(galData&&galData.length)?galData.map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span><span class="gi-date">${g.item_date||''}</span></div></div>`).join(''):'<div class="empty">No gallery images.</div>';
 
   renderTeamPage(sortedMems); renderResearchPage(); renderAllPubs(); renderAllNews(); renderGallery(); renderContact();
 }
 
 function pubCardHome(p){
-  const shortAbs = p.abstract ? (p.abstract.length > 100 ? p.abstract.substring(0, 100) + '...' : p.abstract) : '';
   const statusBadge = p.status ? `<span style="font-size:0.75rem; padding:0.15rem 0.6rem; border-radius:4px; background:var(--silver); color:var(--navy); font-weight:700">${p.status}</span>` : '';
   return `<div class="pubi-home" onclick="goPage('publication', '${p.id}')">
     <div class="pubi-home-body">
       <div class="pub-title">${p.title}</div>
       <div class="pub-authors" style="margin-bottom:.3rem">${p.authors_list||p.authors||''}</div>
       <div class="pub-venue" style="font-size:.8rem;color:var(--gray);font-style:italic;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem">${p.venue||''} · ${p.pub_date || p.year} ${statusBadge}</div>
-      ${p.abstract ? `<div style="font-size:.85rem;color:var(--muted);display:inline-block">${shortAbs} <span class="pubi-home-more">More...</span></div>` : ''}
     </div>
   </div>`;
 }
@@ -1311,8 +1352,16 @@ function memberCardHTML(m){
 
 // ── DEDICATED PAGES RENDERING ──
 async function buildProfileDetail(id) {
-  const {data:m}=await db.from('profiles').select('*').or(`id.eq.${id},slug.eq.${id}`).single();
-  if(!m) return $('dp-profile-body').innerHTML='<div class="empty">Profile not found.</div>';
+  const isUUID = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(id);
+  let query = db.from('profiles').select('*');
+  if(isUUID) query = query.eq('id', id);
+  else query = query.eq('slug', id);
+  const {data:m, error} = await query.single();
+  
+  if(!m || error) {
+    console.error(error);
+    return $('dp-profile-body').innerHTML='<div class="empty">Profile not found. Did you save it from dashboard to generate slug?</div>';
+  }
   
   const [{data:pubs}, {data:allProjs}] = await Promise.all([
     db.from('publications').select('*').or(`user_id.eq.${m.id},linked_users.cs.{${m.id}}`).order('pub_date',{ascending:false}),
