@@ -111,7 +111,7 @@ a{color:inherit;text-decoration:none}img{max-width:100%;display:block}button{fon
 @media(max-width:480px){.team-grid{grid-template-columns:1fr 1fr;gap:1rem}.tc{padding:1.5rem 1rem}}
 /* PUBS */
 .pub-list{display:flex;flex-direction:column;gap:1.2rem}
-.pubi{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:var(--tr);cursor:pointer;padding:1.5rem;box-shadow:var(--shadow)}
+.pubi(background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:var(--tr);cursor:pointer;padding:1.5rem;box-shadow:var(--shadow)}
 .pubi:hover{box-shadow:var(--shadow-lg);border-color:rgba(74,123,200,.3);transform:translateY(-3px)}
 .pubi-top{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem;flex-wrap:wrap}
 .pub-type{background:rgba(74,123,200,.1);color:var(--accent);padding:.15rem .55rem;border-radius:4px;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
@@ -187,8 +187,9 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem;font-si
 .dp-img{width:100%;max-height:450px;object-fit:cover;border-radius:var(--rl);margin-bottom:2.5rem;box-shadow:var(--shadow)}
 .dp-title{font-size:1.8rem;font-weight:900;color:var(--navy);margin-bottom:1rem;line-height:1.3}
 @media(max-width:600px){.dp-container{padding:1.5rem}.dp-hero{flex-direction:column;text-align:center}.dp-photo,.dp-photo-ph{width:120px;height:120px}}
-/* DASHBOARD */
-#dash{display:none;position:fixed;inset:0;z-index:9900;flex-direction:column;background:#eef1f7}#dash.open{display:flex}
+
+/* DASHBOARD GRID & AUTO OVERSCROLL FIXES */
+#dash{display:none;position:fixed;inset:0;z-index:9900;flex-direction:column;background:#eef1f7;overflow:hidden;}#dash.open{display:flex}
 .dn{background:var(--navy);height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;border-bottom:1px solid rgba(255,255,255,.07);box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:10}
 .dn-brand{font-size:1.2rem;font-weight:900;color:#fff}
 .dl{display:grid;grid-template-columns:240px 1fr;flex:1;overflow:hidden}
@@ -210,13 +211,11 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem;font-si
 .up-ph{font-size:2rem;display:block;margin-bottom:.5rem;opacity:.5}.up-label{font-size:.85rem;font-weight:600;color:var(--navy)}.up-hint{font-size:.7rem;color:var(--muted);margin-top:.4rem;display:block}
 .up-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2}
 
-/* MOBILE DASHBOARD FIXES */
 @media(max-width:768px){
-  .dl{display:flex;flex-direction:column;flex:1;}
+  .dl{display:flex;flex-direction:column;flex:1;overflow-y:auto;}
   .ds{display:none}
   #mob-dash-nav{display:block!important}
-  .dc{padding:1rem;flex:1;overflow-y:auto;}
-  .g2,.g3,.d2,.d3{grid-template-columns:1fr}
+  .dc{padding:1rem;flex:none;}
 }
 </style>
 </head>
@@ -317,7 +316,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start">
       <div>
         <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">📍</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Address</h4><p id="c-addr" style="color:rgba(255,255,255,.7);line-height:1.6"></p></div></div>
-        <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">✉️</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Email</h4><a id="c-email" href="" style="color:rgba(255,255,255,.7)"></a></div></div>
+        <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">✉️</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Email</h4><a id="c-email" href="" style="color:rgba(255,255,255,.7); font-weight: bold;"></a></div></div>
       </div>
       <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);padding:2.5rem">
         <h3 style="color:#fff;font-size:1.5rem;margin-bottom:1rem">Prospective Members</h3>
@@ -527,7 +526,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
         <div class="dcard"><h3>Current Slides</h3><div class="aci-list" id="slides-list"></div></div>
       </div>
 
-      <div class="dsec" id="d-members"><div class="dpt">Members</div><div class="dcard"><h3>All Members</h3><div id="members-list"></div></div></div>
+      <div class="dsec" id="d-members"><div class="dpt">Members & Permissions</div><div class="dcard"><h3>All Users Management</h3><div id="members-list"></div></div></div>
 
       <div class="dsec" id="d-research">
         <div class="dpt">Research Areas</div>
@@ -624,7 +623,8 @@ let npAuthorsList=[];
 let cropCb=null,cropper=null,cropFolder='',targetRatio=NaN;
 let editState={pub:null,news:null,gal:null,proj:null,res:null};
 let fetchedData={pubs:[],news:[],gal:[],proj:[],res:[]};
-let globalProfiles = []; // For Author linking
+let globalProfiles = [];
+let orcidCachedWorks = [];
 
 const roleRanks={'Principal Investigator':1,'Assistant Investigator':2,'Research Assistant':3,'PhD. Student':4,'MSc. Student':5,'Graduate Research Student':6,'Undergraduate Student':7,'Lab Technician':8,'Alumni':9};
 const getRank=role=>roleRanks[role]||10;
@@ -730,51 +730,108 @@ async function confirmCrop(){
   },'image/jpeg',.9);
 }
 
-// ═══ AUTH ═══
+// ═══ AUTH WITH APPROVAL FLOW ═══
 const openMo=m=>$(`mo-${m}`).classList.add('open');
 const closeMo=m=>$(`mo-${m}`).classList.remove('open');
 const swMo=(a,b)=>{closeMo(a);openMo(b);};
 document.querySelectorAll('.mo').forEach(o=>o.addEventListener('click',e=>{if(e.target===o&&o.id!=='mo-crop')o.classList.remove('open')}));
+
 async function signIn(){
   const err=$('l-err');err.style.display='none';
-  const {error}=await db.auth.signInWithPassword({email:getVal('l-email'),password:getVal('l-pwd')});
+  const {data, error}=await db.auth.signInWithPassword({email:getVal('l-email'),password:getVal('l-pwd')});
   if(error){err.textContent=error.message;err.style.display='block';return;}
-  closeMo('login');await loadUser();openDash();showToast('✓ Welcome back!');const ml=$('mob-login-li'),md=$('mob-dash-li');if(ml)ml.style.display='none';if(md)md.style.display='block';const fo=$('footer-out'),fi=$('footer-in');if(fo)fo.style.display='none';if(fi)fi.style.display='block';
+  
+  // Validation profile flow check 
+  const {data:p}=await db.from('profiles').select('*').eq('id',data.user.id).single();
+  if(!p || p.approved !== true) {
+      err.textContent = "Waiting for admin approval.";
+      err.style.display = 'block';
+      await db.auth.signOut();
+      return;
+  }
+  
+  closeMo('login');await loadUser();openDash();showToast('✓ Welcome back!');
 }
+
 async function signUp(){
   const err=$('s-err');err.style.display='none';
-  const {data,error}=await db.auth.signUp({email:getVal('s-email'),password:getVal('s-pwd'),options:{data:{name:getVal('s-name')}}});
+  const email = getVal('s-email');
+  const name = getVal('s-name');
+  const {data,error}=await db.auth.signUp({email:email,password:getVal('s-pwd'),options:{data:{name:name}}});
   if(error){err.textContent=error.message;err.style.display='block';return;}
-  if(data.user)await db.from('profiles').update({name:getVal('s-name'),slug:genSlug(getVal('s-name'))}).eq('id',data.user.id);
-  closeMo('signup');showToast('✓ Account created! Admin will approve your profile.');
+  if(data.user) {
+      await db.from('profiles').upsert({
+         id: data.user.id,
+         name: name,
+         email: email,
+         slug: genSlug(name),
+         approved: false,
+         allowed_sections: 'd-profile,d-mypubs'
+      });
+  }
+  closeMo('signup');showToast('✓ Request sent! Waiting for admin approval.');
 }
+
 async function signOut(){await db.auth.signOut();CU=null;CP=null;$('nav-in-logged').style.display='none';$('nav-out').style.display='flex';closeDash();const ml2=$('mob-login-li'),md2=$('mob-dash-li');if(ml2)ml2.style.display='block';if(md2)md2.style.display='none';const fo2=$('footer-out'),fi2=$('footer-in');if(fo2)fo2.style.display='block';if(fi2)fi2.style.display='none';}
+
 async function loadUser(){
   const {data:{user}}=await db.auth.getUser();if(!user)return;CU=user;
   const {data:p}=await db.from('profiles').select('*').eq('id',user.id).single();CP=p;
+  
+  if(!p || p.approved !== true) {
+      await db.auth.signOut();
+      return;
+  }
+
   $('nav-in-logged').style.display='flex';$('nav-out').style.display='none';const ml=$('mob-login-li'),md=$('mob-dash-li');if(ml)ml.style.display='none';if(md)md.style.display='block';const fo=$('footer-out'),fi=$('footer-in');if(fo)fo.style.display='none';if(fi)fi.style.display='block';
   $('admin-nav').style.display=p?.is_admin?'block':'none';
+  
+  // Sidebar visibility configuration matching individual allowed components array
+  let allowedArr = p.allowed_sections ? p.allowed_sections.split(',') : [];
+  document.querySelectorAll('.ds .dni, #admin-nav .dni').forEach(btn => {
+      const s = btn.dataset.sec;
+      if(p.is_admin || allowedArr.includes(s) || s === 'd-profile' || s === 'd-mypubs') {
+          btn.style.display = 'flex';
+      } else {
+          btn.style.display = 'none';
+      }
+  });
+
   updateDashNav();
 }
 
-// ═══ DASHBOARD ═══
+// ═══ DASHBOARD NAVIGATION FILTER SYSTEM ═══
 function updateDashNav() {
     const sel = document.querySelector('#mob-dash-nav select');
-    if(!sel) return;
-    sel.innerHTML = `
+    if(!sel || !CP) return;
+    let allowedArr = CP.allowed_sections ? CP.allowed_sections.split(',') : [];
+    
+    let html = `
       <option value="d-profile">👤 My Profile</option>
       <option value="d-mypubs">📄 My Publications</option>
-      ${CP?.is_admin ? `
-      <option value="" disabled style="color:var(--gray);font-size:.7rem">── Admin ──</option>
-      <option value="d-lab">⚙️ Settings & Logos</option>
-      <option value="d-hero">🖼️ Hero Slides</option>
-      <option value="d-members">👥 Members</option>
-      <option value="d-research">🔬 Research Areas</option>
-      <option value="d-ongoing">⚡ Projects</option>
-      <option value="d-news">📢 News</option>
-      <option value="d-gallery">🖼️ Gallery</option>
-      ` : ''}
     `;
+    
+    const adminOpts = [
+      {value: 'd-lab', label: '⚙️ Settings & Logos'},
+      {value: 'd-hero', label: '🖼️ Hero Slides'},
+      {value: 'd-members', label: '👥 Members'},
+      {value: 'd-research', label: '🔬 Research Areas'},
+      {value: 'd-ongoing', label: '⚡ Projects'},
+      {value: 'd-news', label: '📢 News'},
+      {value: 'd-gallery', label: '🖼️ Gallery'}
+    ];
+    
+    let hasAdminOpt = false;
+    adminOpts.forEach(o => {
+      if(CP.is_admin || allowedArr.includes(o.value)) {
+        if(!hasAdminOpt) {
+          html += `<option value="" disabled style="color:var(--gray);font-size:.7rem">── Admin Modules ──</option>`;
+          hasAdminOpt = true;
+        }
+        html += `<option value="${o.value}">${o.label}</option>`;
+      }
+    });
+    sel.innerHTML = html;
 }
 
 function openDash(){
@@ -908,19 +965,79 @@ async function saveLabSettings(){
   showToast('✓ Settings saved!');initPublicData();
 }
 
-// Admin sections CRUD
+// ═══ MEMBERS MANAGEMENT WITH GRANULAR ROLE CHECKBOXES & DELETE ═══
 async function loadMembersAdmin(){
   const {data}=await db.from('profiles').select('*').order('created_at');
-  $('members-list').innerHTML=(data||[]).map(m=>`
-    <div class="aci"><div class="aci-h">
-      <div><span style="font-weight:700">${m.name||'—'}</span> <span style="font-size:.7rem;color:var(--muted)">(${m.role||'—'})</span></div>
-      <div style="display:flex;gap:.5rem;align-items:center">
-        <label style="font-size:.7rem"><input type="checkbox"${m.approved?' checked':''} onchange="updateMemberField('${m.id}','approved',this.checked)"> Public</label>
-        <label style="font-size:.7rem"><input type="checkbox"${m.is_admin?' checked':''} onchange="updateMemberField('${m.id}','is_admin',this.checked)"> Admin</label>
+  const sections = [
+    {id:'d-profile', name:'Profile'},
+    {id:'d-mypubs', name:'Publications'},
+    {id:'d-lab', name:'Lab Settings'},
+    {id:'d-hero', name:'Slides'},
+    {id:'d-members', name:'Members Access'},
+    {id:'d-research', name:'Research'},
+    {id:'d-ongoing', name:'Projects'},
+    {id:'d-news', name:'News'},
+    {id:'d-gallery', name:'Gallery'}
+  ];
+
+  $('members-list').innerHTML=(data||[]).map(m=>{
+    if(m.id === CU.id) return ''; // Prevent self lockout modifications
+    let allowed = m.allowed_sections ? m.allowed_sections.split(',') : [];
+    
+    let checkboxes = sections.map(s => `
+      <label style="font-size:.72rem; display:inline-flex; align-items:center; gap:3px; margin-right:8px; background:var(--silver); padding:2px 6px; border-radius:4px; margin-bottom:4px;">
+        <input type="checkbox" ${m.is_admin || allowed.includes(s.id)?'checked':''} ${m.is_admin?'disabled':''} onchange="toggleUserPermission('${m.id}', '${s.id}', this.checked)"> ${s.name}
+      </label>
+    `).join('');
+
+    return `
+    <div class="aci" style="margin-bottom:1.5rem;">
+      <div class="aci-h" style="flex-wrap:wrap; gap:1rem;">
+        <div>
+          <span style="font-weight:800; font-size:1rem; display:block; color:var(--navy);">${m.name||'—'}</span>
+          <small style="color:var(--muted); display:block; font-weight:600;">✉️ ${m.email||'No associated email'}</small>
+          <small style="color:var(--accent); font-weight:700;">Role Group: ${m.role||'Unassigned'}</small>
+        </div>
+        <div style="display:flex; gap:.6rem; align-items:center; flex-wrap:wrap;">
+          <label style="font-size:.78rem; font-weight:700; color:var(--navy-mid);"><input type="checkbox"${m.approved?' checked':''} onchange="updateMemberField('${m.id}','approved',this.checked)"> Public (Approved)</label>
+          <label style="font-size:.78rem; font-weight:700; color:var(--navy-mid);"><input type="checkbox"${m.is_admin?' checked':''} onchange="updateMemberField('${m.id}','is_admin',this.checked)"> Admin</label>
+          <button class="btn btn-d btn-sm" onclick="deleteUserProfile('${m.id}')">✕ Delete User</button>
+        </div>
       </div>
-    </div></div>`).join('');
+      <div style="margin-top:1rem; padding-top:.8rem; border-top:1px solid var(--border);">
+        <div style="font-size:.7rem; font-weight:800; text-transform:uppercase; color:var(--gray); margin-bottom:6px;">Section Access Allowances:</div>
+        <div style="display:flex; flex-wrap:wrap;">${checkboxes}</div>
+      </div>
+    </div>`;
+  }).join('');
 }
-async function updateMemberField(id,field,val){const p={};p[field]=val;await db.from('profiles').update(p).eq('id',id);showToast('✓ Updated');initPublicData();}
+
+async function toggleUserPermission(userId, sectionId, isChecked) {
+  const {data} = await db.from('profiles').select('allowed_sections').eq('id', userId).single();
+  let allowed = data?.allowed_sections ? data.allowed_sections.split(',').filter(Boolean) : [];
+  if(isChecked) {
+    if(!allowed.includes(sectionId)) allowed.push(sectionId);
+  } else {
+    allowed = allowed.filter(x => x !== sectionId);
+  }
+  await db.from('profiles').update({allowed_sections: allowed.join(',')}).eq('id', userId);
+  showToast('✓ Permissions allowance structure changed');
+}
+
+async function deleteUserProfile(userId) {
+  if(confirm('Are you completely sure you want to delete this member profile from the system?')) {
+     const {error} = await db.from('profiles').delete().eq('id', userId);
+     if(error) showToast('❌ '+error.message);
+     else {
+        showToast('✓ Profile successfully removed.');
+        loadMembersAdmin();
+        initPublicData();
+     }
+  }
+}
+
+async function updateMemberField(id,field,val){const p={};p[field]=val;await db.from('profiles').update(p).eq('id',id);showToast('✓ Updated');initPublicData();loadMembersAdmin();}
+
 async function loadResearchAdmin(){
   const {data}=await db.from('research_areas').select('*').order('sort_order');fetchedData.res=data||[];
   $('research-admin').innerHTML=fetchedData.res.map(a=>`<div class="aci"><div class="aci-h"><span style="font-weight:700">${a.icon} ${a.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditRes('${a.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('research_areas','${a.id}',loadResearchAdmin)">Del</button></div></div></div>`).join('');
@@ -960,26 +1077,10 @@ async function saveNews(){
   showToast('✓ News saved!');resetNewsForm();loadNewsAdmin();initPublicData();
 }
 async function loadGalAdmin(){
-  // Error চেক করার জন্য error ভেরিয়েবলটি যোগ করা হয়েছে
-  const {data, error} = await db.from('gallery').select('*').order('created_at',{ascending:false});
-  
-  if(error) {
-    console.error("Gallery Fetch Error:", error);
-    showToast('❌ Error loading gallery: ' + error.message, 5000);
-  }
-  
-  fetchedData.gal = data || [];
-  
-  $('gal-admin').innerHTML = fetchedData.gal.map(g => `
-    <div class="aci" style="display:flex;align-items:center;gap:.8rem">
-      <img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--border)">
-      <div style="flex:1;font-weight:700;font-size:.85rem">${g.caption||'Photo'}</div>
-      <div style="display:flex;gap:.3rem">
-        <button class="btn btn-edit btn-sm" onclick="triggerEditGal('${g.id}')">Edit</button>
-        <button class="btn btn-d btn-sm" onclick="delRow('gallery','${g.id}',loadGalAdmin)">Del</button>
-      </div>
-    </div>`
-  ).join('');
+  const {data, error}=await db.from('gallery').select('*').order('created_at',{ascending:false});
+  if(error) { console.error(error); showToast('❌ Error parsing data:' + error.message); }
+  fetchedData.gal=data||[];
+  $('gal-admin').innerHTML=fetchedData.gal.map(g=>`<div class="aci" style="display:flex;align-items:center;gap:.8rem"><img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--border)"><div style="flex:1;font-weight:700;font-size:.85rem">${g.caption||'Photo'}</div><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditGal('${g.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('gallery','${g.id}',loadGalAdmin)">Del</button></div></div>`).join('');
 }
 function triggerEditGal(id){const x=fetchedData.gal.find(i=>i.id===id);if(!x)return;editState.gal=id;setVal('g-url',x.url);setVal('g-cap',x.caption);setVal('g-date',x.item_date||'');if(x.url)showPrev('prev-gal','ph-gal',x.url);$('gal-form-title').textContent='Edit Photo';$('btn-save-gal').textContent='💾 Update';$('btn-cancel-gal').style.display='inline-flex';}
 function resetGalForm(){editState.gal=null;['g-url','g-cap','g-date'].forEach(id=>setVal(id,''));hidePrev('prev-gal','ph-gal');$('gal-form-title').textContent='Add Photo';$('btn-save-gal').textContent='+ Save Photo';$('btn-cancel-gal').style.display='none';}
@@ -1019,8 +1120,6 @@ async function loadCountsDisplay(){
 // ═══ PUBLIC RENDERING ═══
 async function initPublicData(){
   if(!db)return;
-  
-  // Fetch profiles for global Author linking first
   const {data: profs} = await db.from('profiles').select('id,name').eq('approved',true);
   globalProfiles = profs || [];
 
@@ -1029,7 +1128,7 @@ async function initPublicData(){
   const g=(k,f='')=>gS(sArr,k,f);
   setText('h-name',g('lab_name','ILAMPS'));setText('nav-lab-name',g('lab_name','ILAMPS'));
   setText('h-desc',g('about'));setText('hs-founded',g('founded','—'));
-  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · Developed by Abdullah Shadek Fahim`);
+  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · ${g('university','JUST')}`);
   const logo=g('lab_logo');if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}">`;updateFavicon(logo);}
   const jlogo=g('just_logo');
   if(logo){$('f-logo-box-1').style.display='flex';$('f-logo-ilamps').src=logo;}
@@ -1047,7 +1146,12 @@ async function initPublicData(){
   $('home-team').innerHTML=sortedMems.slice(0,6).map(m=>memberCardHTML(m)).join('');
   $('home-news').innerHTML=(news&&news.length)?news.map(n=>newsCard(n)).join(''):'<div class="empty">No news yet.</div>';
   $('home-pubs').innerHTML=(pubsData&&pubsData.length)?pubsData.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications.</div>';
-  $('home-gallery').innerHTML=(galData&&galData.length)?galData.map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span></div></div>`).join(''):'<div class="empty">No gallery yet.</div>';
+  
+  $('home-gallery').innerHTML=(galData&&galData.length)?galData.map(g=>{
+    const dateStr = g.item_date ? new Date(g.item_date+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short'}) : '';
+    return `<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span>${dateStr?`<span class="gi-date">${dateStr}</span>`:''}</div></div>`;
+  }).join(''):'<div class="empty">No gallery yet.</div>';
+
   renderTeamPage(sortedMems);renderResearchPage();renderAllPubs();renderAllNews();renderGallery();renderContact(sArr);
 }
 
@@ -1207,7 +1311,10 @@ async function renderAllNews(){
 }
 async function renderGallery(){
   const {data}=await db.from('gallery').select('*').order('created_at',{ascending:false});
-  $('gal-grid').innerHTML=(data||[]).map(g=>`<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span><span class="gi-date">${g.item_date||''}</span></div></div>`).join('')||'<div class="empty">No photos yet.</div>';
+  $('gal-grid').innerHTML=(data||[]).map(g=>{
+    const dateStr = g.item_date ? new Date(g.item_date+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) : '';
+    return `<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span>${dateStr?`<span class="gi-date">${dateStr}</span>`:''}</div></div>`;
+  }).join('')||'<div class="empty">No photos yet.</div>';
 }
 async function renderContact(sArr){
   const settings=sArr||(await db.from('lab_settings').select('*')).data||[];
@@ -1219,7 +1326,7 @@ async function renderContact(sArr){
   const ca=$('c-apply');if(ca)ca.href='mailto:'+g('contact_email')+'?subject=ILAMPS Application';
 }
 
-// ── ORCID INTEGRATION ──
+// ═══ DYNAMIC ORCID CONTROLLER WITH PARSING ENGINE & BULK ALL CHIPS ═══
 async function fetchFromOrcid(){
   if(!CP||!CP.orcid)return showToast('❌ Set your ORCID link in My Profile first!');
   const match=(CP.orcid||'').match(/\d{4}-\d{4}-\d{4}-\d{3}[0-9X]/i);
@@ -1229,30 +1336,77 @@ async function fetchFromOrcid(){
     const res=await fetch(`https://pub.orcid.org/v3.0/${orcid}/works`,{headers:{'Accept':'application/json'}});
     const data=await res.json(); const works=data.group;
     if(!works||!works.length)return showToast('No publications found on ORCID.');
-    $('orcid-list').innerHTML=works.map((w,i)=>{
+    
+    orcidCachedWorks = []; 
+    let listHtml = '';
+    
+    works.forEach((w) => {
       const s=w['work-summary'][0];
       const title=s.title?.title?.value||'Unknown Title';
       const year=s['publication-date']?.year?.value||'';
-      const type=s.type||'';
+      let type='Journal Paper';
+      if((s.type||'').toLowerCase().includes('conference'))t='Conference Paper';
+      if((s.type||'').toLowerCase().includes('book'))t='Book Chapter';
       const journal=s['journal-title']?.value||'';
       const doiEl=(s['external-ids']?.['external-id']||[]).find(e=>e['external-id-type']==='doi');
       const doi=doiEl?`https://doi.org/${doiEl['external-id-value']}`:'';
-      const pd=JSON.stringify({title,year,type,journal,doi}).replace(/"/g,'&quot;');
-      return `<div class="aci"><div class="aci-h" style="align-items:flex-start">
-        <span style="font-size:.85rem;font-weight:700;line-height:1.4">${title} (${year})<br><span style="font-weight:400;color:var(--muted)">${journal}</span></span>
+      
+      // Dynamic internal contributor author parsing configuration sequence
+      let authors = s['source']?.['source-name']?.value || CP.name;
+      
+      const itemData = {title, year, type, journal, doi, authors};
+      orcidCachedWorks.push(itemData);
+      
+      const pd=JSON.stringify(itemData).replace(/"/g,'&quot;');
+      listHtml += `<div class="aci"><div class="aci-h" style="align-items:flex-start">
+        <span style="font-size:.85rem;font-weight:700;line-height:1.4">${title} (${year})<br><span style="font-weight:400;color:var(--muted)">Authors: ${authors} | ${journal}</span></span>
         <button class="btn btn-p btn-sm" onclick='fillPubFromOrcid(${pd});closeMo("orcid")'>Use</button>
       </div></div>`;
-    }).join('');
+    });
+
+    $('mo-orcid').querySelector('.mh').innerHTML = `
+      <h2>Select from ORCID</h2>
+      <div style="display:flex; gap:.5rem; align-items:center;">
+        <button class="btn btn-p btn-sm" onclick="importAllOrcid()">Use All</button>
+        <button class="mc" onclick="closeMo('orcid')">✕</button>
+      </div>
+    `;
+    
+    $('orcid-list').innerHTML=listHtml;
     openMo('orcid');
   }catch(e){showToast('❌ Failed to fetch ORCID data');}
 }
+
+async function importAllOrcid() {
+  if(!orcidCachedWorks.length) return showToast('No data loaded to fetch');
+  showToast('⏳ Performing bulk dataset upload...');
+  const payloads = orcidCachedWorks.map(w => ({
+     title: w.title,
+     authors: w.authors,
+     authors_list: w.authors,
+     year: w.year,
+     venue: w.journal,
+     type: w.type,
+     status: 'Published',
+     doi: w.doi,
+     user_id: CU.id,
+     linked_users: [CU.id]
+  }));
+  const {error} = await db.from('publications').insert(payloads);
+  closeMo('orcid');
+  if(error) showToast('❌ Bulk process failed: '+error.message);
+  else {
+     showToast('✓ Loaded all publications successfully!');
+     loadMyPubs(); loadCountsDisplay(); initPublicData();
+  }
+}
+
 function fillPubFromOrcid(d){
   setVal('np-t',d.title); setVal('np-yr',d.year); setVal('np-venue',d.journal); setVal('np-doi',d.doi);
-  let t='Journal Paper';
-  if((d.type||'').toLowerCase().includes('conference'))t='Conference Paper';
-  if((d.type||'').toLowerCase().includes('book'))t='Book Chapter';
-  setVal('np-type',t);
-  showToast('✓ Form filled from ORCID. Review and save.');
+  setVal('np-type',d.type);
+  npAuthorsList = [{name: d.authors}];
+  renderAuthChips();
+  showToast('✓ Form loaded from ORCID data.');
 }
 
 $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
