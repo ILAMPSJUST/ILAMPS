@@ -46,6 +46,8 @@ button{font-family:var(--f);cursor:pointer}
 .btn-o{background:transparent;color:var(--navy);border:1.5px solid var(--border)}.btn-o:hover{border-color:var(--accent);color:var(--accent);background:var(--off)}
 .btn-d{background:rgba(239,68,68,.1);color:#dc2626;border:1px solid rgba(239,68,68,.2)}.btn-d:hover{background:rgba(239,68,68,.2)}
 .btn-sm{padding:.4rem .85rem;font-size:.75rem;border-radius:8px;}
+.btn-edit{background:var(--silver);color:#000;border:1px solid #ccc;}.btn-edit:hover{background:#e0e0e0;}
+
 .tag-b{background:rgba(74,123,200,.1);color:var(--accent);border:1px solid rgba(74,123,200,.2);padding:.3rem .8rem;border-radius:50px;font-size:.72rem;font-weight:600;display:inline-block}
 
 /* PAGE SYSTEM */
@@ -89,7 +91,7 @@ button{font-family:var(--f);cursor:pointer}
 .hero-bg-grid { position: absolute; inset: 0; z-index: 1; background-image: linear-gradient(rgba(74,123,200,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(74,123,200,.05) 1px, transparent 1px); background-size: 50px 50px; pointer-events: none; }
 .hero-split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 4rem; align-items: center; width: 100%; position: relative; z-index: 3; padding-top: 80px; }
 .hero-content { padding: 2rem 0; display:flex; flex-direction:column; align-items:flex-start;}
-.hero-slides-container { position: relative; height: 460px; border-radius: var(--rl); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid rgba(255,255,255,0.1); }
+.hero-slides-container { position: relative; width: 100%; aspect-ratio: 4/3; height: auto; border-radius: var(--rl); overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid rgba(255,255,255,0.1); }
 .slides-wrap { position: absolute; inset: 0; z-index: 1; background:var(--navy-mid)}
 .slide{position:absolute;inset:0;opacity:0;transition:opacity 1.2s ease}
 .slide.active{opacity:1}
@@ -105,7 +107,7 @@ button{font-family:var(--f);cursor:pointer}
 .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(74,123,200,.15);border:1px solid rgba(74,123,200,.25);border-radius:50px;padding:.35rem 1rem;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-light);margin-bottom:1.5rem;font-weight:700}
 .hero-badge::before{content:'';width:6px;height:6px;background:var(--accent-light);border-radius:50%;animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
-.hero-title{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:900;color:#fff;line-height:1.05;margin-bottom:1rem;letter-spacing:-.04em}
+.hero-title{font-size:clamp(2rem,4vw,3.5rem);font-weight:900;color:#fff;line-height:1.15;margin-bottom:1rem;letter-spacing:-.02em}
 .hero-desc{font-size:1.05rem;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:2.5rem;max-width:540px}
 .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3rem; width:100%}
 .hero-stats{display:flex;gap:2.5rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1);flex-wrap:wrap; width:100%}
@@ -113,16 +115,16 @@ button{font-family:var(--f);cursor:pointer}
 .hs-num:hover{color:var(--accent-light)}
 .hs-lbl{font-size:.65rem;color:var(--gray-light);letter-spacing:.1em;text-transform:uppercase;margin-top:.4rem;font-weight:600}
 
-/* Mobile Hero Ordered */
+/* Mobile Hero Reordering Rules */
 @media(max-width:900px){
-  .hero-split { display:flex; flex-direction:column; padding-top:100px; gap:1.5rem; text-align:center;}
-  .hero-content { align-items:center; padding: 0;}
-  .hero-title { order: 1; margin-bottom:.5rem; font-size:2.8rem;}
-  .hero-badge { order: 2; margin-bottom:1rem;}
-  .hero-slides-container { order: 3; width: 100%; height: 260px; margin: 1rem 0; }
-  .hero-desc { order: 4; font-size:.95rem; margin-bottom:1.5rem;}
-  .hero-actions { order: 5; justify-content:center; margin-bottom:1.5rem;}
-  .hero-stats { order: 6; justify-content:center; border-top:none; padding-top:0;}
+  .hero-split { display:flex; flex-direction:column; padding-top:110px; gap:1.2rem; text-align:left;}
+  .hero-content { display: contents; }
+  .hero-title { order: 1; font-size:1.8rem; line-height:1.25; margin-bottom:0;}
+  .hero-badge { order: 2; margin-bottom:0;}
+  .hero-slides-container { order: 3; width: 100%; aspect-ratio:4/3; height:auto; margin: .8rem 0; }
+  .hero-desc { order: 4; font-size:.95rem; margin-bottom:0;}
+  .hero-actions { order: 5; margin-bottom:0; width:100%;}
+  .hero-stats { order: 6; border-top:none; padding-top:1rem; gap:1rem; justify-content:flex-start;}
 }
 
 /* ═══ HOME SECTIONS ═══ */
@@ -131,21 +133,19 @@ button{font-family:var(--f);cursor:pointer}
 .view-all{display:inline-flex;align-items:center;gap:.4rem;font-size:.9rem;font-weight:700;color:var(--accent);cursor:pointer;margin-top:2.5rem;transition:var(--tr);letter-spacing:.01em}
 .view-all:hover{gap:.7rem; color:var(--navy)}
 
-/* ABOUT */
-.about-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:4rem;align-items:center}
-.about-big{background:var(--navy);border-radius:var(--rl);padding:1.75rem;position:relative;overflow:hidden;margin-bottom:.875rem; cursor:pointer;}
-.about-big::after{content:'';position:absolute;top:-25px;right:-25px;width:90px;height:90px;background:rgba(74,123,200,.12);border-radius:50%}
-.about-big-num{font-size:2.75rem;font-weight:900;color:var(--accent-light);line-height:1;}
-.about-big:hover .about-big-num{color:#fff}
-.about-big-lbl{font-size:.78rem;color:rgba(255,255,255,.58);margin-top:.28rem}
-.about-sm-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
-.about-sm{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1rem;text-align:center;box-shadow:var(--shadow);cursor:pointer;transition:var(--tr)}
-.about-sm:hover{border-color:var(--accent);transform:translateY(-2px)}
-.about-sm .num{font-size:1.6rem;font-weight:800;color:var(--navy)}
-.about-sm .lbl{font-size:.63rem;color:var(--muted);margin-top:.18rem;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
-.about-content p{color:var(--muted);margin-bottom:.8rem;font-size:.93rem;line-height:1.78}
-.about-tags{display:flex;flex-wrap:wrap;gap:.38rem;margin-top:1.2rem}
-@media(max-width:768px){.about-grid{grid-template-columns:1fr;gap:2rem}.about-sm-row{grid-template-columns:1fr 1fr}}
+/* PI CONTAINER */
+.pi-card{display:grid;grid-template-columns:260px 1fr;gap:3rem;align-items:start;background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:2.5rem;box-shadow:var(--shadow);transition:var(--tr)}
+.pi-card:hover{box-shadow:var(--shadow-lg)}
+.pi-photo,.pi-photo-ph{width:180px;height:180px;border-radius:50%;margin:0 auto 1.2rem;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(74,123,200,.15)}
+.pi-photo{object-fit:cover;border:4px solid var(--accent);display:block}
+.pi-photo-ph{background:rgba(74,123,200,.1);border:4px solid rgba(74,123,200,.2);font-size:3.5rem}
+.pi-name{font-size:1.4rem;font-weight:800;color:var(--navy);text-align:center;margin-bottom:.2rem;letter-spacing:-.02em}
+.pi-desig{font-size:.85rem;color:var(--accent);font-weight:700;text-align:center;margin-bottom:.3rem}
+.pi-dept{font-size:.8rem;color:var(--muted);text-align:center;line-height:1.5}
+.pi-sl{font-size:.7rem;color:var(--accent);font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem;margin-top:1.5rem;display:block}
+.pi-sl:first-child{margin-top:0}
+.pi-bio{color:var(--muted);font-size:.95rem;line-height:1.8}
+@media(max-width:768px){.pi-card{grid-template-columns:1fr;gap:2rem;padding:2rem}}
 
 /* TEAM CARDS */
 .team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.5rem}
@@ -168,15 +168,13 @@ button{font-family:var(--f);cursor:pointer}
 .pub-yr{font-size:.8rem;color:var(--gray);font-weight:700}
 .pub-title{font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:.4rem;line-height:1.4;letter-spacing:-.01em}
 .pub-authors{font-size:.85rem;color:var(--muted);margin-bottom:.3rem}
-.pub-venue{font-size:.85rem;color:var(--gray);font-style:italic}
+.pub-venue{font-size:.85rem;color:var(--gray);font-style:italic;display:flex;align-items:center;gap:.5rem}
 
-/* HOME PUB CARD (SQUARE THUMBNAIL) */
-.pubi-home { display: flex; gap: 1.5rem; background: #fff; border: 1px solid var(--border); border-radius: var(--rl); padding: 1.5rem; transition: var(--tr); cursor: pointer; align-items: flex-start; box-shadow:var(--shadow) }
+/* HOME PUB CARD (NO THUMBNAIL) */
+.pubi-home { display: flex; flex-direction: column; background: #fff; border: 1px solid var(--border); border-radius: var(--rl); padding: 1.5rem; transition: var(--tr); cursor: pointer; box-shadow:var(--shadow) }
 .pubi-home:hover { box-shadow: var(--shadow-lg); border-color: rgba(74,123,200,.3); transform: translateY(-3px); }
-.pubi-home-img { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; flex-shrink: 0; border: 1px solid var(--border); }
 .pubi-home-body { flex: 1; }
 .pubi-home-more { color: var(--accent); font-weight: 700; font-size: .8rem; cursor: pointer; display: inline-block; margin-left: 5px; text-decoration: underline; }
-@media(max-width:600px){.pubi-home { flex-direction: column; gap: 1.2rem; } .pubi-home-img { width: 100%; height: 200px; }}
 
 /* NEWS CARD */
 .news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem}
@@ -211,8 +209,8 @@ button{font-family:var(--f);cursor:pointer}
 .gi{border-radius:var(--rl);overflow:hidden;aspect-ratio:4/3;position:relative;background:var(--silver);border:1px solid var(--border);box-shadow:var(--shadow)}
 .gi img{width:100%;height:100%;object-fit:cover;transition:transform .5s;display:block}
 .gi:hover img{transform:scale(1.08)}
-.gi-cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.7));padding:.8rem;font-size:.8rem;color:#fff;font-weight:600; display:flex; justify-content:space-between; align-items:flex-end;}
-.gi-date{font-size:.65rem; color:var(--accent-light); font-weight:700;}
+.gi-cap{position:absolute;bottom:0;left:0;right:0;background:#fff;padding:1rem;font-size:.85rem;color:var(--navy);font-weight:700; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border)}
+.gi-date{font-size:.75rem; color:var(--muted); font-weight:600;}
 
 /* FOOTER */
 footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem; font-size:.85rem;}
@@ -291,7 +289,6 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem; font-s
 </head>
 <body>
 
-<!-- CONFIG -->
 <script>
 const SUPABASE_URL  = 'https://rqviytqzrbsmdppcxzwr.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxdml5dHF6cmJzbWRwcGN4endyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2OTYxMzcsImV4cCI6MjA5NTI3MjEzN30.876Ml_UovPdcGqRxmnRwp5Iw0Z4-nR6vdIh1ZnEggio';
@@ -300,7 +297,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 <div class="toast" id="toast"></div>
 <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<!-- NAV -->
 <nav id="navbar">
   <div class="con">
     <div class="nav-in">
@@ -330,14 +326,13 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   </div>
 </nav>
 
-<!-- ══ HOME ══ -->
 <div class="page active" id="page-home">
   <section id="hero">
     <div class="hero-bg-grid"></div>
     <div class="con" style="width: 100%; z-index: 3;">
       <div class="hero-split">
         <div class="hero-content">
-          <h1 class="hero-title" id="h-name">ILAMPS</h1>
+          <h1 class="hero-title" id="h-name">Interdisciplinary Laboratory for Advanced Material Processing and Simulation (ILAMPS)</h1>
           <div class="hero-badge">Active Research Group</div>
           <p class="hero-desc" id="h-desc"></p>
           <div class="hero-actions">
@@ -348,6 +343,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
             <div onclick="goPage('publications')"><div class="hs-num" id="hs-pubs">—</div><div class="hs-lbl">Publications</div></div>
             <div onclick="goPage('research')"><div class="hs-num" id="hs-projs">—</div><div class="hs-lbl">Projects</div></div>
             <div onclick="goPage('team')"><div class="hs-num" id="hs-mems">—</div><div class="hs-lbl">Members</div></div>
+            <div><div class="hs-num" id="hs-founded">—</div><div class="hs-lbl">Founded</div></div>
           </div>
         </div>
         <div class="hero-slides-container">
@@ -360,32 +356,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     </div>
   </section>
 
-  <!-- HOME: ABOUT -->
-  <div class="home-sec">
-    <div class="con">
-      <div class="about-grid">
-        <div>
-          <div class="about-big" onclick="goPage('publications')">
-            <div class="about-big-num" id="ab-pubs">—</div>
-            <div class="about-big-lbl">Publications &amp; abstracts · View all</div>
-          </div>
-          <div class="about-sm-row">
-            <div class="about-sm" onclick="goPage('research')"><div class="num" id="ab-projs">—</div><div class="lbl">Projects</div></div>
-            <div class="about-sm" onclick="goPage('team')"><div class="num" id="ab-mems">—</div><div class="lbl">Members</div></div>
-            <div class="about-sm"><div class="num" id="ab-founded">—</div><div class="lbl">Founded</div></div>
-          </div>
-        </div>
-        <div class="about-content">
-          <span class="slabel">About the Laboratory</span>
-          <h2 class="stitle" id="ab-fullname">ILAMPS</h2>
-          <p id="ab-a1"></p>
-          <div class="about-tags" id="ab-tags"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- HOME: TEAM SECTION (Top 6 based on rank) -->
   <div class="home-sec gray">
     <div class="con">
       <div class="shdr"><span class="slabel">Researchers</span><h2 class="stitle">Meet the Team</h2></div>
@@ -394,7 +364,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     </div>
   </div>
   
-  <!-- LATEST NEWS -->
   <div class="home-sec">
     <div class="con">
       <div class="shdr"><span class="slabel">Latest Updates</span><h2 class="stitle">News &amp; Announcements</h2></div>
@@ -403,7 +372,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     </div>
   </div>
   
-  <!-- LATEST PUBS -->
   <div class="home-sec gray">
     <div class="con">
       <div class="shdr"><span class="slabel">Recent Work</span><h2 class="stitle">Recent Publications</h2></div>
@@ -412,7 +380,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     </div>
   </div>
 
-  <!-- HOME: GALLERY -->
   <div class="home-sec">
     <div class="con">
       <div class="shdr"><span class="slabel">Visuals</span><h2 class="stitle">Recent Gallery</h2></div>
@@ -422,7 +389,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   </div>
 </div>
 
-<!-- ══ TEAM PAGE ══ -->
 <div class="page" id="page-team">
   <div style="padding:4.5rem 0">
     <div class="con">
@@ -433,7 +399,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   </div>
 </div>
 
-<!-- ══ RESEARCH PAGE ══ -->
 <div class="page" id="page-research">
   <div style="padding:4.5rem 0">
     <div class="con">
@@ -444,7 +409,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   </div>
 </div>
 
-<!-- ══ PUBLICATIONS PAGE ══ -->
 <div class="page" id="page-publications">
   <div style="padding:4.5rem 0">
     <div class="con">
@@ -454,7 +418,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   </div>
 </div>
 
-<!-- ══ NEWS PAGE ══ -->
 <div class="page" id="page-news">
   <div style="padding:4.5rem 0">
     <div class="con">
@@ -464,7 +427,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   </div>
 </div>
 
-<!-- ══ GALLERY PAGE ══ -->
 <div class="page" id="page-gallery">
   <div style="padding:4.5rem 0">
     <div class="con">
@@ -474,7 +436,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   </div>
 </div>
 
-<!-- ══ CONTACT PAGE ══ -->
 <div class="page" id="page-contact">
   <div style="padding:4.5rem 0;background:var(--navy);min-height:100vh">
     <div class="con">
@@ -495,47 +456,25 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   </div>
 </div>
 
-<!-- ══ DEDICATED DETAIL PAGES ══ -->
-<!-- Profile Detail -->
-<div class="page" id="page-profile">
-  <div style="padding:4.5rem 0">
-    <div class="con" id="dp-profile-body"></div>
-  </div>
-</div>
+<div class="page" id="page-profile"><div style="padding:4.5rem 0"><div class="con" id="dp-profile-body"></div></div></div>
+<div class="page" id="page-publication"><div style="padding:4.5rem 0"><div class="con" id="dp-pub-body"></div></div></div>
+<div class="page" id="page-newsdetail"><div style="padding:4.5rem 0"><div class="con" id="dp-news-body"></div></div></div>
 
-<!-- Publication Detail -->
-<div class="page" id="page-publication">
-  <div style="padding:4.5rem 0">
-    <div class="con" id="dp-pub-body"></div>
-  </div>
-</div>
-
-<!-- News Detail -->
-<div class="page" id="page-newsdetail">
-  <div style="padding:4.5rem 0">
-    <div class="con" id="dp-news-body"></div>
-  </div>
-</div>
-
-<!-- ══ FOOTER ══ -->
 <footer>
   <div class="con">
     <div class="footer-grid">
-      <!-- Logos -->
       <div>
-        <div class="f-title" style="font-size:1rem; line-height:1.5">Interdisciplinary Laboratory for Advanced Materials Processing and Simulations</div>
+        <div class="f-title" style="font-size:1.4rem; line-height:1.5">ILAMPS</div>
         <div class="f-logos">
           <div class="f-logo-box" id="f-logo-box-1" style="display:none"><img id="f-logo-ilamps" src=""></div>
           <div class="f-logo-box" id="f-logo-box-2" style="display:none"><img id="f-logo-just" src=""></div>
         </div>
       </div>
-      <!-- Contact -->
       <div>
         <div class="f-title">Contact</div>
         <div style="display:flex;gap:10px;margin-bottom:.8rem;align-items:flex-start"><span>📍</span><p id="f-addr"></p></div>
         <div style="display:flex;gap:10px;align-items:center"><span>✉️</span><a id="f-email" class="f-link" style="margin:0"></a></div>
       </div>
-      <!-- Links -->
       <div>
         <div class="f-title">Quick Links</div>
         <a onclick="goPage('team')" class="f-link">Team</a>
@@ -549,7 +488,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   </div>
 </footer>
 
-<!-- AUTH MODALS -->
 <div class="mo" id="mo-login">
   <div class="mb" style="max-width:420px">
     <div class="mh"><h2>Lab Login</h2><button class="mc" onclick="closeMo('login')">✕</button></div>
@@ -576,7 +514,15 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   </div>
 </div>
 
-<!-- CROP MODAL -->
+<div class="mo" id="mo-orcid" style="z-index:9999;">
+  <div class="mb" style="max-width:600px">
+    <div class="mh"><h2>Select from ORCID</h2><button class="mc" onclick="closeMo('orcid')">✕</button></div>
+    <div class="mbody" style="padding:1.5rem;display:flex;flex-direction:column;gap:1rem">
+      <div id="orcid-list" style="display:flex;flex-direction:column;gap:.8rem"></div>
+    </div>
+  </div>
+</div>
+
 <div class="mo" id="mo-crop" style="z-index:9999;">
   <div class="mb" style="max-width:600px">
     <div class="mh"><h2>Crop Image</h2><button class="mc" onclick="cancelCrop()">✕</button></div>
@@ -590,7 +536,6 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
   </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dash">
   <div class="dn">
     <div class="dn-brand">ILAMPS Admin</div>
@@ -613,15 +558,14 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     </div>
     <div class="dc">
 
-      <!-- PROFILE -->
       <div class="dsec active" id="d-profile">
         <div class="dpt">My Profile</div>
-        <div class="dps">Your public profile. Update your role and designation accurately to appear correctly on the Team page.</div>
+        <div class="dps">Your public profile. Provide your ORCID link to auto-fetch publications.</div>
         <div class="dcard">
           <div class="d2">
             <div class="ff">
-              <label>Photo</label>
-              <div class="up-wrap" onclick="prepareUpload('profiles', url=>{profilePhotoUrl=url;showPrev('prev-profile','ph-profile',url)})">
+              <label>Photo (Square)</label>
+              <div class="up-wrap" onclick="prepareUpload('profiles', 1, url=>{profilePhotoUrl=url;showPrev('prev-profile','ph-profile',url)})">
                 <img class="up-preview" id="prev-profile" src="">
                 <span class="up-ph" id="ph-profile">📷</span>
                 <span class="up-label">Click to upload</span>
@@ -660,33 +604,19 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
             <div class="ff"><label>Public Email</label><input type="email" id="p-email"></div>
             <div class="ff"><label>Website</label><input type="text" id="p-website"></div>
             <div class="ff"><label>LinkedIn Link</label><input type="text" id="p-linkedin"></div>
-            <div class="ff"><label>ORCID Link</label><input type="text" id="p-orcid"></div>
+            <div class="ff"><label>ORCID Link (Required for auto-fetch)</label><input type="text" id="p-orcid" placeholder="https://orcid.org/0000-..."></div>
           </div>
           <button class="btn btn-p" onclick="saveProfile()">💾 Save Profile</button>
         </div>
       </div>
 
-      <!-- MY PUBS -->
       <div class="dsec" id="d-mypubs">
-        <div class="dpt">Publications</div>
+        <div class="dpt" style="display:flex;align-items:center;justify-content:space-between">
+          Publications
+          <button class="btn btn-o btn-sm" onclick="fetchFromOrcid()">Fetch from ORCID</button>
+        </div>
         <div class="dcard">
           <h3 id="pub-form-title">Add Publication</h3>
-          <div class="d2">
-            <div class="ff">
-              <label>Thumbnail (Square)</label>
-              <div class="up-wrap" onclick="prepareUpload('publications', url=>{pubThumbUrl=url;showPrev('prev-pub-thumb','ph-pub-thumb',url)})">
-                <img class="up-preview" id="prev-pub-thumb" src=""><span class="up-ph" id="ph-pub-thumb">🔳</span>
-                <span class="up-label">Upload or Paste Image</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
-              </div>
-            </div>
-            <div class="ff">
-              <label>Detail Image (Banner)</label>
-              <div class="up-wrap" onclick="prepareUpload('publications', url=>{pubDetailUrl=url;showPrev('prev-pub-detail','ph-pub-detail',url)})">
-                <img class="up-preview" id="prev-pub-detail" src=""><span class="up-ph" id="ph-pub-detail">🖼️</span>
-                <span class="up-label">Upload or Paste Image</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
-              </div>
-            </div>
-          </div>
           <div class="ff"><label>Title</label><input type="text" id="np-t"></div>
           <div class="ff">
             <label>Authors</label>
@@ -701,25 +631,27 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
             <div class="ff"><label>Year</label><input type="text" id="np-yr"></div>
             <div class="ff"><label>Type</label><select id="np-type"><option>Journal Paper</option><option>Conference Paper</option><option>Preprint</option><option>Book Chapter</option></select></div>
           </div>
-          <div class="ff"><label>Journal / Conference Name</label><input type="text" id="np-venue"></div>
+          <div class="g2">
+            <div class="ff"><label>Journal / Conference Name</label><input type="text" id="np-venue"></div>
+            <div class="ff"><label>Status</label><select id="np-status"><option>Published</option><option>Accepted</option><option>Under Review</option><option>Submitted</option></select></div>
+          </div>
           <div class="ff"><label>Abstract</label><textarea id="np-abs" style="min-height:90px"></textarea></div>
           <div class="ff"><label>DOI / Link</label><input type="text" id="np-doi"></div>
           <div style="display:flex;gap:1rem;">
              <button class="btn btn-p" id="btn-save-pub" onclick="savePub()">+ Save Publication</button>
-             <button class="btn btn-o" id="btn-cancel-pub" style="display:none" onclick="resetPubForm()">Cancel Edit</button>
+             <button class="btn btn-edit" id="btn-cancel-pub" style="display:none" onclick="resetPubForm()">Cancel Edit</button>
           </div>
         </div>
         <div class="dcard"><h3>Manage Papers</h3><div id="my-pubs"></div></div>
       </div>
 
-      <!-- LAB SETTINGS -->
       <div class="dsec" id="d-lab">
         <div class="dpt">Settings & Logos</div>
         <div class="dcard">
           <div class="d2">
             <div class="ff">
               <label>ILAMPS Logo</label>
-              <div class="up-wrap" onclick="prepareUpload('logos',url=>{setVal('ls-logo',url);showPrev('prev-logo','ph-logo',url);updateFavicon(url)})">
+              <div class="up-wrap" onclick="prepareUpload('logos',NaN,url=>{setVal('ls-logo',url);showPrev('prev-logo','ph-logo',url);updateFavicon(url)})">
                 <img class="up-preview" id="prev-logo" src=""><span class="up-ph" id="ph-logo">🏛️</span>
                 <span class="up-label">Upload or Paste Logo</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
               </div>
@@ -727,28 +659,28 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
             </div>
             <div class="ff">
               <label>JUST Logo (University)</label>
-              <div class="up-wrap" onclick="prepareUpload('logos',url=>{setVal('ls-just-logo',url);showPrev('prev-just-logo','ph-just-logo',url);})">
+              <div class="up-wrap" onclick="prepareUpload('logos',NaN,url=>{setVal('ls-just-logo',url);showPrev('prev-just-logo','ph-just-logo',url);})">
                 <img class="up-preview" id="prev-just-logo" src=""><span class="up-ph" id="ph-just-logo">🏫</span>
                 <span class="up-label">Upload or Paste Logo</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
               </div>
               <input type="hidden" id="ls-just-logo">
             </div>
           </div>
-          <div class="ff"><label>Lab Name</label><input type="text" id="ls-name"></div>
-          <div class="g2"><div class="ff"><label>University</label><input type="text" id="ls-uni"></div><div class="ff"><label>Department</label><input type="text" id="ls-dept"></div></div>
-          <div class="ff"><label>About</label><textarea id="ls-a1" style="min-height:80px"></textarea></div>
+          <div class="g2"><div class="ff"><label>Lab Full Name</label><input type="text" id="ls-fullname"></div><div class="ff"><label>Lab Short Name</label><input type="text" id="ls-name"></div></div>
+          <div class="g3"><div class="ff"><label>Founded Year</label><input type="text" id="ls-founded"></div><div class="ff"><label>University</label><input type="text" id="ls-uni"></div><div class="ff"><label>Department</label><input type="text" id="ls-dept"></div></div>
+          <div class="ff"><label>About Lab Intro Paragraph</label><textarea id="ls-a1" style="min-height:80px"></textarea></div>
           <div class="ff"><label>Address</label><textarea id="ls-addr"></textarea></div>
           <div class="g2"><div class="ff"><label>Email</label><input type="email" id="ls-email"></div><div class="ff"><label>Phone</label><input type="text" id="ls-phone"></div></div>
           <button class="btn btn-p" onclick="saveLabSettings()">💾 Save Settings</button>
         </div>
       </div>
 
-      <!-- HERO SLIDES -->
       <div class="dsec" id="d-hero">
         <div class="dpt">Hero Slides</div>
         <div class="dcard">
           <div class="ff">
-            <div class="up-wrap" onclick="prepareUpload('slides',url=>{setVal('ns-url',url);showPrev('prev-slide','ph-slide',url)})">
+            <label>Slide Image (Automatically crops to 4:3)</label>
+            <div class="up-wrap" onclick="prepareUpload('slides',4/3,url=>{setVal('ns-url',url);showPrev('prev-slide','ph-slide',url)})">
               <img class="up-preview" id="prev-slide" src=""><span class="up-ph" id="ph-slide">🖼️</span>
               <span class="up-label">Upload or Paste Slide</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
             </div>
@@ -760,13 +692,11 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
         <div class="dcard"><h3>Current Slides</h3><div class="aci-list" id="slides-list"></div></div>
       </div>
 
-      <!-- MEMBERS -->
       <div class="dsec" id="d-members">
         <div class="dpt">Members Approvals</div>
         <div class="dcard"><h3>All Members</h3><div id="members-list"></div></div>
       </div>
 
-      <!-- RESEARCH -->
       <div class="dsec" id="d-research">
         <div class="dpt">Research Areas</div>
         <div class="dcard">
@@ -775,13 +705,12 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
           <div class="ff"><label>Description</label><textarea id="ra-desc" style="min-height:80px"></textarea></div>
           <div style="display:flex;gap:1rem;">
             <button class="btn btn-p" id="btn-save-res" onclick="saveResearch()">+ Save Area</button>
-            <button class="btn btn-o" id="btn-cancel-res" style="display:none" onclick="resetResForm()">Cancel</button>
+            <button class="btn btn-edit" id="btn-cancel-res" style="display:none" onclick="resetResForm()">Cancel Edit</button>
           </div>
         </div>
         <div class="dcard"><h3>Current Areas</h3><div class="aci-list" id="research-admin"></div></div>
       </div>
 
-      <!-- ONGOING -->
       <div class="dsec" id="d-ongoing">
         <div class="dpt">Projects</div>
         <div class="dcard">
@@ -791,19 +720,18 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
           <div class="ff"><label>Description</label><textarea id="op-d" style="min-height:80px"></textarea></div>
           <div style="display:flex;gap:1rem;">
              <button class="btn btn-p" id="btn-save-proj" onclick="saveProject()">+ Save Project</button>
-             <button class="btn btn-o" id="btn-cancel-proj" style="display:none" onclick="resetProjForm()">Cancel</button>
+             <button class="btn btn-edit" id="btn-cancel-proj" style="display:none" onclick="resetProjForm()">Cancel Edit</button>
           </div>
         </div>
         <div class="dcard"><h3>Current Projects</h3><div class="aci-list" id="proj-admin"></div></div>
       </div>
 
-      <!-- NEWS -->
       <div class="dsec" id="d-news">
         <div class="dpt">News</div>
         <div class="dcard">
           <h3 id="news-form-title">Add News</h3>
           <div class="ff">
-            <div class="up-wrap" onclick="prepareUpload('news',url=>{newsImgUrl=url;showPrev('prev-news-img','ph-news-img',url)})">
+            <div class="up-wrap" onclick="prepareUpload('news',16/9,url=>{newsImgUrl=url;showPrev('prev-news-img','ph-news-img',url)})">
               <img class="up-preview" id="prev-news-img" src=""><span class="up-ph" id="ph-news-img">📰</span>
               <span class="up-label">Upload or Paste Cover</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
             </div>
@@ -813,19 +741,19 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
           <div class="ff"><label>Description</label><textarea id="nw-desc" style="min-height:90px"></textarea></div>
           <div style="display:flex;gap:1rem;">
             <button class="btn btn-p" id="btn-save-news" onclick="saveNews()">+ Save News</button>
-            <button class="btn btn-o" id="btn-cancel-news" style="display:none" onclick="resetNewsForm()">Cancel</button>
+            <button class="btn btn-edit" id="btn-cancel-news" style="display:none" onclick="resetNewsForm()">Cancel Edit</button>
           </div>
         </div>
         <div class="dcard"><h3>All News</h3><div class="aci-list" id="news-admin"></div></div>
       </div>
 
-      <!-- GALLERY -->
       <div class="dsec" id="d-gallery">
         <div class="dpt">Gallery</div>
         <div class="dcard">
           <h3 id="gal-form-title">Add Photo</h3>
           <div class="ff">
-            <div class="up-wrap" onclick="prepareUpload('gallery',url=>{setVal('g-url',url);showPrev('prev-gal','ph-gal',url)})">
+            <label>Photo (Automatically crops to 4:3)</label>
+            <div class="up-wrap" onclick="prepareUpload('gallery',4/3,url=>{setVal('g-url',url);showPrev('prev-gal','ph-gal',url)})">
               <img class="up-preview" id="prev-gal" src=""><span class="up-ph" id="ph-gal">📸</span>
               <span class="up-label">Upload or Paste Photo</span><input class="up-input" type="file" accept="image/*" onchange="handleFileInput(event)">
             </div>
@@ -837,7 +765,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
           </div>
           <div style="display:flex;gap:1rem;">
              <button class="btn btn-p" id="btn-save-gal" onclick="saveGallery()">+ Save Photo</button>
-             <button class="btn btn-o" id="btn-cancel-gal" style="display:none" onclick="resetGalForm()">Cancel</button>
+             <button class="btn btn-edit" id="btn-cancel-gal" style="display:none" onclick="resetGalForm()">Cancel Edit</button>
           </div>
         </div>
         <div class="dcard"><h3>Gallery Photos</h3><div class="aci-list" id="gal-admin"></div></div>
@@ -854,15 +782,13 @@ let db;
 try{db=createClient(SUPABASE_URL,SUPABASE_ANON);}catch(e){}
 let CU=null,CP=null;
 let slides=[],slideIdx=0,slideTimer=null;
-let pubThumbUrl='', pubDetailUrl='', newsImgUrl='', profilePhotoUrl='';
+let newsImgUrl='', profilePhotoUrl='';
 let npAuthorsList=[];
-let cropCb=null,cropper=null,cropFolder='';
+let cropCb=null,cropper=null,cropFolder='',targetRatio=NaN;
 
-// State tracking for Edits
 let editState = { pub: null, news: null, gal: null, proj: null, res: null };
 let fetchedData = { pubs: [], news: [], gal: [], proj: [], res: [] };
 
-// Role Hierarchy Mapping (Lower is higher priority)
 const roleRanks = {
   'Principal Investigator': 1, 'Assistant Investigator': 2, 'Research Assistant': 3,
   'PhD. Student': 4, 'MSc. Student': 5, 'Graduate Research Student': 6,
@@ -872,7 +798,7 @@ const getRank = role => roleRanks[role] || 10;
 
 // ═══ HELPERS ═══
 const $=id=>document.getElementById(id);
-const setText=(id,v)=>{const e=$(id);if(e)e.textContent=v||''};
+const setText=(id,v)=>{const e=$(id);if(e)e.textContent=v||'0'};
 const setVal=(id,v)=>{const e=$(id);if(e)e.value=v||''};
 const getVal=id=>{const e=$(id);return e?e.value.trim():''};
 const gS=(arr,k,fb='')=>{const f=(arr||[]).find(r=>r.key===k);return f?f.value:fb};
@@ -949,8 +875,8 @@ function slideDir(d){const n=(slideIdx+d+slides.length)%slides.length;goSlide(n)
 function startSlideTimer(){clearInterval(slideTimer);if(slides.length>1)slideTimer=setInterval(()=>slideDir(1),5000);}
 
 // ═══ UPLOAD, CROP & PASTE ═══
-function prepareUpload(folder, cb) {
-  cropFolder = folder; cropCb = cb;
+function prepareUpload(folder, ratio, cb) {
+  cropFolder = folder; cropCb = cb; targetRatio = ratio;
   document.querySelectorAll('.up-wrap').forEach(w=>w.classList.remove('active-drop'));
   if(event && event.currentTarget) event.currentTarget.classList.add('active-drop');
 }
@@ -977,7 +903,7 @@ function processFileForCrop(file) {
     $('mo-crop').classList.add('open');
     setTimeout(() => {
       if(cropper) cropper.destroy();
-      cropper = new Cropper($('crop-img'), {viewMode:1, autoCropArea:0.9});
+      cropper = new Cropper($('crop-img'), {viewMode:1, aspectRatio: targetRatio, autoCropArea:0.9});
     }, 150);
   };
   reader.readAsDataURL(file);
@@ -1011,12 +937,6 @@ async function signIn(){
   const {error}=await db.auth.signInWithPassword({email:getVal('l-email'),password:getVal('l-pwd')});
   if(error)return $('l-err').textContent=error.message;
   closeMo('login');await loadUser();openDash();showToast('✓ Welcome back!');
-}
-async function signUp(){
-  const {data,error}=await db.auth.signUp({email:getVal('s-email'),password:getVal('s-pwd'),options:{data:{name:getVal('s-name')}}});
-  if(error)return $('s-err').textContent=error.message;
-  if(data.user)await db.from('profiles').update({name:getVal('s-name'),slug:genSlug(getVal('s-name'))}).eq('id',data.user.id);
-  closeMo('signup');showToast('✓ Account created! Admin will approve.');
 }
 async function signOut(){await db.auth.signOut();CU=null;CP=null;$('nav-in-logged').style.display='none';$('nav-out').style.display='flex';closeDash();}
 async function loadUser(){
@@ -1074,6 +994,56 @@ async function saveProfile(){
   showToast('✓ Profile Saved!');await loadUser(); initPublicData();
 }
 
+// ── ORCID INTEGRATION ──
+async function fetchFromOrcid() {
+  if(!CP.orcid) return showToast('❌ Set your ORCID link in My Profile first!');
+  const match = CP.orcid.match(/\d{4}-\d{4}-\d{4}-\d{3}[0-9X]/i);
+  if(!match) return showToast('❌ Invalid ORCID format in profile!');
+  const orcid = match[0];
+  showToast('⏳ Fetching from ORCID...');
+  
+  try {
+    const res = await fetch(`https://pub.orcid.org/v3.0/${orcid}/works`, {headers:{'Accept':'application/json'}});
+    const data = await res.json();
+    const works = data.group;
+    if(!works || !works.length) return showToast('No publications found on ORCID.');
+    
+    let html = works.map((w,i) => {
+      const summary = w['work-summary'][0];
+      const title = summary.title?.title?.value || 'Unknown Title';
+      const year = summary['publication-date']?.year?.value || '';
+      const type = summary.type || '';
+      const journal = summary['journal-title']?.value || '';
+      const doiEl = summary['external-ids']?.['external-id']?.find(e => e['external-id-type'] === 'doi');
+      const doi = doiEl ? `https://doi.org/${doiEl['external-id-value']}` : '';
+      
+      const pubData = JSON.stringify({title, year, type, journal, doi}).replace(/"/g, '&quot;');
+      return `<div class="aci"><div class="aci-h" style="align-items:flex-start">
+        <span style="font-size:.85rem;font-weight:700;line-height:1.4">${title} (${year})<br><span style="font-weight:400;color:var(--muted)">${journal}</span></span>
+        <button class="btn btn-p btn-sm" onclick="fillPubFormFromOrcid(${pubData});closeMo('orcid')">Use</button>
+      </div></div>`;
+    }).join('');
+    
+    $('orcid-list').innerHTML = html;
+    openMo('orcid');
+  } catch(e) {
+    showToast('❌ Failed to fetch ORCID data');
+  }
+}
+
+function fillPubFormFromOrcid(data) {
+  setVal('np-t', data.title);
+  setVal('np-yr', data.year);
+  setVal('np-venue', data.journal);
+  setVal('np-doi', data.doi);
+  let t = 'Journal Paper';
+  if(data.type.toLowerCase().includes('conference')) t = 'Conference Paper';
+  if(data.type.toLowerCase().includes('book')) t = 'Book Chapter';
+  setVal('np-type', t);
+  showToast('✓ Form filled from ORCID. Review and save.');
+  $('d-mypubs').scrollIntoView({behavior: 'smooth'});
+}
+
 // ── CRUD EDITS (Pubs) ──
 async function loadMyPubs(){
   const {data}=await db.from('publications').select('*').eq('user_id',CU.id).order('pub_date',{ascending:false});
@@ -1082,7 +1052,7 @@ async function loadMyPubs(){
     <div class="aci">
       <div class="aci-h"><span style="font-weight:700;color:var(--navy);font-size:.9rem">${p.title}</span>
         <div style="display:flex;gap:.4rem">
-          <button class="btn btn-g btn-sm" onclick="triggerEditPub('${p.id}')">Edit</button>
+          <button class="btn btn-edit btn-sm" onclick="triggerEditPub('${p.id}')">Edit</button>
           <button class="btn btn-d btn-sm" onclick="delRow('publications','${p.id}',loadMyPubs)">Del</button>
         </div>
       </div>
@@ -1094,10 +1064,7 @@ function triggerEditPub(id) {
   const p = fetchedData.pubs.find(x => x.id === id); if(!p) return;
   editState.pub = id;
   setVal('np-t', p.title); setVal('np-date', p.pub_date); setVal('np-yr', p.year);
-  setVal('np-type', p.type); setVal('np-venue', p.venue); setVal('np-abs', p.abstract); setVal('np-doi', p.doi);
-  pubThumbUrl = p.thumbnail_image; pubDetailUrl = p.detail_image;
-  if(pubThumbUrl) showPrev('prev-pub-thumb','ph-pub-thumb', pubThumbUrl); else hidePrev('prev-pub-thumb','ph-pub-thumb');
-  if(pubDetailUrl) showPrev('prev-pub-detail','ph-pub-detail', pubDetailUrl); else hidePrev('prev-pub-detail','ph-pub-detail');
+  setVal('np-type', p.type); setVal('np-status', p.status || 'Published'); setVal('np-venue', p.venue); setVal('np-abs', p.abstract); setVal('np-doi', p.doi);
   npAuthorsList = [];
   if(p.authors_list) p.authors_list.split(',').forEach(a => npAuthorsList.push({name: a.trim()}));
   renderAuthChips();
@@ -1106,9 +1073,8 @@ function triggerEditPub(id) {
 }
 function resetPubForm() {
   editState.pub = null;
-  ['np-t','np-yr','np-venue','np-doi','np-abs','np-date'].forEach(id=>setVal(id,''));
-  npAuthorsList=[]; renderAuthChips(); pubThumbUrl=''; pubDetailUrl='';
-  hidePrev('prev-pub-thumb','ph-pub-thumb'); hidePrev('prev-pub-detail','ph-pub-detail');
+  ['np-t','np-yr','np-venue','np-doi','np-abs','np-date'].forEach(id=>setVal(id,'')); setVal('np-status', 'Published');
+  npAuthorsList=[]; renderAuthChips(); 
   $('pub-form-title').textContent = 'Add Publication'; $('btn-save-pub').textContent = '+ Save Publication'; $('btn-cancel-pub').style.display='none';
 }
 async function loadMemberSelect(){
@@ -1126,8 +1092,8 @@ async function savePub(){
   const linkedUsers = npAuthorsList.filter(a=>a.user_id).map(a=>a.user_id);
   const payload = {
     title, authors:authStr, authors_list:authStr, pub_date: getVal('np-date') || null,
-    year:getVal('np-yr'), venue:getVal('np-venue'), type:getVal('np-type'),
-    doi:getVal('np-doi'), abstract:getVal('np-abs'), thumbnail_image:pubThumbUrl||'', detail_image:pubDetailUrl||'', linked_users:linkedUsers
+    year:getVal('np-yr'), venue:getVal('np-venue'), type:getVal('np-type'), status:getVal('np-status'),
+    doi:getVal('np-doi'), abstract:getVal('np-abs'), linked_users:linkedUsers
   };
   
   if (editState.pub) {
@@ -1158,7 +1124,7 @@ async function updateMemberStatus(id, field, val){
 
 async function loadResearchAdmin(){
   const {data}=await db.from('research_areas').select('*').order('sort_order'); fetchedData.res=data||[];
-  $('research-admin').innerHTML=fetchedData.res.map(a=>`<div class="aci"><div class="aci-h"><span style="font-weight:700;color:var(--navy)">${a.icon} ${a.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-g btn-sm" onclick="triggerEditRes('${a.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('research_areas','${a.id}',loadResearchAdmin)">Del</button></div></div></div>`).join('');
+  $('research-admin').innerHTML=fetchedData.res.map(a=>`<div class="aci"><div class="aci-h"><span style="font-weight:700;color:var(--navy)">${a.icon} ${a.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditRes('${a.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('research_areas','${a.id}',loadResearchAdmin)">Del</button></div></div></div>`).join('');
 }
 function triggerEditRes(id){
   const x=fetchedData.res.find(i=>i.id===id); if(!x)return; editState.res=id;
@@ -1174,7 +1140,7 @@ async function saveResearch(){
 
 async function loadProjAdmin(){
   const {data}=await db.from('ongoing_projects').select('*').order('sort_order'); fetchedData.proj=data||[];
-  $('proj-admin').innerHTML=fetchedData.proj.map(p=>`<div class="aci"><div class="aci-h"><span style="font-weight:700;color:var(--navy)">${p.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-g btn-sm" onclick="triggerEditProj('${p.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('ongoing_projects','${p.id}',loadProjAdmin)">Del</button></div></div></div>`).join('');
+  $('proj-admin').innerHTML=fetchedData.proj.map(p=>`<div class="aci"><div class="aci-h"><span style="font-weight:700;color:var(--navy)">${p.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditProj('${p.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('ongoing_projects','${p.id}',loadProjAdmin)">Del</button></div></div></div>`).join('');
 }
 function triggerEditProj(id){
   const x=fetchedData.proj.find(i=>i.id===id); if(!x)return; editState.proj=id;
@@ -1190,7 +1156,7 @@ async function saveProject(){
 
 async function loadNewsAdmin(){
   const {data}=await db.from('news').select('*').order('created_at',{ascending:false}); fetchedData.news=data||[];
-  $('news-admin').innerHTML=fetchedData.news.map(n=>`<div class="aci"><div class="aci-h"><span style="font-weight:700;color:var(--navy)">${n.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-g btn-sm" onclick="triggerEditNews('${n.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('news','${n.id}',loadNewsAdmin)">Del</button></div></div></div>`).join('');
+  $('news-admin').innerHTML=fetchedData.news.map(n=>`<div class="aci"><div class="aci-h"><span style="font-weight:700;color:var(--navy)">${n.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditNews('${n.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('news','${n.id}',loadNewsAdmin)">Del</button></div></div></div>`).join('');
 }
 function triggerEditNews(id){
   const x=fetchedData.news.find(i=>i.id===id); if(!x)return; editState.news=id;
@@ -1207,7 +1173,7 @@ async function saveNews(){
 
 async function loadGalAdmin(){
   const {data}=await db.from('gallery').select('*').order('item_date',{ascending:false}); fetchedData.gal=data||[];
-  $('gal-admin').innerHTML=fetchedData.gal.map(g=>`<div class="aci" style="display:flex;align-items:center;gap:.8rem"><img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--border);"><div style="flex:1;font-weight:700;color:var(--navy);font-size:.85rem">${g.caption||'Photo'}</div><div style="display:flex;gap:.3rem"><button class="btn btn-g btn-sm" onclick="triggerEditGal('${g.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('gallery','${g.id}',loadGalAdmin)">Del</button></div></div>`).join('');
+  $('gal-admin').innerHTML=fetchedData.gal.map(g=>`<div class="aci" style="display:flex;align-items:center;gap:.8rem"><img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--border);"><div style="flex:1;font-weight:700;color:var(--navy);font-size:.85rem">${g.caption||'Photo'}</div><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditGal('${g.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('gallery','${g.id}',loadGalAdmin)">Del</button></div></div>`).join('');
 }
 function triggerEditGal(id){
   const x=fetchedData.gal.find(i=>i.id===id); if(!x)return; editState.gal=id;
@@ -1238,7 +1204,7 @@ async function delRow(table,id,reload){if(confirm('Delete?')){await db.from(tabl
 // Settings 
 async function loadLabForm(){
   const {data:s}=await db.from('lab_settings').select('*');if(!s)return; const g=(k,f='')=>gS(s,k,f);
-  ['name','uni','dept','a1','addr','email','phone'].forEach(k=>setVal('ls-'+k,g(k==='name'?'lab_name':(k==='uni'?'university':(k==='dept'?'department':(k==='a1'?'about':(k==='addr'?'contact_address':(k==='email'?'contact_email':'contact_phone'))))))));
+  ['name','fullname','founded','uni','dept','a1','addr','email','phone'].forEach(k=>setVal('ls-'+k,g(k==='name'?'lab_name':(k==='fullname'?'lab_fullname':(k==='uni'?'university':(k==='dept'?'department':(k==='a1'?'about':(k==='addr'?'contact_address':(k==='email'?'contact_email':k)))))))));
   if(g('lab_logo')){setVal('ls-logo',g('lab_logo'));showPrev('prev-logo','ph-logo',g('lab_logo'));}
   if(g('just_logo')){setVal('ls-just-logo',g('just_logo'));showPrev('prev-just-logo','ph-just-logo',g('just_logo'));}
 }
@@ -1246,7 +1212,8 @@ async function ups(k,v){await db.from('lab_settings').upsert({key:k,value:v},{on
 async function saveLabSettings(){
   await Promise.all([
     ups('lab_logo',getVal('ls-logo')), ups('just_logo',getVal('ls-just-logo')), ups('lab_name',getVal('ls-name')),
-    ups('university',getVal('ls-uni')), ups('department',getVal('ls-dept')), ups('about',getVal('ls-a1')),
+    ups('lab_fullname',getVal('ls-fullname')), ups('founded',getVal('ls-founded')), ups('university',getVal('ls-uni')), 
+    ups('department',getVal('ls-dept')), ups('about',getVal('ls-a1')),
     ups('contact_address',getVal('ls-addr')), ups('contact_email',getVal('ls-email')), ups('contact_phone',getVal('ls-phone'))
   ]);
   showToast('✓ Settings saved!'); initPublicData();
@@ -1258,8 +1225,12 @@ async function initPublicData() {
   const {data:s}=await db.from('lab_settings').select('*');if(!s)return;
   const g=(k,f='')=>gS(s,k,f);
   
-  setText('h-name',g('lab_name','ILAMPS')); setText('nav-lab-name',g('lab_name','ILAMPS'));
+  const labFullName = g('lab_fullname', 'Interdisciplinary Laboratory for Advanced Material Processing and Simulation');
+  const labShortName = g('lab_name', 'ILAMPS');
+  setText('h-name', `${labFullName} (${labShortName})`);
+  setText('nav-lab-name', labShortName);
   setText('h-desc',g('about'));
+  
   const logo=g('lab_logo'); if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}">`;updateFavicon(logo);}
   
   setText('f-addr', g('contact_address')); setText('f-email', g('contact_email')); $('f-email').href='mailto:'+g('contact_email');
@@ -1267,25 +1238,30 @@ async function initPublicData() {
   if(logo) { $('f-logo-box-1').style.display='flex'; $('f-logo-ilamps').src=logo; }
   if(jlogo) { $('f-logo-box-2').style.display='flex'; $('f-logo-just').src=jlogo; }
 
+  // COUNT AGGREGATIONS OVER LIFETIME INSTANCES
   const [{count:pubs},{count:projs},{count:mems}]=await Promise.all([
     db.from('publications').select('*',{count:'exact',head:true}),
     db.from('ongoing_projects').select('*',{count:'exact',head:true}),
     db.from('profiles').select('*',{count:'exact',head:true}).eq('approved',true)
   ]);
-  ['hs-pubs','ab-pubs'].forEach(id=>setText(id,pubs||'0'));
-  ['hs-projs','ab-projs'].forEach(id=>setText(id,projs||'0'));
-  ['hs-mems','ab-mems'].forEach(id=>setText(id,mems||'0'));
+  
+  // Binding values safely to both overview sections
+  ['hs-pubs'].forEach(id=>setText(id,pubs||'0'));
+  ['hs-projs'].forEach(id=>setText(id,projs||'0'));
+  ['hs-mems'].forEach(id=>setText(id,mems||'0'));
+  
+  const fYear = g('founded','—');
+  setText('hs-founded', fYear);
   setText('pub-total-count',pubs?`(${pubs})`:'');
 
-  // Fetch Latest Data
+  // Fetch Group Matrix Nodes
   const [{data:news},{data:pubsData},{data:memsData},{data:galData}] = await Promise.all([
     db.from('news').select('*').order('created_at',{ascending:false}).limit(3),
     db.from('publications').select('*').order('pub_date',{ascending:false}).limit(4),
-    db.from('profiles').select('*').eq('approved',true), // Fetch all members to sort
+    db.from('profiles').select('*').eq('approved',true),
     db.from('gallery').select('*').order('item_date',{ascending:false}).limit(3)
   ]);
 
-  // Sort Members by Hierarchy Rank
   const sortedMems = (memsData || []).sort((a,b) => getRank(a.role) - getRank(b.role));
   
   $('home-team').innerHTML=sortedMems.slice(0,6).map(m=>memberCardHTML(m)).join('');
@@ -1298,12 +1274,12 @@ async function initPublicData() {
 
 function pubCardHome(p){
   const shortAbs = p.abstract ? (p.abstract.length > 100 ? p.abstract.substring(0, 100) + '...' : p.abstract) : '';
+  const statusBadge = p.status ? `<span style="font-size:0.75rem; padding:0.15rem 0.6rem; border-radius:4px; background:var(--silver); color:var(--navy); font-weight:700">${p.status}</span>` : '';
   return `<div class="pubi-home" onclick="goPage('publication', '${p.id}')">
-    ${p.thumbnail_image ? `<img class="pubi-home-img" src="${p.thumbnail_image}">` : `<div class="pubi-home-img" style="background:var(--off);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--gray-light)">📄</div>`}
     <div class="pubi-home-body">
       <div class="pub-title">${p.title}</div>
       <div class="pub-authors" style="margin-bottom:.3rem">${p.authors_list||p.authors||''}</div>
-      <div class="pub-venue" style="font-size:.8rem;color:var(--gray);font-style:italic;margin-bottom:.5rem">${p.venue||''} · ${p.pub_date || p.year}</div>
+      <div class="pub-venue" style="font-size:.8rem;color:var(--gray);font-style:italic;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem">${p.venue||''} · ${p.pub_date || p.year} ${statusBadge}</div>
       ${p.abstract ? `<div style="font-size:.85rem;color:var(--muted);display:inline-block">${shortAbs} <span class="pubi-home-more">More...</span></div>` : ''}
     </div>
   </div>`;
@@ -1343,7 +1319,6 @@ async function buildProfileDetail(id) {
     db.from('ongoing_projects').select('*')
   ]);
   
-  // Filter projects by matching name
   const userProjs = (allProjs||[]).filter(p => (p.members||[]).some(mem => mem.toLowerCase() === (m.name||'').toLowerCase() || mem.includes(m.name)));
   
   let socialHTML = '';
@@ -1379,8 +1354,9 @@ async function buildProfileDetail(id) {
         <div class="pub-list">
           ${(pubs||[]).map(p=>{
             const boldNameStr = (p.authors_list||'').replace(new RegExp(`(${m.name})`, 'gi'), '<strong style="color:var(--navy);">$1</strong>');
+            const statusBadge = p.status ? `<span style="font-size:0.7rem; padding:0.15rem 0.5rem; border-radius:4px; background:var(--silver); color:var(--navy); font-weight:700">${p.status}</span>` : '';
             return `<div class="pubi" onclick="goPage('publication', '${p.id}')">
-              <div class="pubi-top"><span class="pub-type">${p.type}</span><span class="pub-yr">${p.pub_date||p.year}</span></div>
+              <div class="pubi-top"><span class="pub-type">${p.type}</span>${statusBadge}<span class="pub-yr">${p.pub_date||p.year}</span></div>
               <div class="pub-title">${p.title}</div>
               <div class="pub-authors">${boldNameStr}</div>
               <div class="pub-venue">${p.venue||''}</div>
@@ -1394,11 +1370,11 @@ async function buildProfileDetail(id) {
 async function buildPubDetail(id) {
   const {data:p}=await db.from('publications').select('*').eq('id',id).single();
   if(!p) return $('dp-pub-body').innerHTML='<div class="empty">Publication not found.</div>';
+  const statusBadge = p.status ? `<span style="font-size:0.75rem; padding:0.2rem 0.6rem; border-radius:4px; background:var(--silver); color:var(--navy); font-weight:700">${p.status}</span>` : '';
   $('dp-pub-body').innerHTML=`
     <button class="back-btn" onclick="history.back()">← Back</button>
     <div class="dp-container">
-      ${p.detail_image ? `<img class="dp-img" src="${p.detail_image}">` : ''}
-      <div style="display:flex;gap:.5rem;margin-bottom:1rem"><span class="tag-b">${p.type}</span><span style="font-size:.85rem;color:var(--gray);font-weight:700">${p.pub_date||p.year}</span></div>
+      <div style="display:flex;gap:.5rem;margin-bottom:1rem;align-items:center"><span class="tag-b">${p.type}</span>${statusBadge}<span style="font-size:.85rem;color:var(--gray);font-weight:700">${p.pub_date||p.year}</span></div>
       <div class="dp-title">${p.title}</div>
       <div style="font-size:1.15rem;color:var(--accent);font-weight:700;margin-bottom:1rem">${p.authors_list||p.authors||''}</div>
       <div style="font-size:1.05rem;color:var(--muted);font-style:italic;margin-bottom:2rem">${p.venue||''}</div>
@@ -1426,20 +1402,30 @@ async function renderTeamPage(sortedMems){
     sortedMems = (data||[]).sort((a,b) => getRank(a.role) - getRank(b.role));
   }
   
-  // Grouping for Team Page
   const groups = {
-    'Leadership': sortedMems.filter(m => getRank(m.role) <= 2),
-    'Graduate Researchers': sortedMems.filter(m => getRank(m.role) >= 3 && getRank(m.role) <= 6),
-    'Undergraduate Researchers': sortedMems.filter(m => getRank(m.role) === 7),
-    'Staff & Technicians': sortedMems.filter(m => getRank(m.role) === 8),
-    'Alumni': sortedMems.filter(m => getRank(m.role) === 9),
-    'Other Members': sortedMems.filter(m => getRank(m.role) === 10)
+    'Principal Investigator': sortedMems.filter(m => m.role === 'Principal Investigator'),
+    'Assistant Investigator': sortedMems.filter(m => m.role === 'Assistant Investigator'),
+    'Research Assistants': sortedMems.filter(m => m.role === 'Research Assistant'),
+    'PhD. Students': sortedMems.filter(m => m.role === 'PhD. Student'),
+    'MSc. Students': sortedMems.filter(m => m.role === 'MSc. Student'),
+    'Graduate Researchers': sortedMems.filter(m => m.role === 'Graduate Research Student'),
+    'Undergraduate Researchers': sortedMems.filter(m => m.role === 'Undergraduate Student'),
+    'Lab Technicians': sortedMems.filter(m => m.role === 'Lab Technician'),
+    'Alumni': sortedMems.filter(m => m.role === 'Alumni'),
+    'Other Members': sortedMems.filter(m => getRank(m.role) > 9)
   };
 
   let html = '';
   for (const [title, mems] of Object.entries(groups)) {
     if (mems.length) {
-      html += `<div style="margin-bottom:4rem"><span class="dp-slabel" style="font-size:1rem">${title}</span><div class="team-grid">${mems.map(m=>memberCardHTML(m)).join('')}</div></div>`;
+      if (title === 'Principal Investigator') {
+        html += `<div style="margin-bottom:4rem"><span class="dp-slabel" style="font-size:1rem;margin-bottom:1.5rem">${title}</span><div class="pi-card">${mems.map(m=>`
+          <div style="text-align:center"><img src="${m.photo_url}" class="pi-photo"><div class="pi-name">${m.name}</div><div class="pi-desig">${m.designation}</div><div class="pi-dept">${m.department || ''}<br>${m.university || ''}</div></div>
+          <div><span class="pi-sl">Biography</span><p class="pi-bio">${m.bio || ''}</p><button class="btn btn-o btn-sm" style="margin-top:1rem" onclick="goPage('profile', '${m.slug||m.id}')">View Full Profile</button></div>
+        `).join('')}</div></div>`;
+      } else {
+        html += `<div style="margin-bottom:4rem"><span class="dp-slabel" style="font-size:1rem">${title}</span><div class="team-grid">${mems.map(m=>memberCardHTML(m)).join('')}</div></div>`;
+      }
     }
   }
   
@@ -1454,7 +1440,10 @@ async function renderResearchPage(){
 }
 async function renderAllPubs(){
   const {data}=await db.from('publications').select('*').order('pub_date',{ascending:false});
-  $('all-pubs').innerHTML=(data||[]).map(p=>`<div class="pubi" onclick="goPage('publication', '${p.id}')"><div class="pubi-top"><span class="pub-type">${p.type}</span><span class="pub-yr">${p.pub_date||p.year}</span></div><div class="pub-title">${p.title}</div><div class="pub-authors">${p.authors_list||p.authors||''}</div><div class="pub-venue">${p.venue||''}</div></div>`).join('');
+  $('all-pubs').innerHTML=(data||[]).map(p=> {
+    const statusBadge = p.status ? `<span style="font-size:0.7rem; padding:0.15rem 0.5rem; border-radius:4px; background:var(--silver); color:var(--navy); font-weight:700">${p.status}</span>` : '';
+    return `<div class="pubi" onclick="goPage('publication', '${p.id}')"><div class="pubi-top"><span class="pub-type">${p.type}</span>${statusBadge}<span class="pub-yr">${p.pub_date||p.year}</span></div><div class="pub-title">${p.title}</div><div class="pub-authors">${p.authors_list||p.authors||''}</div><div class="pub-venue">${p.venue||''}</div></div>`;
+  }).join('');
 }
 async function renderAllNews(){
   const {data}=await db.from('news').select('*').order('created_at',{ascending:false});
@@ -1473,7 +1462,7 @@ async function renderContact(){
 $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
 
 async function init(){
-  if(!db)return showToast('⚙️ Configure Supabase first');
+  if(!db)return showToast('❌ Configure Supabase client nodes correctly');
   await loadUser(); await initPublicData(); await loadSlides();
   handleRoute(); 
 }
