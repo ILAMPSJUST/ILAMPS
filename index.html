@@ -960,8 +960,26 @@ async function saveNews(){
   showToast('✓ News saved!');resetNewsForm();loadNewsAdmin();initPublicData();
 }
 async function loadGalAdmin(){
-  const {data}=await db.from('gallery').select('*').order('created_at',{ascending:false});fetchedData.gal=data||[];
-  $('gal-admin').innerHTML=fetchedData.gal.map(g=>`<div class="aci" style="display:flex;align-items:center;gap:.8rem"><img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--border)"><div style="flex:1;font-weight:700;font-size:.85rem">${g.caption||'Photo'}</div><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditGal('${g.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('gallery','${g.id}',loadGalAdmin)">Del</button></div></div>`).join('');
+  // Error চেক করার জন্য error ভেরিয়েবলটি যোগ করা হয়েছে
+  const {data, error} = await db.from('gallery').select('*').order('created_at',{ascending:false});
+  
+  if(error) {
+    console.error("Gallery Fetch Error:", error);
+    showToast('❌ Error loading gallery: ' + error.message, 5000);
+  }
+  
+  fetchedData.gal = data || [];
+  
+  $('gal-admin').innerHTML = fetchedData.gal.map(g => `
+    <div class="aci" style="display:flex;align-items:center;gap:.8rem">
+      <img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--border)">
+      <div style="flex:1;font-weight:700;font-size:.85rem">${g.caption||'Photo'}</div>
+      <div style="display:flex;gap:.3rem">
+        <button class="btn btn-edit btn-sm" onclick="triggerEditGal('${g.id}')">Edit</button>
+        <button class="btn btn-d btn-sm" onclick="delRow('gallery','${g.id}',loadGalAdmin)">Del</button>
+      </div>
+    </div>`
+  ).join('');
 }
 function triggerEditGal(id){const x=fetchedData.gal.find(i=>i.id===id);if(!x)return;editState.gal=id;setVal('g-url',x.url);setVal('g-cap',x.caption);setVal('g-date',x.item_date||'');if(x.url)showPrev('prev-gal','ph-gal',x.url);$('gal-form-title').textContent='Edit Photo';$('btn-save-gal').textContent='💾 Update';$('btn-cancel-gal').style.display='inline-flex';}
 function resetGalForm(){editState.gal=null;['g-url','g-cap','g-date'].forEach(id=>setVal(id,''));hidePrev('prev-gal','ph-gal');$('gal-form-title').textContent='Add Photo';$('btn-save-gal').textContent='+ Save Photo';$('btn-cancel-gal').style.display='none';}
@@ -1011,7 +1029,7 @@ async function initPublicData(){
   const g=(k,f='')=>gS(sArr,k,f);
   setText('h-name',g('lab_name','ILAMPS'));setText('nav-lab-name',g('lab_name','ILAMPS'));
   setText('h-desc',g('about'));setText('hs-founded',g('founded','—'));
-  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · ${g('university','JUST')}`);
+  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · Developed by Abdullah Shadek Fahim`);
   const logo=g('lab_logo');if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}">`;updateFavicon(logo);}
   const jlogo=g('just_logo');
   if(logo){$('f-logo-box-1').style.display='flex';$('f-logo-ilamps').src=logo;}
