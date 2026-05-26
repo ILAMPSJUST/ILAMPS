@@ -1309,4 +1309,273 @@ async function buildProfileDetail(id){
       <div class="dp-section"><span class="dp-slabel">Publications (${(pubs||[]).length})</span>
         <div class="pub-list">${(pubs||[]).map(p=>{
           const authHtml = formatAuthors(p.authors_list || p.authors, m.name);
-          const shortAbs=p.abstract?(p.abstract.length>120?p.abstract.substring(0,120)+'...':p.abstract
+          const shortAbs=p.abstract?(p.abstract.length>120?p.abstract.substring(0,120)+'...':p.abstract):'';
+          return `<div class="pubi-home" onclick="goPage('publication','${p.id}')">
+            <div class="pubi-home-body">
+              <div class="pubi-top"><span class="pub-type">${p.type}</span><span class="pub-yr">${p.pub_date||p.year||''}</span></div>
+              <div class="pub-title">${p.title}</div>
+              <div class="pub-authors">${authHtml}</div>
+              <div class="pub-venue">${p.venue||''}</div>
+              ${shortAbs?`<div style="font-size:.82rem;color:var(--muted);margin-top:.35rem">${shortAbs}</div>`:''}
+            </div>
+          </div>`;
+        }).join('')||'<div class="empty" style="padding:1rem">No publications yet.</div>'}</div>
+      </div>
+    </div>`;
+}
+
+async function buildPubDetail(id){
+  const el=$('dp-pub-body');
+  el.innerHTML='<div class="loading"><div class="spin-el"></div>Loading...</div>';
+  const {data:p}=await db.from('publications').select('*').eq('id',id).single();
+  if(!p)return el.innerHTML='<button class="back-btn" onclick="history.back()">← Back</button><div class="empty">Publication not found.</div>';
+  const authHtml = formatAuthors(p.authors_list || p.authors);
+  el.innerHTML=`
+    <button class="back-btn" onclick="history.back()">← Back</button>
+    <div class="dp-container">
+      ${p.detail_image?`<img class="dp-img" src="${p.detail_image}">`:''}
+      <div style="display:flex;gap:.5rem;margin-bottom:1rem;align-items:center;flex-wrap:wrap"><span class="tag-b">${p.type}</span>${p.status?`<span style="font-size:.75rem;padding:.2rem .6rem;border-radius:4px;background:var(--silver);color:var(--navy);font-weight:700">${p.status}</span>`:''}<span style="font-size:.85rem;color:var(--gray);font-weight:700">${p.pub_date||p.year||''}</span></div>
+      <div class="dp-title">${p.title}</div>
+      <div style="font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:1rem">${authHtml}</div>
+      <div style="font-size:1.05rem;color:var(--muted);font-style:italic;margin-bottom:2rem">${p.venue||''}</div>
+      ${p.abstract?`<span class="dp-slabel">Abstract</span><p style="color:var(--muted);line-height:1.8;font-size:1rem;margin-bottom:2.5rem">${p.abstract}</p>`:''}
+      ${p.doi?`<a href="${p.doi}" target="_blank" class="btn btn-p">🔗 View Full Paper</a>`:''}
+    </div>`;
+}
+
+async function buildNewsDetail(id){
+  const el=$('dp-news-body');
+  el.innerHTML='<div class="loading"><div class="spin-el"></div>Loading...</div>';
+  const {data:n}=await db.from('news').select('*').eq('id',id).single();
+  if(!n)return el.innerHTML='<button class="back-btn" onclick="history.back()">← Back</button><div class="empty">News not found.</div>';
+  el.innerHTML=`
+    <button class="back-btn" onclick="history.back()">← Back</button>
+    <div class="dp-container">
+      ${n.featured_image?`<img class="dp-img" src="${n.featured_image}">`:''}
+      <div style="display:flex;gap:.5rem;margin-bottom:1rem"><span class="tag-b">${n.category||'General'}</span><span style="font-size:.85rem;color:var(--gray);font-weight:700">${n.date_label||''}</span></div>
+      <div class="dp-title">${n.title}</div>
+      <p style="color:var(--muted);line-height:1.8;white-space:pre-wrap;font-size:1rem">${n.description||''}</p>
+    </div>`;
+}
+
+async function renderTeamPage(sortedMems){
+  if(!sortedMems){
+    const {data}=await db.from('profiles').select('*').eq('approved',true);
+    sortedMems=(data||[]).sort((a,b)=>getRank(a.role)-getRank(b.role));
+  }
+  const groups={'Principal Investigator':sortedMems.filter(m=>m.role==='Principal Investigator'),'Assistant Investigator':sortedMems.filter(m=>m.role==='Assistant Investigator'),'Research Assistants':sortedMems.filter(m=>m.role==='Research Assistant'),'PhD. Students':sortedMems.filter(m=>m.role==='PhD. Student'),'MSc. Students':sortedMems.filter(m=>m.role==='MSc. Student'),'Graduate Researchers':sortedMems.filter(m=>m.role==='Graduate Research Student'),'Undergraduate Researchers':sortedMems.filter(m=>m.role==='Undergraduate Student'),'Alumni':sortedMems.filter(m=>m.role==='Alumni'),'Others':sortedMems.filter(m=>getRank(m.role)>9)};
+  let html='';
+  for(const [title,mems] of Object.entries(groups)){
+    if(!mems.length)continue;
+    if(title==='Principal Investigator'){
+      html+=`<div style="margin-bottom:4rem"><span class="dp-slabel" style="font-size:1rem;margin-bottom:1.5rem">${title}</span><div class="pi-card">${mems.map(m=>`
+        <div style="text-align:center">${m.photo_url?`<img src="${m.photo_url}" class="pi-photo">`:`<div class="pi-photo-ph">${ini(m.name)}</div>`}<div class="pi-name">${m.name}</div><div class="pi-desig">${m.designation||m.role}</div><div class="pi-dept">${m.department||''}<br>${m.university||''}</div></div>
+        <div><span class="pi-sl">Biography</span><p class="pi-bio">${m.bio||''}</p><button class="btn btn-o btn-sm" style="margin-top:1rem" onclick="goPage('profile','${m.id}')">View Full Profile</button></div>
+      `).join('')}</div></div>`;
+    }else{
+      html+=`<div style="margin-bottom:4rem"><span class="dp-slabel" style="font-size:1rem">${title}</span><div class="team-grid">${mems.map(m=>memberCardHTML(m)).join('')}</div></div>`;
+    }
+  }
+  $('team-content').innerHTML=html||'<div class="empty">No approved members yet.</div>';
+  $('team-load').style.display='none';
+}
+
+async function renderResearchPage(){
+  const [{data:areas},{data:projs}]=await Promise.all([db.from('research_areas').select('*').order('sort_order'),db.from('ongoing_projects').select('*').order('sort_order')]);
+  $('research-grid').innerHTML=(areas||[]).map(a=>`<div class="rc"><span class="rc-icon">${a.icon}</span><h3>${a.title}</h3><p>${a.description}</p></div>`).join('')||'<div class="empty">No research areas yet.</div>';
+  $('proj-list').innerHTML=(projs||[]).map(p=>`<div class="pc"><div><h3>${p.title}</h3><p>${p.description}</p><div class="pc-mems">${(p.members||[]).map(m=>`<span class="pc-mem">${m}</span>`).join('')}</div></div><span class="badge badge-${p.status||'active'}">${p.status||'active'}</span></div>`).join('')||'<div class="empty">No projects yet.</div>';
+}
+
+async function renderAllPubs(){
+  const {data}=await db.from('publications').select('*')
+    .order('pub_date',{ascending:false, nullsFirst:false})
+    .order('year',{ascending:false, nullsFirst:false});
+  setText('pub-total-count',`(${(data||[]).length})`);
+  $('all-pubs').innerHTML=(data||[]).map(p=>pubCardHome(p)).join('')||'<div class="empty">No publications yet.</div>';
+}
+
+async function renderAllNews(){
+  const {data}=await db.from('news').select('*').order('created_at',{ascending:false});
+  $('all-news').innerHTML=(data||[]).map(n=>newsCard(n)).join('')||'<div class="empty">No news yet.</div>';
+}
+
+async function renderGallery(){
+  const {data}=await db.from('gallery').select('*').order('created_at',{ascending:false});
+  $('gal-grid').innerHTML=(data||[]).map(g=>{
+    const dateStr = g.item_date ? new Date(g.item_date+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) : '';
+    return `<div class="gi"><img src="${g.url}"><div class="gi-cap"><span>${g.caption||''}</span>${dateStr?`<span class="gi-date">${dateStr}</span>`:''}</div></div>`;
+  }).join('')||'<div class="empty">No photos yet.</div>';
+}
+
+async function renderContact(sArr){
+  const settings=sArr||(await db.from('lab_settings').select('*')).data||[];
+  const g=(k,f='')=>gS(settings,k,f);
+  setText('c-addr',g('contact_address'));
+  const ce=$('c-email');if(ce){ce.textContent=g('contact_email');ce.href='mailto:'+g('contact_email');}
+  setText('c-join',g('join_text'));
+  $('c-reqs').innerHTML=g('join_reqs','').split('|').filter(Boolean).map(r=>`<li style="padding:.4rem 0;border-bottom:1px solid rgba(255,255,255,.1);padding-left:1rem">→ ${r}</li>`).join('');
+  const ca=$('c-apply');if(ca)ca.href='mailto:'+g('contact_email')+'?subject=ILAMPS Application';
+}
+
+// ── ORCID INTEGRATION WITH BULK UPLOAD & AUTHORS ──
+async function fetchFromOrcid(){
+  if(!CP||!CP.orcid)return showToast('❌ Set your ORCID link in My Profile first!');
+  const match=(CP.orcid||'').match(/\d{4}-\d{4}-\d{4}-\d{3}[0-9X]/i);
+  if(!match)return showToast('❌ Invalid ORCID format!');
+  const orcid=match[0];showToast('⏳ Fetching from ORCID...');
+  try{
+    const res=await fetch(`https://pub.orcid.org/v3.0/${orcid}/works`,{headers:{'Accept':'application/json'}});
+    const data=await res.json();const works=data.group;
+    if(!works||!works.length)return showToast('No publications found on ORCID.');
+    // Bulk-fetch FULL records for contributor names
+    const putCodes=works.map(w=>w['work-summary'][0]['put-code']).join(',');
+    const fullRes=await fetch(`https://pub.orcid.org/v3.0/${orcid}/works/${putCodes}`,{headers:{'Accept':'application/json'}});
+    const fullData=await fullRes.json();
+    const fullWorks=fullData.bulk||[];
+    orcidCachedWorks=[];let listHtml='';
+    fullWorks.forEach(item=>{
+      const w=item.work;if(!w)return;
+      const title=w.title?.title?.value||'Unknown Title';
+      const year=w['publication-date']?.year?.value||'';
+      let t='Journal Paper';
+      if((w.type||'').toLowerCase().includes('conference'))t='Conference Paper';
+      if((w.type||'').toLowerCase().includes('book'))t='Book Chapter';
+      const journal=w['journal-title']?.value||'';
+      const doiEl=(w['external-ids']?.['external-id']||[]).find(e=>e['external-id-type']==='doi');
+      const doi=doiEl?`https://doi.org/${doiEl['external-id-value']}`:''; 
+      const contribs=w.contributors?.contributor||[];
+      let authors='';
+      if(contribs.length){
+        authors=contribs.map(c=>swapOrcidName(c['credit-name']?.value||'')).filter(Boolean).join(', ');
+      }
+      if(!authors)authors=CP.name||'';
+      const itemData={title,year,type:t,journal,doi,authors};
+      orcidCachedWorks.push(itemData);
+      const pd=JSON.stringify(itemData).replace(/"/g,'&quot;');
+      listHtml+=`<div class="aci"><div class="aci-h" style="align-items:flex-start;gap:.5rem">`
+        +`<div style="flex:1"><div style="font-weight:700;font-size:.88rem;line-height:1.4;margin-bottom:.2rem">${title} (${year})</div>`
+        +`<div style="font-size:.78rem;color:var(--navy-mid);font-weight:600;margin-bottom:.1rem">Authors: ${authors||'Not listed'}</div>`
+        +`<div style="font-size:.74rem;color:var(--muted);font-style:italic">${journal}</div></div>`
+        +`<button class="btn btn-p btn-sm" style="flex-shrink:0" onclick='fillPubFromOrcid(${pd});closeMo("orcid")'>Use</button>`
+        +`</div></div>`;
+    });
+    $('mo-orcid').querySelector('.mh').innerHTML=`<h2>ORCID (${fullWorks.length} works)</h2>`
+      +`<div style="display:flex;gap:.5rem;align-items:center">`
+      +`<button class="btn btn-p btn-sm" onclick="importAllOrcid()">Import All</button>`
+      +`<button class="mc" onclick="closeMo('orcid')">&#x2715;</button></div>`;
+    $('orcid-list').innerHTML=listHtml;openMo('orcid');
+  }catch(e){console.error(e);showToast('❌ ORCID failed: '+e.message);}
+}
+
+// ═══ ADMIN EMAIL NOTIFICATION ═══
+async function sendAdminNotification(eventType, userName, userEmail){
+  if(EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY')return; 
+  try{
+    emailjs.init({publicKey:EMAILJS_PUBLIC_KEY});
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email: ADMIN_EMAIL,
+      from_name: userName,
+      from_email: userEmail,
+      message: `New ${eventType} on ILAMPS!
+
+Name: ${userName}
+Email: ${userEmail}
+Time: ${new Date().toLocaleString('en-US',{timeZone:'Asia/Dhaka'})} (BST)`,
+      subject: `ILAMPS: New ${eventType} — ${userName}`
+    });
+    console.log('Admin notified via email.');
+  }catch(e){console.warn('EmailJS notification failed:',e);}
+}
+
+async function importAllOrcid(){
+  if(!orcidCachedWorks||!orcidCachedWorks.length)return showToast('⚠️ Fetch ORCID publications first.');
+  if(!confirm(`Import all ${orcidCachedWorks.length} publications from ORCID?`))return;
+  showToast('⏳ Importing...');
+  let ok=0,fail=0,errs=[];
+  for(const w of orcidCachedWorks){
+    const authStr=w.authors||CP.name||'';
+    const payload={
+      title:w.title||'Untitled',
+      authors:authStr,
+      authors_list:authStr,
+      year:String(w.year||''),
+      venue:w.journal||'',
+      type:w.type||'Journal Paper',
+      status:'Published',
+      doi:w.doi||'',
+      user_id:CU.id,
+    };
+    const {error}=await db.from('publications').insert(payload);
+    if(error){fail++;errs.push(error.message);}else ok++;
+  }
+  closeMo('orcid');
+  if(fail)console.error('Import errors:',errs);
+  showToast(`✓ Imported ${ok}${fail?' (❌ '+fail+' failed)':''}`);
+  loadMyPubs();loadCountsDisplay();
+}
+
+// ═══ ORCID NAME FORMAT & AUTHOR REPLACE ═══
+function swapOrcidName(name){
+  if(!name)return '';
+  const commaIdx=name.indexOf(',');
+  if(commaIdx<0)return name;
+  const last=name.substring(0,commaIdx).trim();
+  const first=name.substring(commaIdx+1).trim();
+  return first?`${first} ${last}`:last;
+}
+
+function buildAuthorReplaceUI(){
+  const allAuthors=new Set();
+  fetchedData.pubs.forEach(p=>{
+    (p.authors_list||p.authors||'').split(',').map(n=>n.trim()).filter(Boolean).forEach(n=>allAuthors.add(n));
+  });
+  authorReplaceCache=[...allAuthors];
+  const el=$('author-replace-list');if(!el)return;
+  if(!authorReplaceCache.length){el.innerHTML='<div class="empty" style="padding:1rem">No author names found. Add publications first.</div>';return;}
+  const memberOpts=globalMembers.map(m=>`<option value="${m.id}" data-name="${m.name}">${m.name}</option>`).join('');
+  el.innerHTML=authorReplaceCache.map((author,i)=>`
+    <div style="display:flex;align-items:center;gap:.6rem;padding:.65rem 0;border-bottom:1px solid var(--border);flex-wrap:wrap">
+      <span style="flex:1;min-width:120px;font-size:.85rem;font-weight:600;color:var(--navy)">${author}</span>
+      <select id="ar-sel-${i}" style="flex:1;min-width:150px;padding:.38rem .7rem;border:1.5px solid var(--border);border-radius:8px;font-size:.8rem;font-family:var(--f)">
+        <option value="">Select lab member...</option>
+        ${memberOpts}
+      </select>
+      <button class="btn btn-p btn-sm" onclick="applyAuthorReplace(${i})">Apply</button>
+    </div>`).join('');
+}
+
+async function applyAuthorReplace(idx){
+  const oldName=authorReplaceCache[idx];if(!oldName)return;
+  const sel=$(`ar-sel-${idx}`);if(!sel||!sel.value)return showToast('⚠️ Select a lab member first');
+  const memberId=sel.value;
+  const memberName=sel.options[sel.selectedIndex]?.dataset?.name||'';
+  if(!memberName)return;
+  let count=0;
+  for(const p of fetchedData.pubs){
+    const names=(p.authors_list||p.authors||'').split(',').map(n=>n.trim());
+    if(!names.includes(oldName))continue;
+    const newAuthStr=names.map(n=>n===oldName?memberName:n).join(', ');
+    const linked=Array.isArray(p.linked_users)?[...new Set([...p.linked_users,memberId])]:[memberId];
+    const {error}=await db.from('publications').update({authors:newAuthStr,authors_list:newAuthStr,linked_users:linked}).eq('id',p.id);
+    if(!error)count++;
+  }
+  if(count)showToast(`✓ Replaced "${oldName}" → "${memberName}" in ${count} pub(s)`);
+  else showToast(`⚠️ No matching publications found`);
+  loadMyPubs();
+}
+
+$('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
+
+async function init(){
+  const ml=$('mob-login-li');if(ml)ml.style.display='block';
+  if(!db)return showToast('⚙️ Configure Supabase credentials in index.html',5000);
+  await loadUser();
+  loadCountsDisplay(); 
+  await initPublicData();
+  await loadSlides();
+  handleRoute();
+}
+init();
+</script>
+</body>
+</html>
