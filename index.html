@@ -1190,7 +1190,7 @@ async function initPublicData(){
   // Fetch latest data for home page
   const [{data:news},{data:pubsData},{data:memsData},{data:galData}]=await Promise.all([
     db.from('news').select('*').order('created_at',{ascending:false}).limit(3),
-    db.from('publications').select('*').limit(20), // fetch more, sort client-side
+    db.from('publications').select('*'),
     db.from('profiles').select('*').eq('approved',true),
     db.from('gallery').select('*').order('created_at',{ascending:false}).limit(3)
   ]);
