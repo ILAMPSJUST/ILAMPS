@@ -111,7 +111,7 @@ a{color:inherit;text-decoration:none}img{max-width:100%;display:block}button{fon
 @media(max-width:480px){.team-grid{grid-template-columns:1fr 1fr;gap:1rem}.tc{padding:1.5rem 1rem}}
 /* PUBS */
 .pub-list{display:flex;flex-direction:column;gap:1.2rem}
-.pubi(background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:var(--tr);cursor:pointer;padding:1.5rem;box-shadow:var(--shadow)}
+.pubi{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:var(--tr);cursor:pointer;padding:1.5rem;box-shadow:var(--shadow)}
 .pubi:hover{box-shadow:var(--shadow-lg);border-color:rgba(74,123,200,.3);transform:translateY(-3px)}
 .pubi-top{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem;flex-wrap:wrap}
 .pub-type{background:rgba(74,123,200,.1);color:var(--accent);padding:.15rem .55rem;border-radius:4px;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
@@ -187,8 +187,7 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem;font-si
 .dp-img{width:100%;max-height:450px;object-fit:cover;border-radius:var(--rl);margin-bottom:2.5rem;box-shadow:var(--shadow)}
 .dp-title{font-size:1.8rem;font-weight:900;color:var(--navy);margin-bottom:1rem;line-height:1.3}
 @media(max-width:600px){.dp-container{padding:1.5rem}.dp-hero{flex-direction:column;text-align:center}.dp-photo,.dp-photo-ph{width:120px;height:120px}}
-
-/* DASHBOARD GRID & AUTO OVERSCROLL FIXES */
+/* DASHBOARD */
 #dash{display:none;position:fixed;inset:0;z-index:9900;flex-direction:column;background:#eef1f7;overflow:hidden;}#dash.open{display:flex}
 .dn{background:var(--navy);height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;border-bottom:1px solid rgba(255,255,255,.07);box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:10}
 .dn-brand{font-size:1.2rem;font-weight:900;color:#fff}
@@ -211,11 +210,13 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem;font-si
 .up-ph{font-size:2rem;display:block;margin-bottom:.5rem;opacity:.5}.up-label{font-size:.85rem;font-weight:600;color:var(--navy)}.up-hint{font-size:.7rem;color:var(--muted);margin-top:.4rem;display:block}
 .up-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2}
 
+/* MOBILE DASHBOARD FIXES */
 @media(max-width:768px){
-  .dl{display:flex;flex-direction:column;flex:1;overflow-y:auto;}
+  .dl{display:flex;flex-direction:column;flex:1;}
   .ds{display:none}
   #mob-dash-nav{display:block!important}
-  .dc{padding:1rem;flex:none;}
+  .dc{padding:1rem;flex:1;overflow-y:auto;}
+  .g2,.g3,.d2,.d3{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -316,7 +317,7 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start">
       <div>
         <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">📍</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Address</h4><p id="c-addr" style="color:rgba(255,255,255,.7);line-height:1.6"></p></div></div>
-        <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">✉️</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Email</h4><a id="c-email" href="" style="color:rgba(255,255,255,.7); font-weight: bold;"></a></div></div>
+        <div style="display:flex;gap:1rem;margin-bottom:2rem"><div style="font-size:1.5rem">✉️</div><div><h4 style="color:var(--accent-light);margin-bottom:.3rem;text-transform:uppercase;font-size:.75rem;letter-spacing:.1em">Email</h4><a id="c-email" href="" style="color:rgba(255,255,255,.7)"></a></div></div>
       </div>
       <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);padding:2.5rem">
         <h3 style="color:#fff;font-size:1.5rem;margin-bottom:1rem">Prospective Members</h3>
@@ -526,7 +527,10 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
         <div class="dcard"><h3>Current Slides</h3><div class="aci-list" id="slides-list"></div></div>
       </div>
 
-      <div class="dsec" id="d-members"><div class="dpt">Members & Permissions</div><div class="dcard"><h3>All Users Management</h3><div id="members-list"></div></div></div>
+      <div class="dsec" id="d-members">
+        <div class="dpt">Members & Permissions</div>
+        <div class="dcard"><h3>All Users Management</h3><div id="members-list"></div></div>
+      </div>
 
       <div class="dsec" id="d-research">
         <div class="dpt">Research Areas</div>
@@ -645,21 +649,21 @@ function updateFavicon(url){if(!url)return;const l=$('favicon-link');if(l)l.href
 
 // ═══ AUTHOR FORMATTING HELPER ═══
 function formatAuthors(authString, currentProfileName = null) {
-    let str = authString || '';
-    if(!globalProfiles.length) return str;
-    const sortedProfs = [...globalProfiles].sort((a,b) => (b.name||'').length - (a.name||'').length);
-    sortedProfs.forEach(prof => {
-        if (prof.name && str.includes(prof.name)) {
-            const safeName = prof.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const regex = new RegExp(`(^|\\s|,|;)\\s*(${safeName})\\s*(?=$|\\s|,|;)`, 'g');
-            if (currentProfileName && prof.name === currentProfileName) {
-                str = str.replace(regex, `$1<strong style="color:var(--navy)">$2</strong>`);
-            } else {
-                str = str.replace(regex, `$1<span onclick="event.stopPropagation(); goPage('profile', '${prof.id}')" style="color:var(--accent);cursor:pointer;text-decoration:underline;">$2</span>`);
-            }
-        }
-    });
-    return str;
+  let str = authString || '';
+  if(!globalProfiles.length) return str;
+  const sortedProfs = [...globalProfiles].sort((a,b) => (b.name||'').length - (a.name||'').length);
+  sortedProfs.forEach(prof => {
+      if (prof.name && str.includes(prof.name)) {
+          const safeName = prof.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const regex = new RegExp(`(^|\\s|,|;)\\s*(${safeName})\\s*(?=$|\\s|,|;)`, 'g');
+          if (currentProfileName && prof.name === currentProfileName) {
+              str = str.replace(regex, `$1<strong style="color:var(--navy)">$2</strong>`);
+          } else {
+              str = str.replace(regex, `$1<span onclick="event.stopPropagation(); goPage('profile', '${prof.id}')" style="color:var(--accent);cursor:pointer;text-decoration:underline;">$2</span>`);
+          }
+      }
+  });
+  return str;
 }
 
 // ═══ ROUTING ═══
@@ -1077,10 +1081,19 @@ async function saveNews(){
   showToast('✓ News saved!');resetNewsForm();loadNewsAdmin();initPublicData();
 }
 async function loadGalAdmin(){
-  const {data, error}=await db.from('gallery').select('*').order('created_at',{ascending:false});
-  if(error) { console.error(error); showToast('❌ Error parsing data:' + error.message); }
-  fetchedData.gal=data||[];
-  $('gal-admin').innerHTML=fetchedData.gal.map(g=>`<div class="aci" style="display:flex;align-items:center;gap:.8rem"><img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--border)"><div style="flex:1;font-weight:700;font-size:.85rem">${g.caption||'Photo'}</div><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditGal('${g.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('gallery','${g.id}',loadGalAdmin)">Del</button></div></div>`).join('');
+  const {data, error} = await db.from('gallery').select('*').order('created_at',{ascending:false});
+  if(error) { console.error("Gallery Fetch Error:", error); showToast('❌ Error loading gallery: ' + error.message, 5000); }
+  fetchedData.gal = data || [];
+  $('gal-admin').innerHTML = fetchedData.gal.map(g => `
+    <div class="aci" style="display:flex;align-items:center;gap:.8rem">
+      <img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--border)">
+      <div style="flex:1;font-weight:700;font-size:.85rem">${g.caption||'Photo'}</div>
+      <div style="display:flex;gap:.3rem">
+        <button class="btn btn-edit btn-sm" onclick="triggerEditGal('${g.id}')">Edit</button>
+        <button class="btn btn-d btn-sm" onclick="delRow('gallery','${g.id}',loadGalAdmin)">Del</button>
+      </div>
+    </div>`
+  ).join('');
 }
 function triggerEditGal(id){const x=fetchedData.gal.find(i=>i.id===id);if(!x)return;editState.gal=id;setVal('g-url',x.url);setVal('g-cap',x.caption);setVal('g-date',x.item_date||'');if(x.url)showPrev('prev-gal','ph-gal',x.url);$('gal-form-title').textContent='Edit Photo';$('btn-save-gal').textContent='💾 Update';$('btn-cancel-gal').style.display='inline-flex';}
 function resetGalForm(){editState.gal=null;['g-url','g-cap','g-date'].forEach(id=>setVal(id,''));hidePrev('prev-gal','ph-gal');$('gal-form-title').textContent='Add Photo';$('btn-save-gal').textContent='+ Save Photo';$('btn-cancel-gal').style.display='none';}
@@ -1120,6 +1133,8 @@ async function loadCountsDisplay(){
 // ═══ PUBLIC RENDERING ═══
 async function initPublicData(){
   if(!db)return;
+  
+  // Fetch profiles for global Author linking first
   const {data: profs} = await db.from('profiles').select('id,name').eq('approved',true);
   globalProfiles = profs || [];
 
@@ -1128,7 +1143,7 @@ async function initPublicData(){
   const g=(k,f='')=>gS(sArr,k,f);
   setText('h-name',g('lab_name','ILAMPS'));setText('nav-lab-name',g('lab_name','ILAMPS'));
   setText('h-desc',g('about'));setText('hs-founded',g('founded','—'));
-  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · ${g('university','JUST')}`);
+  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · Developed by Abdullah Shadek Fahim`);
   const logo=g('lab_logo');if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}">`;updateFavicon(logo);}
   const jlogo=g('just_logo');
   if(logo){$('f-logo-box-1').style.display='flex';$('f-logo-ilamps').src=logo;}
@@ -1326,7 +1341,7 @@ async function renderContact(sArr){
   const ca=$('c-apply');if(ca)ca.href='mailto:'+g('contact_email')+'?subject=ILAMPS Application';
 }
 
-// ═══ DYNAMIC ORCID CONTROLLER WITH PARSING ENGINE & BULK ALL CHIPS ═══
+// ── ORCID INTEGRATION WITH BULK UPLOAD & AUTHORS ──
 async function fetchFromOrcid(){
   if(!CP||!CP.orcid)return showToast('❌ Set your ORCID link in My Profile first!');
   const match=(CP.orcid||'').match(/\d{4}-\d{4}-\d{4}-\d{3}[0-9X]/i);
@@ -1344,17 +1359,16 @@ async function fetchFromOrcid(){
       const s=w['work-summary'][0];
       const title=s.title?.title?.value||'Unknown Title';
       const year=s['publication-date']?.year?.value||'';
-      let type='Journal Paper';
+      let t='Journal Paper';
       if((s.type||'').toLowerCase().includes('conference'))t='Conference Paper';
       if((s.type||'').toLowerCase().includes('book'))t='Book Chapter';
       const journal=s['journal-title']?.value||'';
       const doiEl=(s['external-ids']?.['external-id']||[]).find(e=>e['external-id-type']==='doi');
       const doi=doiEl?`https://doi.org/${doiEl['external-id-value']}`:'';
       
-      // Dynamic internal contributor author parsing configuration sequence
       let authors = s['source']?.['source-name']?.value || CP.name;
       
-      const itemData = {title, year, type, journal, doi, authors};
+      const itemData = {title, year, type: t, journal, doi, authors};
       orcidCachedWorks.push(itemData);
       
       const pd=JSON.stringify(itemData).replace(/"/g,'&quot;');
@@ -1406,7 +1420,7 @@ function fillPubFromOrcid(d){
   setVal('np-type',d.type);
   npAuthorsList = [{name: d.authors}];
   renderAuthChips();
-  showToast('✓ Form loaded from ORCID data.');
+  showToast('✓ Form filled from ORCID. Review and save.');
 }
 
 $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
