@@ -84,6 +84,7 @@ a{color:inherit;text-decoration:none}img{max-width:100%;display:block}button{fon
 .hero-stats{display:flex;gap:2.5rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1);flex-wrap:wrap;width:100%}
 .hs-num{font-size:2rem;font-weight:800;color:#fff;line-height:1;cursor:pointer;transition:var(--tr)}.hs-num:hover{color:var(--accent-light)}
 .hs-lbl{font-size:.65rem;color:var(--gray-light);letter-spacing:.1em;text-transform:uppercase;margin-top:.4rem;font-weight:600}
+@media(min-width:901px){#mob-login-li,#mob-dash-li{display:none!important}}
 @media(max-width:900px){#hero{height:auto;min-height:0;padding-bottom:2rem}.hero-split{display:flex;flex-direction:column;padding-top:80px;gap:1rem;text-align:left}.hero-content{display:contents}.hero-title{order:1;font-size:1.45rem;line-height:1.25;margin-bottom:0}.hero-badge{order:2;margin-bottom:0}.hero-slides-container{order:3;width:100%;aspect-ratio:4/3;height:auto;margin:.5rem 0;border-radius:var(--r)}.hero-desc{order:4;font-size:.86rem;margin-bottom:0}.hero-actions{order:5;margin-bottom:0;width:100%;gap:.6rem}.hero-stats{order:6;border-top:1px solid rgba(255,255,255,.1);padding-top:.9rem;gap:.7rem;justify-content:flex-start;flex-wrap:wrap}.hs-num{font-size:1.25rem}.hs-lbl{font-size:.52rem}}
 /* HOME SECTIONS */
 .home-sec{padding:5.5rem 0}.home-sec.gray{background:var(--off)}
@@ -208,7 +209,7 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem;font-si
 .up-preview{width:100%;max-height:160px;object-fit:cover;border-radius:8px;margin-bottom:.8rem;display:none;box-shadow:var(--shadow)}.up-preview.show{display:block}
 .up-ph{font-size:2rem;display:block;margin-bottom:.5rem;opacity:.5}.up-label{font-size:.85rem;font-weight:600;color:var(--navy)}.up-hint{font-size:.7rem;color:var(--muted);margin-top:.4rem;display:block}
 .up-input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;z-index:2}
-@media(max-width:768px){.dl{grid-template-columns:1fr}.ds{display:none}.g2,.g3{grid-template-columns:1fr}.dc{padding:1rem}}
+@media(max-width:768px){.dl{display:block}.ds{display:none}#mob-dash-nav{display:block!important}.g2,.g3,.d2,.d3{grid-template-columns:1fr}.dc{padding:1rem}}
 </style>
 </head>
 <body>
@@ -399,6 +400,20 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
       </div>
     </div>
     <div class="dc">
+      <div id="mob-dash-nav" style="display:none;margin-bottom:1.2rem">
+        <select onchange="switchDashSection(this.value)" style="width:100%;padding:.65rem 1rem;background:#fff;border:1.5px solid var(--border);border-radius:10px;color:var(--navy);font-size:.88rem;font-weight:600;font-family:var(--f)">
+          <option value="d-profile">👤 My Profile</option>
+          <option value="d-mypubs">📄 My Publications</option>
+          <option value="" disabled style="color:var(--gray);font-size:.7rem">── Admin ──</option>
+          <option value="d-lab">⚙️ Settings & Logos</option>
+          <option value="d-hero">🖼️ Hero Slides</option>
+          <option value="d-members">👥 Members</option>
+          <option value="d-research">🔬 Research Areas</option>
+          <option value="d-ongoing">⚡ Projects</option>
+          <option value="d-news">📢 News</option>
+          <option value="d-gallery">🖼️ Gallery</option>
+        </select>
+      </div>
 
       <div class="dsec active" id="d-profile">
         <div class="dpt">My Profile</div><div class="dps">Your public profile on the Team page.</div>
@@ -721,10 +736,27 @@ async function loadUser(){
   const {data:p}=await db.from('profiles').select('*').eq('id',user.id).single();CP=p;
   $('nav-in-logged').style.display='flex';$('nav-out').style.display='none';const ml=$('mob-login-li'),md=$('mob-dash-li');if(ml)ml.style.display='none';if(md)md.style.display='block';const fo=$('footer-out'),fi=$('footer-in');if(fo)fo.style.display='none';if(fi)fi.style.display='block';
   $('admin-nav').style.display=p?.is_admin?'block':'none';
+  // Also update mob-dash-nav admin options
+  const msel=document.querySelector('#mob-dash-nav select');
+  if(msel){Array.from(msel.options).forEach(o=>{if(['d-lab','d-hero','d-members','d-research','d-ongoing','d-news','d-gallery'].includes(o.value))o.style.display=p?.is_admin?'':'none';});}
 }
 
 // ═══ DASHBOARD ═══
-function openDash(){$('dash').classList.add('open');document.body.style.overflow='hidden';loadProfileForm();if(CP?.is_admin)loadLabForm();}
+function openDash(){$('dash').classList.add('open');document.body.style.overflow='hidden';
+  // Show mobile nav if small screen
+  const mn=$('mob-dash-nav');
+  if(mn){
+    mn.style.display=window.innerWidth<=768?'block':'none';
+    // Show/hide admin options
+    const sel=mn.querySelector('select');
+    if(sel){
+      Array.from(sel.options).forEach(o=>{
+        if(['d-lab','d-hero','d-members','d-research','d-ongoing','d-news','d-gallery'].includes(o.value)){
+          o.style.display=CP?.is_admin?'':'none';
+        }
+      });
+    }
+  }loadProfileForm();if(CP?.is_admin)loadLabForm();}
 function closeDash(){$('dash').classList.remove('open');document.body.style.overflow='';}
 document.querySelectorAll('.dni').forEach(btn=>{
   btn.addEventListener('click',()=>{
@@ -877,7 +909,7 @@ async function saveProject(){
   showToast('✓ Saved');resetProjForm();loadProjAdmin();initPublicData();
 }
 async function loadNewsAdmin(){
-  const {data}=await db.from('news').select('*').order('news_date',{ascending:false,nullsFirst:false});fetchedData.news=data||[];
+  const {data}=await db.from('news').select('*').order('created_at',{ascending:false});fetchedData.news=data||[];
   $('news-admin').innerHTML=fetchedData.news.map(n=>`<div class="aci"><div class="aci-h"><span style="font-weight:700">${n.title}</span><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditNews('${n.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('news','${n.id}',loadNewsAdmin)">Del</button></div></div></div>`).join('');
 }
 function triggerEditNews(id){const x=fetchedData.news.find(i=>i.id===id);if(!x)return;editState.news=id;setVal('nw-date',x.news_date||'');setVal('nw-cat',x.category);setVal('nw-t',x.title);setVal('nw-desc',x.description);newsImgUrl=x.featured_image||'';newsThumbUrl=x.thumbnail_image||'';if(newsImgUrl)showPrev('prev-news-img','ph-news-img',newsImgUrl);else hidePrev('prev-news-img','ph-news-img');if(newsThumbUrl)showPrev('prev-nw-thumb','ph-nw-thumb',newsThumbUrl);else hidePrev('prev-nw-thumb','ph-nw-thumb');$('news-form-title').textContent='Edit News';$('btn-save-news').textContent='💾 Update';$('btn-cancel-news').style.display='inline-flex';}
@@ -885,16 +917,16 @@ function resetNewsForm(){editState.news=null;['nw-date','nw-t','nw-desc'].forEac
 async function saveNews(){
   const rawDate=getVal('nw-date');
   const dateLabel=rawDate?new Date(rawDate+'T00:00:00').toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}):'';
-  const payload={date_label:dateLabel,news_date:rawDate||null,category:getVal('nw-cat'),title:getVal('nw-t'),description:getVal('nw-desc'),featured_image:newsImgUrl,thumbnail_image:newsThumbUrl||''};
+  const payload={date_label:dateLabel,category:getVal('nw-cat'),title:getVal('nw-t'),description:getVal('nw-desc'),featured_image:newsImgUrl||''};
   const {error:ne}=editState.news?await db.from('news').update(payload).eq('id',editState.news):await db.from('news').insert(payload);
   if(ne)return showToast('❌ '+ne.message,5000);
   showToast('✓ News saved!');resetNewsForm();loadNewsAdmin();initPublicData();
 }
 async function loadGalAdmin(){
-  const {data}=await db.from('gallery').select('*').order('item_date',{ascending:false});fetchedData.gal=data||[];
+  const {data}=await db.from('gallery').select('*').order('created_at',{ascending:false});fetchedData.gal=data||[];
   $('gal-admin').innerHTML=fetchedData.gal.map(g=>`<div class="aci" style="display:flex;align-items:center;gap:.8rem"><img src="${g.url}" style="width:60px;height:45px;object-fit:cover;border-radius:6px;border:1px solid var(--border)"><div style="flex:1;font-weight:700;font-size:.85rem">${g.caption||'Photo'}</div><div style="display:flex;gap:.3rem"><button class="btn btn-edit btn-sm" onclick="triggerEditGal('${g.id}')">Edit</button><button class="btn btn-d btn-sm" onclick="delRow('gallery','${g.id}',loadGalAdmin)">Del</button></div></div>`).join('');
 }
-function triggerEditGal(id){const x=fetchedData.gal.find(i=>i.id===id);if(!x)return;editState.gal=id;setVal('g-url',x.url);setVal('g-cap',x.caption);setVal('g-date',x.item_date);if(x.url)showPrev('prev-gal','ph-gal',x.url);$('gal-form-title').textContent='Edit Photo';$('btn-save-gal').textContent='💾 Update';$('btn-cancel-gal').style.display='inline-flex';}
+function triggerEditGal(id){const x=fetchedData.gal.find(i=>i.id===id);if(!x)return;editState.gal=id;setVal('g-url',x.url);setVal('g-cap',x.caption);setVal('g-date',x.item_date||'');if(x.url)showPrev('prev-gal','ph-gal',x.url);$('gal-form-title').textContent='Edit Photo';$('btn-save-gal').textContent='💾 Update';$('btn-cancel-gal').style.display='inline-flex';}
 function resetGalForm(){editState.gal=null;['g-url','g-cap','g-date'].forEach(id=>setVal(id,''));hidePrev('prev-gal','ph-gal');$('gal-form-title').textContent='Add Photo';$('btn-save-gal').textContent='+ Save Photo';$('btn-cancel-gal').style.display='none';}
 async function saveGallery(){
   const url=getVal('g-url');if(!url)return showToast('❌ Upload photo first');
@@ -947,7 +979,7 @@ async function initPublicData(){
 
   // Fetch latest data for home page
   const [{data:news},{data:pubsData},{data:memsData},{data:galData}]=await Promise.all([
-    db.from('news').select('*').order('news_date',{ascending:false,nullsFirst:false}).limit(3),
+    db.from('news').select('*').order('created_at',{ascending:false}).limit(3),
     db.from('publications').select('*').order('pub_date',{ascending:false,nullsFirst:false}).limit(4),
     db.from('profiles').select('*').eq('approved',true),
     db.from('gallery').select('*').order('created_at',{ascending:false}).limit(3)
@@ -1037,7 +1069,6 @@ async function buildProfileDetail(id){
           const boldAuthors=(p.authors_list||p.authors||'').replace(boldName,'<strong style="color:var(--navy)">$1</strong>');
           const shortAbs=p.abstract?(p.abstract.length>120?p.abstract.substring(0,120)+'...':p.abstract):'';
           return `<div class="pubi-home" onclick="goPage('publication','${p.id}')">
-            ${p.thumbnail_image?`<img class="pubi-home-img" src="${p.thumbnail_image}">`:`<div class="pubi-home-img" style="background:var(--off);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--gray-light)">📄</div>`}
             <div class="pubi-home-body">
               <div class="pubi-top"><span class="pub-type">${p.type}</span><span class="pub-yr">${p.pub_date||p.year||''}</span></div>
               <div class="pub-title">${p.title}</div>
@@ -1113,7 +1144,7 @@ async function renderAllPubs(){
   $('all-pubs').innerHTML=(data||[]).map(p=>pubCardHome(p)).join('')||'<div class="empty">No publications yet.</div>';
 }
 async function renderAllNews(){
-  const {data}=await db.from('news').select('*').order('news_date',{ascending:false,nullsFirst:false});
+  const {data}=await db.from('news').select('*').order('created_at',{ascending:false});
   $('all-news').innerHTML=(data||[]).map(n=>newsCard(n)).join('')||'<div class="empty">No news yet.</div>';
 }
 async function renderGallery(){
@@ -1166,6 +1197,17 @@ function fillPubFromOrcid(d){
   if((d.type||'').toLowerCase().includes('book'))t='Book Chapter';
   setVal('np-type',t);
   showToast('✓ Form filled from ORCID. Review and save.');
+}
+
+function switchDashSection(sec){
+  document.querySelectorAll('.dni').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.dsec').forEach(s=>s.classList.remove('active'));
+  const btn=document.querySelector(`.dni[data-sec="${sec}"]`);
+  if(btn)btn.classList.add('active');
+  const el=$(sec);if(el)el.classList.add('active');
+  // Load data for section
+  const secMap={'d-profile':loadProfileForm,'d-mypubs':loadMyPubs,'d-lab':loadLabForm,'d-members':loadMembersAdmin,'d-hero':loadSlidesAdmin,'d-research':loadResearchAdmin,'d-ongoing':loadProjAdmin,'d-news':loadNewsAdmin,'d-gallery':loadGalAdmin};
+  if(secMap[sec])secMap[sec]();
 }
 
 $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
