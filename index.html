@@ -497,6 +497,11 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
           </div>
         </div>
         <div class="dcard"><h3>Manage Papers</h3><div id="my-pubs"></div></div>
+      <div class="dcard">
+        <h3>Author Name Manager</h3>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:.8rem">Replace abbreviated ORCID names (e.g. <em>Md.A. Hossain</em>) with full lab member names. After replacing, clicking the name on the website will open that member's profile.</p>
+        <div id="author-replace-list"><div class="empty" style="padding:1rem">Load publications to see author names.</div></div>
+      </div>
       </div>
 
       <div class="dsec" id="d-lab">
@@ -651,6 +656,8 @@ let pubThumbUrl='',pubDetailUrl='',newsImgUrl='',newsThumbUrl='',profilePhotoUrl
 let npAuthorsList=[];
 let cropCb=null,cropper=null,cropFolder='',targetRatio=NaN;
 let editState={pub:null,news:null,gal:null,proj:null,res:null};
+let authorReplaceCache=[];
+let globalMembers=[];
 let fetchedData={pubs:[],news:[],gal:[],proj:[],res:[]};
 const roleRanks={'Principal Investigator':1,'Assistant Investigator':2,'Research Assistant':3,'PhD. Student':4,'MSc. Student':5,'Graduate Research Student':6,'Undergraduate Student':7,'Lab Technician':8,'Alumni':9};
 const getRank=role=>roleRanks[role]||10;
@@ -774,28 +781,54 @@ async function loadUser(){
   // If not approved, sign out silently
   if(!p||p.approved!==true){await db.auth.signOut();CU=null;CP=null;$('nav-in-logged').style.display='none';$('nav-out').style.display='flex';return;}
   $('nav-in-logged').style.display='flex';$('nav-out').style.display='none';const ml=$('mob-login-li'),md=$('mob-dash-li');if(ml)ml.style.display='none';if(md)md.style.display='block';const fo=$('footer-out'),fi=$('footer-in');if(fo)fo.style.display='none';if(fi)fi.style.display='block';
-  $('admin-nav').style.display=p?.is_admin?'block':'none';
-  // Also update mob-dash-nav admin options
-  const msel=document.querySelector('#mob-dash-nav select');
-  if(msel){Array.from(msel.options).forEach(o=>{if(['d-lab','d-hero','d-members','d-research','d-ongoing','d-news','d-gallery'].includes(o.value))o.style.display=p?.is_admin?'':'none';});}
+  const allowedArr=p.allowed_sections?p.allowed_sections.split(',').filter(Boolean):[];
+  const adminSecs=['d-lab','d-hero','d-members','d-allpubs','d-research','d-ongoing','d-news','d-gallery'];
+  const hasAnyAdmin=p.is_admin||allowedArr.some(s=>adminSecs.includes(s));
+  $('admin-nav').style.display=hasAnyAdmin?'block':'none';
+  // Filter desktop sidebar buttons
+  document.querySelectorAll('.dni').forEach(btn=>{
+    const sec=btn.dataset.sec;
+    const show=p.is_admin||sec==='d-profile'||sec==='d-mypubs'||allowedArr.includes(sec);
+    btn.style.display=show?'flex':'none';
+  });
 }
 
 // ═══ DASHBOARD ═══
-function openDash(){$('dash').classList.add('open');document.body.style.overflow='hidden';
-  // Show mobile nav if small screen
+function updateDashNav(){
+  if(!CP)return;
   const mn=$('mob-dash-nav');
-  if(mn){
-    mn.style.display=window.innerWidth<=768?'block':'none';
-    // Show/hide admin options
-    const sel=mn.querySelector('select');
-    if(sel){
-      Array.from(sel.options).forEach(o=>{
-        if(['d-lab','d-hero','d-members','d-research','d-ongoing','d-news','d-gallery'].includes(o.value)){
-          o.style.display=CP?.is_admin?'':'none';
-        }
-      });
+  if(mn)mn.style.display=window.innerWidth<=768?'block':'none';
+  const sel=document.querySelector('#mob-dash-nav select');
+  if(!sel)return;
+  const allowedArr=CP.allowed_sections?CP.allowed_sections.split(',').filter(Boolean):[];
+  const adminOpts=[
+    {value:'d-allpubs',label:'📚 All Publications'},
+    {value:'d-lab',label:'⚙️ Settings & Logos'},
+    {value:'d-hero',label:'🖼️ Hero Slides'},
+    {value:'d-members',label:'👥 Members'},
+    {value:'d-research',label:'🔬 Research Areas'},
+    {value:'d-ongoing',label:'⚡ Projects'},
+    {value:'d-news',label:'📢 News'},
+    {value:'d-gallery',label:'🖼️ Gallery'}
+  ];
+  let html=`<option value="d-profile">👤 My Profile</option>
+    <option value="d-mypubs">📄 My Publications</option>`;
+  let hasAdmin=false;
+  adminOpts.forEach(o=>{
+    if(CP.is_admin||allowedArr.includes(o.value)){
+      if(!hasAdmin){html+=`<option value="" disabled style="color:var(--gray);font-size:.7rem">─── Admin ───</option>`;hasAdmin=true;}
+      html+=`<option value="${o.value}">${o.label}</option>`;
     }
-  }loadProfileForm();if(CP?.is_admin)loadLabForm();}
+  });
+  sel.innerHTML=html;
+}
+
+function openDash(){
+  $('dash').classList.add('open');document.body.style.overflow='hidden';
+  updateDashNav(); // builds mobile select with correct permissions
+  loadProfileForm();
+  if(CP?.is_admin||CP?.allowed_sections?.includes('d-lab'))loadLabForm();
+}
 function closeDash(){$('dash').classList.remove('open');document.body.style.overflow='';}
 document.querySelectorAll('.dni').forEach(btn=>{
   btn.addEventListener('click',()=>{
@@ -837,6 +870,7 @@ async function saveProfile(){
 
 // Publications CRUD
 async function loadMyPubs(){
+  if(!globalMembers.length)await loadMemberSelect(); // ensure members loaded for author replace
   const {data}=await db.from('publications').select('*').eq('user_id',CU.id).order('pub_date',{ascending:false,nullsFirst:false});
   fetchedData.pubs=data||[];
   const cont=$('my-pubs');
@@ -867,6 +901,7 @@ async function loadMyPubs(){
       </div>
     </div>`).join('');
 }
+  if(globalMembers.length)buildAuthorReplaceUI();
 
 function toggleAllPubs(checked){
   document.querySelectorAll('.pub-chk').forEach(c=>c.checked=checked);
@@ -894,7 +929,9 @@ async function deleteSelectedPubs(){
 
 async function loadMemberSelect(){
   const {data}=await db.from('profiles').select('id,name').eq('approved',true);
-  $('np-auth-select').innerHTML='<option value="">+ Lab member...</option>'+(data||[]).map(m=>`<option value="${m.id}" data-name="${m.name}">${m.name}</option>`).join('');
+  globalMembers=data||[];
+  const opts='<option value="">+ Lab member...</option>'+(data||[]).map(m=>`<option value="${m.id}" data-name="${m.name}">${m.name}</option>`).join('');
+  $('np-auth-select').innerHTML=opts;
 }
 function addAuthorMember(){const sel=$('np-auth-select');const id=sel.value,name=sel.options[sel.selectedIndex]?.dataset?.name;if(id&&name){npAuthorsList.push({name,user_id:id});renderAuthChips();}sel.value='';}
 function addAuthorCustom(){const nm=getVal('np-auth-custom');if(nm){npAuthorsList.push({name:nm});renderAuthChips();}setVal('np-auth-custom','');}
@@ -1024,7 +1061,6 @@ async function updateMemberField(id,field,val){
 }
 
 
-async function updateMemberField(id,field,val){const p={};p[field]=val;await db.from('profiles').update(p).eq('id',id);showToast('✓ Updated');initPublicData();}
 async function loadAllPubsAdmin(selectAll=false){
   const {data}=await db.from('publications').select('id,title,authors_list,authors,venue,pub_date,year,status,user_id').order('pub_date',{ascending:false,nullsFirst:false});
   const cont=$('all-pubs-admin');if(!cont)return;
@@ -1365,7 +1401,7 @@ async function fetchFromOrcid(){
       const contribs=w.contributors?.contributor||[];
       let authors='';
       if(contribs.length){
-        authors=contribs.map(c=>c['credit-name']?.value||'').filter(Boolean).join(', ');
+        authors=contribs.map(c=>swapOrcidName(c['credit-name']?.value||'')).filter(Boolean).join(', ');
       }
       if(!authors)authors=CP.name||'';
       const itemData={title,year,type:t,journal,doi,authors};
@@ -1456,6 +1492,57 @@ async function importAllOrcid(){
   if(fail)console.error('Import errors:',errs);
   showToast(`✓ Imported ${ok}${fail?' (❌ '+fail+' failed)':''}`);
   loadMyPubs();loadCountsDisplay();
+}
+
+// ═══ ORCID NAME FORMAT & AUTHOR REPLACE ═══
+function swapOrcidName(name){
+  // "Hossain, Md.A." → "Md.A. Hossain" (Last, First → First Last)
+  if(!name)return '';
+  const commaIdx=name.indexOf(',');
+  if(commaIdx<0)return name;
+  const last=name.substring(0,commaIdx).trim();
+  const first=name.substring(commaIdx+1).trim();
+  return first?`${first} ${last}`:last;
+}
+
+function buildAuthorReplaceUI(){
+  const allAuthors=new Set();
+  fetchedData.pubs.forEach(p=>{
+    (p.authors_list||p.authors||'').split(',').map(n=>n.trim()).filter(Boolean).forEach(n=>allAuthors.add(n));
+  });
+  authorReplaceCache=[...allAuthors];
+  const el=$('author-replace-list');if(!el)return;
+  if(!authorReplaceCache.length){el.innerHTML='<div class="empty" style="padding:1rem">No author names found. Add publications first.</div>';return;}
+  const memberOpts=globalMembers.map(m=>`<option value="${m.id}" data-name="${m.name}">${m.name}</option>`).join('');
+  el.innerHTML=authorReplaceCache.map((author,i)=>`
+    <div style="display:flex;align-items:center;gap:.6rem;padding:.65rem 0;border-bottom:1px solid var(--border);flex-wrap:wrap">
+      <span style="flex:1;min-width:120px;font-size:.85rem;font-weight:600;color:var(--navy)">${author}</span>
+      <select id="ar-sel-${i}" style="flex:1;min-width:150px;padding:.38rem .7rem;border:1.5px solid var(--border);border-radius:8px;font-size:.8rem;font-family:var(--f)">
+        <option value="">Select lab member...</option>
+        ${memberOpts}
+      </select>
+      <button class="btn btn-p btn-sm" onclick="applyAuthorReplace(${i})">Apply</button>
+    </div>`).join('');
+}
+
+async function applyAuthorReplace(idx){
+  const oldName=authorReplaceCache[idx];if(!oldName)return;
+  const sel=$(`ar-sel-${idx}`);if(!sel||!sel.value)return showToast('⚠️ Select a lab member first');
+  const memberId=sel.value;
+  const memberName=sel.options[sel.selectedIndex]?.dataset?.name||'';
+  if(!memberName)return;
+  let count=0;
+  for(const p of fetchedData.pubs){
+    const names=(p.authors_list||p.authors||'').split(',').map(n=>n.trim());
+    if(!names.includes(oldName))continue;
+    const newAuthStr=names.map(n=>n===oldName?memberName:n).join(', ');
+    const linked=Array.isArray(p.linked_users)?[...new Set([...p.linked_users,memberId])]:[memberId];
+    const {error}=await db.from('publications').update({authors:newAuthStr,authors_list:newAuthStr,linked_users:linked}).eq('id',p.id);
+    if(!error)count++;
+  }
+  if(count)showToast(`✓ Replaced "${oldName}" → "${memberName}" in ${count} pub(s)`);
+  else showToast(`⚠️ No matching publications found`);
+  loadMyPubs();
 }
 
 $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
