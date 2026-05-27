@@ -691,6 +691,17 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
 const {createClient}=supabase;
 let db;
 try{db=createClient(SUPABASE_URL,SUPABASE_ANON);}catch(e){}
+
+// Handle Supabase auth events - PASSWORD_RECOVERY fires when user clicks reset link
+if(db){
+  db.auth.onAuthStateChange((event,session)=>{
+    if(event==='PASSWORD_RECOVERY'){
+      // User clicked reset email link - show new password modal
+      openMo('newpw');
+      window.history.replaceState({},'','/');
+    }
+  });
+}
 let CU=null,CP=null;
 let slides=[],slideIdx=0,slideTimer=null;
 let pubThumbUrl='',pubDetailUrl='',newsImgUrl='',newsThumbUrl='',profilePhotoUrl='';
@@ -1760,17 +1771,6 @@ $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'
 async function init(){
   const ml=$('mob-login-li');if(ml)ml.style.display='block';
   if(!db)return showToast('⚙️ Configure Supabase credentials in index.html',5000);
-  // Detect password recovery token in URL hash
-  const hash=window.location.hash;
-  if(hash.includes('type=recovery')||hash.includes('access_token')){
-    // Supabase auto-handles the session from hash
-    const {data,error}=await db.auth.getSession();
-    if(data?.session){
-      openMo('newpw');
-      window.history.replaceState({},'','/');
-      return; // Don't continue init while user is setting password
-    }
-  }
   await loadUser();
   loadCountsDisplay(); // FIX: runs independently, does not depend on lab_settings
   await initPublicData();
