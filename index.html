@@ -232,9 +232,9 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
 // ── EmailJS Config (for admin notifications) ──
 // Setup: emailjs.com → free account → Gmail service → template with {from_name}, {from_email}, {message} vars
-const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_abc123'
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xyz789'
-const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'user_ABCDEF123'
+const EMAILJS_SERVICE_ID  = 'service_mh86scj';   // e.g. 'service_abc123'
+const EMAILJS_TEMPLATE_ID = 'template_g8i9owl';  // e.g. 'template_xyz789'
+const EMAILJS_PUBLIC_KEY  = 'dl0NwGrQSXRyfGvV-';   // e.g. 'user_ABCDEF123'
 const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
 </script>
 <div class="toast" id="toast"></div>
@@ -359,6 +359,17 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
         <div id="footer-in" style="display:none"><button class="btn btn-p btn-sm" onclick="openDash()" style="font-size:.72rem;padding:.3rem .75rem">📊 Dashboard</button></div>
       </div></div>
 </div></footer>
+
+<div class="mo" id="mo-newpw"><div class="mb" style="max-width:420px">
+  <div class="mh"><h2>Set New Password</h2></div>
+  <div class="mbody">
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:1.2rem">Enter your new password below.</p>
+    <div class="ff"><label>New Password</label><input type="password" id="np-pwd" placeholder="Min 6 characters"></div>
+    <div class="ff"><label>Confirm Password</label><input type="password" id="np-pwd2" placeholder="Repeat password"></div>
+    <p id="np-msg" style="display:none;font-size:.82rem;padding:.5rem .8rem;border-radius:8px;margin-bottom:.8rem"></p>
+    <button id="np-btn" class="btn btn-p" style="width:100%;justify-content:center" onclick="submitNewPassword()">✓ Set New Password</button>
+  </div>
+</div></div>
 
 <div class="mo" id="mo-reset"><div class="mb" style="max-width:420px">
   <div class="mh"><h2>Reset Password</h2><button class="mc" onclick="closeMo('reset')">✕</button></div>
@@ -1705,12 +1716,28 @@ function sortPubsByDate(pubs){
 }
 
 // ── Auth: Reset & Change Password ──
+async function submitNewPassword(){
+  const pw=getVal('np-pwd'),pw2=getVal('np-pwd2');
+  const msg=$('np-msg');
+  if(!pw||pw.length<6){msg.textContent='Password must be at least 6 characters.';msg.style.background='#fee2e2';msg.style.color='#dc2626';msg.style.display='block';return;}
+  if(pw!==pw2){msg.textContent='Passwords do not match.';msg.style.background='#fee2e2';msg.style.color='#dc2626';msg.style.display='block';return;}
+  $('np-btn').disabled=true;$('np-btn').textContent='Updating...';
+  const {error}=await db.auth.updateUser({password:pw});
+  $('np-btn').disabled=false;$('np-btn').textContent='✓ Set New Password';
+  if(error){msg.textContent=error.message;msg.style.background='#fee2e2';msg.style.color='#dc2626';msg.style.display='block';}
+  else{
+    msg.textContent='✓ Password updated! Logging you in...';msg.style.background='#d1fae5';msg.style.color='#059669';msg.style.display='block';
+    setTimeout(async()=>{closeMo('newpw');await loadUser();showToast('✓ Password updated successfully!');},1500);
+    window.history.replaceState({},'','/');
+  }
+}
+
 async function sendResetEmail(){
   const email=getVal('rst-email').trim();
   const msg=$('rst-msg');
   if(!email){msg.textContent='Please enter your email.';msg.style.background='#fee2e2';msg.style.color='#dc2626';msg.style.display='block';return;}
   $('rst-btn').disabled=true;$('rst-btn').textContent='Sending...';
-  const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:'https://ilamps.pages.dev/#reset-password'});
+  const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:'https://ilamps.pages.dev'});
   $('rst-btn').disabled=false;$('rst-btn').textContent='Send Reset Link';
   if(error){msg.textContent=error.message;msg.style.background='#fee2e2';msg.style.color='#dc2626';}
   else{msg.textContent='✓ Reset link sent! Check your email (including spam folder).';msg.style.background='#d1fae5';msg.style.color='#059669';}
@@ -1731,9 +1758,19 @@ async function changePassword(){
 $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
 
 async function init(){
-  // Show mobile login button by default (will be hidden if logged in)
   const ml=$('mob-login-li');if(ml)ml.style.display='block';
   if(!db)return showToast('⚙️ Configure Supabase credentials in index.html',5000);
+  // Detect password recovery token in URL hash
+  const hash=window.location.hash;
+  if(hash.includes('type=recovery')||hash.includes('access_token')){
+    // Supabase auto-handles the session from hash
+    const {data,error}=await db.auth.getSession();
+    if(data?.session){
+      openMo('newpw');
+      window.history.replaceState({},'','/');
+      return; // Don't continue init while user is setting password
+    }
+  }
   await loadUser();
   loadCountsDisplay(); // FIX: runs independently, does not depend on lab_settings
   await initPublicData();
