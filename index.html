@@ -218,6 +218,11 @@ footer{background:#060f22;color:rgba(255,255,255,.5);padding:4rem 0 2rem;font-si
   .dc{padding:.85rem;flex:1;overflow-y:visible;}
   .dcard{padding:1.25rem;}
 }
+
+.pf-btn{padding:.3rem .8rem;border:1.5px solid var(--border);border-radius:20px;background:#fff;font-size:.78rem;font-weight:600;cursor:pointer;color:var(--navy);transition:all .2s}
+.pf-btn.active,.pf-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.pg-btn{width:36px;height:36px;border:1.5px solid var(--border);border-radius:8px;background:#fff;font-size:.82rem;font-weight:700;cursor:pointer;color:var(--navy);transition:all .2s}
+.pg-btn.active,.pg-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
 </style>
 </head>
 <body>
@@ -227,9 +232,9 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 
 // ── EmailJS Config (for admin notifications) ──
 // Setup: emailjs.com → free account → Gmail service → template with {from_name}, {from_email}, {message} vars
-const EMAILJS_SERVICE_ID  = 'service_mh86scj';   // e.g. 'service_abc123'
-const EMAILJS_TEMPLATE_ID = 'template_g8i9owl';  // e.g. 'template_xyz789'
-const EMAILJS_PUBLIC_KEY  = 'dl0NwGrQSXRyfGvV-';   // e.g. 'user_ABCDEF123'
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';   // e.g. 'service_abc123'
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';  // e.g. 'template_xyz789'
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';   // e.g. 'user_ABCDEF123'
 const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
 </script>
 <div class="toast" id="toast"></div>
@@ -305,7 +310,9 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
 
 <div class="page" id="page-publications"><div style="padding:4.5rem 0"><div class="con">
   <div class="shdr"><span class="slabel">Scholarly Output</span><h2 class="stitle">All Publications <span id="pub-total-count" style="font-size:1.2rem;color:var(--accent);font-weight:800"></span></h2></div>
+  <div id="pub-year-filter" style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.2rem"></div>
   <div class="pub-list" id="all-pubs"></div>
+  <div id="pub-pagination" style="display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)"></div>
 </div></div></div>
 
 <div class="page" id="page-news"><div style="padding:4.5rem 0"><div class="con">
@@ -353,6 +360,17 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
       </div></div>
 </div></footer>
 
+<div class="mo" id="mo-reset"><div class="mb" style="max-width:420px">
+  <div class="mh"><h2>Reset Password</h2><button class="mc" onclick="closeMo('reset')">✕</button></div>
+  <div class="mbody">
+    <p style="font-size:.85rem;color:var(--muted);margin-bottom:1.2rem">Enter your email address and we'll send a password reset link.</p>
+    <div class="ff"><label>Email</label><input type="email" id="rst-email" placeholder="your@email.com"></div>
+    <p id="rst-msg" style="display:none;font-size:.82rem;padding:.6rem .8rem;border-radius:8px;margin-bottom:.8rem"></p>
+    <button id="rst-btn" class="btn btn-p w100" onclick="sendResetEmail()">Send Reset Link</button>
+    <div style="text-align:center;margin-top:.8rem"><a onclick="closeMo('reset');openMo('login')" style="font-size:.8rem;color:var(--accent);cursor:pointer">← Back to Login</a></div>
+  </div>
+</div></div>
+
 <div class="mo" id="mo-login"><div class="mb" style="max-width:420px">
   <div class="mh"><h2>Lab Login</h2><button class="mc" onclick="closeMo('login')">✕</button></div>
   <div class="mbody">
@@ -360,6 +378,7 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
     <div class="ff"><label>Password</label><input type="password" id="l-pwd"></div>
     <div class="ferr" id="l-err" style="display:none"></div>
     <button class="btn btn-p" style="width:100%;justify-content:center;margin-top:.5rem" id="l-btn" onclick="signIn()">Sign In →</button>
+    <div style="text-align:center;margin-top:.7rem"><a onclick="closeMo('login');openMo('reset')" style="font-size:.78rem;color:var(--accent);cursor:pointer">Forgot password?</a></div>
   </div>
   <div class="mft">No account? <a onclick="swMo('login','signup')">Request Access</a></div>
 </div></div>
@@ -453,6 +472,7 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
             </div>
             <div class="ff"><label>Display Designation</label><input type="text" id="p-desig" placeholder="e.g. Lead Researcher"></div>
             <div class="ff"><label>Degree / Title</label><input type="text" id="p-degree" placeholder="e.g. Dr.Eng, PhD, MSc, BSc"></div>
+            <div class="ff"><label>Total Citations</label><input type="number" id="p-citations" placeholder="e.g. 150" min="0"></div>
           </div>
         </div>
         <div class="g2"><div class="ff"><label>Department</label><input type="text" id="p-dept"></div><div class="ff"><label>University</label><input type="text" id="p-uni"></div></div>
@@ -466,6 +486,15 @@ const ADMIN_EMAIL = 'fahim.just.19@gmail.com';
           <div class="ff"><label>ORCID</label><input type="text" id="p-orcid"></div>
         </div>
         <button class="btn btn-p" onclick="saveProfile()">💾 Save Profile</button></div>
+      </div>
+      <div class="dcard" style="margin-top:1.5rem">
+        <h3>Change Password</h3>
+        <div class="d2" style="margin-top:1rem">
+          <div class="ff"><label>New Password</label><input type="password" id="cp-new" placeholder="Min 6 characters"></div>
+          <div class="ff"><label>Confirm Password</label><input type="password" id="cp-confirm" placeholder="Repeat new password"></div>
+        </div>
+        <p id="cp-msg" style="display:none;font-size:.82rem;padding:.5rem .8rem;border-radius:8px;margin-bottom:.8rem"></p>
+        <button class="btn btn-p" onclick="changePassword()">🔒 Update Password</button>
       </div>
 
       <div class="dsec" id="d-mypubs">
@@ -850,7 +879,7 @@ document.querySelectorAll('.dni').forEach(btn=>{
 // Profile
 function loadProfileForm(){
   if(!CP)return;
-  setVal('p-name',CP.name);setVal('p-desig',CP.designation);setVal('p-degree',CP.degree||'');setVal('p-dept',CP.department);
+  setVal('p-name',CP.name);setVal('p-desig',CP.designation);setVal('p-degree',CP.degree||'');setVal('p-citations',CP.citations||0);setVal('p-dept',CP.department);
   setVal('p-uni',CP.university);setVal('p-research',CP.research);setVal('p-bio',CP.bio);
   setVal('p-interests',CP.interests);setVal('p-email',CP.email);setVal('p-website',CP.website);
   setVal('p-linkedin',CP.linkedin);setVal('p-orcid',CP.orcid);
@@ -863,7 +892,7 @@ async function saveProfile(){
   const roleSelect=getVal('p-role');
   const finalRole=roleSelect==='Custom'?getVal('p-custom-role'):roleSelect;
   const {error}=await db.from('profiles').update({
-    name:nm,slug:genSlug(nm),role:finalRole,designation:getVal('p-desig'),degree:getVal('p-degree'),
+    name:nm,slug:genSlug(nm),role:finalRole,designation:getVal('p-desig'),degree:getVal('p-degree'),citations:parseInt(getVal('p-citations'))||0,
     department:getVal('p-dept'),university:getVal('p-uni'),research:getVal('p-research'),
     bio:getVal('p-bio'),interests:getVal('p-interests'),email:getVal('p-email'),
     photo_url:profilePhotoUrl||'',website:getVal('p-website'),linkedin:getVal('p-linkedin'),orcid:getVal('p-orcid')
@@ -1208,7 +1237,7 @@ async function initPublicData(){
   const g=(k,f='')=>gS(sArr,k,f);
   setText('h-name',g('lab_name','ILAMPS'));setText('nav-lab-name',g('lab_name','ILAMPS'));
   setText('h-desc',g('about'));setText('hs-founded',g('founded','—'));
-  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · Developed by Abdullah Shadek Fahim`);
+  setText('footer-copy',`© ${new Date().getFullYear()} ${g('lab_name','ILAMPS')} · ${g('university','JUST')}`);
   const logo=g('lab_logo');if(logo){$('nav-logo-box').innerHTML=`<img src="${logo}">`;updateFavicon(logo);}
   const jlogo=g('just_logo');
   if(logo){$('f-logo-box-1').style.display='flex';$('f-logo-ilamps').src=logo;}
@@ -1224,7 +1253,8 @@ async function initPublicData(){
     db.from('gallery').select('*').order('created_at',{ascending:false}).limit(3)
   ]);
   const sortedMems=(memsData||[]).sort((a,b)=>getRank(a.role)-getRank(b.role));
-  $('home-team').innerHTML=sortedMems.slice(0,6).map(m=>memberCardHTML(m)).join('');
+  const activeForHome=sortedMems.filter(m=>!['Alumni','Former Member'].includes(m.role));
+  $('home-team').innerHTML=activeForHome.slice(0,6).map(m=>memberCardHTML(m)).join('');
   $('home-news').innerHTML=(news&&news.length)?news.map(n=>newsCard(n)).join(''):'<div class="empty">No news yet.</div>';
   const sortedHomePubs=sortPubsByDate(pubsData).slice(0,4);
   $('home-pubs').innerHTML=sortedHomePubs.length?sortedHomePubs.map(p=>pubCardHome(p)).join(''):'<div class="empty">No publications.</div>';
@@ -1296,6 +1326,7 @@ function memberCardHTML(m){
     <div class="tc-name">${m.name||'—'}</div>
     ${m.degree?`<div style="font-size:.65rem;color:var(--accent);font-weight:700;background:rgba(74,123,200,.1);padding:.1rem .45rem;border-radius:4px;display:inline-block;margin-bottom:.3rem">${m.degree}</div>`:''}
     <div class="tc-role">${m.designation||m.role||''}</div>
+    ${m.citations?`<div style="font-size:.62rem;color:var(--muted);margin-top:.1rem">📊 ${m.citations.toLocaleString()} citations</div>`:''} 
     <div style="font-size:.75rem;color:var(--muted);line-height:1.4;min-height:35px">${m.department||''}<br>${m.university||''}</div>
     <div class="tc-links" style="display:flex;gap:.5rem;justify-content:center;margin-top:1rem" onclick="event.stopPropagation()">${links}</div>
   </div>`;
@@ -1415,12 +1446,56 @@ async function renderResearchPage(){
   $('research-grid').innerHTML=(areas||[]).map(a=>`<div class="rc"><span class="rc-icon">${a.icon}</span><h3>${a.title}</h3><p>${a.description}</p></div>`).join('')||'<div class="empty">No research areas yet.</div>';
   $('proj-list').innerHTML=(projs||[]).map(p=>`<div class="pc"><div><h3>${p.title}</h3><p>${p.description}</p><div class="pc-mems">${(p.members||[]).map(m=>`<span class="pc-mem">${m}</span>`).join('')}</div></div><span class="badge badge-${p.status||'active'}">${p.status||'active'}</span></div>`).join('')||'<div class="empty">No projects yet.</div>';
 }
+let allPubsCache=[];
+let pubCurrentPage=1;
+let pubFilterYear='all';
+const PUB_PAGE_SIZE=20;
+
 async function renderAllPubs(){
-  const {data}=await db.from('publications').select('*');
-  const sorted=sortPubsByDate(data);
-  setText('pub-total-count',`(${sorted.length})`);
-  $('all-pubs').innerHTML=sorted.map(p=>pubCardHome(p)).join('')||'<div class="empty">No publications yet.</div>';
+  if(!allPubsCache.length){
+    const {data}=await db.from('publications').select('*');
+    allPubsCache=sortPubsByDate(data||[]);
+  }
+  pubCurrentPage=1;
+  buildPubFilters();
+  renderPubPage();
 }
+
+function buildPubFilters(){
+  const years=[...new Set(allPubsCache.map(p=>p.year||'').filter(Boolean))].sort((a,b)=>b-a);
+  const el=$('pub-year-filter');
+  if(!el)return;
+  el.innerHTML=`<button class="pf-btn ${pubFilterYear==='all'?'active':''}" onclick="setPubFilter('all')">All</button>`
+    +years.map(y=>`<button class="pf-btn ${pubFilterYear===y?'active':''}" onclick="setPubFilter('${y}')">${y}</button>`).join('');
+}
+
+function setPubFilter(year){
+  pubFilterYear=year;pubCurrentPage=1;
+  buildPubFilters();renderPubPage();
+}
+
+function renderPubPage(){
+  const filtered=pubFilterYear==='all'?allPubsCache:allPubsCache.filter(p=>String(p.year)===String(pubFilterYear));
+  const total=filtered.length;
+  const pages=Math.ceil(total/PUB_PAGE_SIZE);
+  const start=(pubCurrentPage-1)*PUB_PAGE_SIZE;
+  const slice=filtered.slice(start,start+PUB_PAGE_SIZE);
+  setText('pub-total-count',`(${total})`);
+  $('all-pubs').innerHTML=slice.map(p=>pubCardHome(p)).join('')||'<div class="empty">No publications found.</div>';
+  // Pagination
+  const pg=$('pub-pagination');
+  if(!pg)return;
+  if(pages<=1){pg.innerHTML='';return;}
+  let btns='';
+  for(let i=1;i<=pages;i++){
+    btns+=`<button class="pg-btn ${i===pubCurrentPage?'active':''}" onclick="goToPubPage(${i})">${i}</button>`;
+  }
+  pg.innerHTML=btns;
+  pg.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function goToPubPage(n){pubCurrentPage=n;renderPubPage();}
+
 async function renderAllNews(){
   const {data}=await db.from('news').select('*').order('created_at',{ascending:false});
   $('all-news').innerHTML=(data||[]).map(n=>newsCard(n)).join('')||'<div class="empty">No news yet.</div>';
@@ -1627,6 +1702,30 @@ function sortPubsByDate(pubs){
     };
     return getTime(b)-getTime(a);
   });
+}
+
+// ── Auth: Reset & Change Password ──
+async function sendResetEmail(){
+  const email=getVal('rst-email').trim();
+  const msg=$('rst-msg');
+  if(!email){msg.textContent='Please enter your email.';msg.style.background='#fee2e2';msg.style.color='#dc2626';msg.style.display='block';return;}
+  $('rst-btn').disabled=true;$('rst-btn').textContent='Sending...';
+  const {error}=await db.auth.resetPasswordForEmail(email,{redirectTo:'https://ilamps.pages.dev/#reset-password'});
+  $('rst-btn').disabled=false;$('rst-btn').textContent='Send Reset Link';
+  if(error){msg.textContent=error.message;msg.style.background='#fee2e2';msg.style.color='#dc2626';}
+  else{msg.textContent='✓ Reset link sent! Check your email (including spam folder).';msg.style.background='#d1fae5';msg.style.color='#059669';}
+  msg.style.display='block';
+}
+
+async function changePassword(){
+  const np=getVal('cp-new'),cp=getVal('cp-confirm');
+  const msg=$('cp-msg');
+  if(!np||np.length<6){msg.textContent='Password must be at least 6 characters.';msg.style.background='#fee2e2';msg.style.color='#dc2626';msg.style.display='block';return;}
+  if(np!==cp){msg.textContent='Passwords do not match.';msg.style.background='#fee2e2';msg.style.color='#dc2626';msg.style.display='block';return;}
+  const {error}=await db.auth.updateUser({password:np});
+  if(error){msg.textContent=error.message;msg.style.background='#fee2e2';msg.style.color='#dc2626';}
+  else{msg.textContent='✓ Password updated successfully!';msg.style.background='#d1fae5';msg.style.color='#059669';setVal('cp-new','');setVal('cp-confirm','');}
+  msg.style.display='block';
 }
 
 $('nav-ham').addEventListener('click',()=>$('nav-links').classList.toggle('open'));
